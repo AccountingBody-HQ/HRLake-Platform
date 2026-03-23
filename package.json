@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "name": "gpe",
-=======
   "name": "globalpayrollexpert-platform",
->>>>>>> 3e86e8d121bbbf9d924b9aafcec27bcabe5be772
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,17 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@tailwindcss/typography": "^0.5.19",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.577.0",
-    "next": "16.2.1",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-=======
     "@clerk/nextjs": "^7.0.6",
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
-    "@lemonsqueezy/wedges": "^1.4.0",
     "@sanity/client": "^7.20.0",
     "@sanity/image-url": "^2.0.3",
     "@sentry/nextjs": "^10.45.0",
@@ -44,7 +31,6 @@
     "recharts": "^3.8.0",
     "resend": "^6.9.4",
     "sanity": "^5.17.1",
->>>>>>> 3e86e8d121bbbf9d924b9aafcec27bcabe5be772
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
