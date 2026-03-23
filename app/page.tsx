@@ -165,7 +165,7 @@ export default async function HomePage() {
               { value: 'Monthly', label: 'Updates', sub: 'Always current' },
               { value: 'Free', label: 'Core Access', sub: 'No account required' },
             ].map((s, i) => (
-              <div key={s.label} className="text-left">
+              <div key={s.label} className="text-center">
                 <div className="text-3xl font-black text-white tracking-tight">{s.value}</div>
                 <div className="text-sm font-bold text-slate-300 mt-1">{s.label}</div>
                 <div className="text-xs text-slate-500 mt-0.5">{s.sub}</div>
