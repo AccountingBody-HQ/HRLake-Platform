@@ -35,8 +35,9 @@ export default async function CountriesPage() {
     <main className="min-h-screen bg-slate-50">
 
       {/* ── Page header ── */}
-      <section className="bg-slate-950 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14">
+      <section className="relative bg-slate-950 border-b border-slate-800 overflow-hidden">
+        <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)'}} />
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-14">
 
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-xs text-slate-500 mb-6">
