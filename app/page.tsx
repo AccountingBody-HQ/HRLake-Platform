@@ -109,9 +109,8 @@ export default async function HomePage() {
             </div>
 
             <h1 className="font-serif text-5xl lg:text-7xl font-bold text-slate-950 leading-[1.0] tracking-tight mb-8">
-              Your complete global<br />
-              payroll intelligence<br />
-              <span className="text-blue-400">platform.</span>
+              Your complete <span className="text-blue-700">global payroll</span><br />
+              intelligence platform.
             </h1>
 
             <p className="text-lg text-slate-500 leading-relaxed max-w-2xl mb-10">
