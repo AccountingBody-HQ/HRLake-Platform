@@ -27,37 +27,27 @@ export default function Navigation() {
         <div className="flex h-16 items-center justify-between">
 
           {/* LOGO */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            {/* GPE Logomark */}
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <radialGradient id="globeGlow" cx="35%" cy="30%" r="70%">
-                  <stop offset="0%" stopColor="#60a5fa" stopOpacity="1"/>
-                  <stop offset="100%" stopColor="#1d4ed8" stopOpacity="1"/>
-                </radialGradient>
-                <radialGradient id="globeFill" cx="35%" cy="30%" r="70%">
-                  <stop offset="0%" stopColor="#1e3a6e" stopOpacity="1"/>
-                  <stop offset="100%" stopColor="#0f172a" stopOpacity="1"/>
-                </radialGradient>
-              </defs>
-              {/* Globe sphere */}
-              <circle cx="16" cy="16" r="14" fill="url(#globeFill)" stroke="url(#globeGlow)" strokeWidth="1.2"/>
-              {/* Equator */}
-              <ellipse cx="16" cy="16" rx="14" ry="5.5" fill="none" stroke="#3b82f6" strokeWidth="0.9" strokeOpacity="0.7"/>
-              {/* Upper latitude */}
-              <ellipse cx="16" cy="10.5" rx="9.5" ry="3" fill="none" stroke="#60a5fa" strokeWidth="0.75" strokeOpacity="0.5"/>
-              {/* Lower latitude */}
-              <ellipse cx="16" cy="21.5" rx="9.5" ry="3" fill="none" stroke="#60a5fa" strokeWidth="0.75" strokeOpacity="0.5"/>
-              {/* Central meridian */}
-              <ellipse cx="16" cy="16" rx="5.5" ry="14" fill="none" stroke="#3b82f6" strokeWidth="0.9" strokeOpacity="0.7"/>
-              {/* Left meridian */}
-              <ellipse cx="16" cy="16" rx="11" ry="14" fill="none" stroke="#1d4ed8" strokeWidth="0.7" strokeOpacity="0.5"/>
-              {/* Right meridian */}
-              <ellipse cx="16" cy="16" rx="11" ry="14" fill="none" stroke="#1d4ed8" strokeWidth="0.7" strokeOpacity="0.5" transform="rotate(60 16 16)"/>
-              {/* Highlight */}
-              <ellipse cx="12" cy="11" rx="3.5" ry="2" fill="white" fillOpacity="0.08" transform="rotate(-25 12 11)"/>
-            </svg>
-          </Link>
+          <Link href="/" className="flex items-center gap-3 group">
+              <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="g1" x1="0" y1="0" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#1e40af"/>
+                    <stop offset="100%" stopColor="#0f172a"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="15" cy="15" r="14" fill="url(#g1)"/>
+                <circle cx="15" cy="15" r="14" stroke="#3b82f6" strokeWidth="0.75" fill="none"/>
+                <ellipse cx="15" cy="15" rx="14" ry="5.2" stroke="#60a5fa" strokeWidth="0.8" fill="none" strokeOpacity="0.6"/>
+                <ellipse cx="15" cy="15" rx="5.2" ry="14" stroke="#60a5fa" strokeWidth="0.8" fill="none" strokeOpacity="0.6"/>
+                <ellipse cx="15" cy="15" rx="10.5" ry="14" stroke="#3b82f6" strokeWidth="0.6" fill="none" strokeOpacity="0.35"/>
+                <ellipse cx="15" cy="9.2" rx="10" ry="3.2" stroke="#93c5fd" strokeWidth="0.6" fill="none" strokeOpacity="0.4"/>
+                <ellipse cx="15" cy="20.8" rx="10" ry="3.2" stroke="#93c5fd" strokeWidth="0.6" fill="none" strokeOpacity="0.4"/>
+                <circle cx="11" cy="11" r="2.5" fill="white" fillOpacity="0.07"/>
+              </svg>
+              <span className="text-base font-bold text-slate-900 tracking-tight group-hover:text-blue-700 transition-colors">
+                Global Payroll Expert
+              </span>
+            </Link>
 
           {/* DESKTOP NAV */}
           <nav className="hidden md:flex items-center gap-1">
