@@ -28,12 +28,6 @@ import MiniCalculator from '@/components/countries/MiniCalculator'
 // ── Revalidate every 24 hours ──────────────────────────────────────────────
 export const dynamic = "force-dynamic"
 
-// ── generateStaticParams ───────────────────────────────────────────────────
-export async function generateStaticParams() {
-  const codes = await getAllCountryCodes()
-  return codes.map(c => ({ code: c.iso2.toLowerCase() }))
-}
-
 // ── generateMetadata ───────────────────────────────────────────────────────
 export async function generateMetadata(
   { params }: { params: Promise<{ code: string }> }
