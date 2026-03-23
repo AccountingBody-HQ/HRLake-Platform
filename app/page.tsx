@@ -97,24 +97,24 @@ export default async function HomePage() {
     <main className="min-h-screen bg-white">
 
       {/* ══════ HERO ══════ */}
-      <section className="relative bg-slate-950 overflow-hidden">
+      <section className="relative overflow-hidden border-b border-stone-200" style={{backgroundColor: '#f5f0eb'}}>
         <div className="absolute inset-0"
-          style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)'}} />
+          style={{background: 'radial-gradient(ellipse at 80% 0%, rgba(30,111,255,0.06) 0%, transparent 60%)'}} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-              <span className="text-blue-300 text-xs font-semibold tracking-wide">Global Payroll Intelligence Platform</span>
+            <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-1.5 mb-8">
+              <div className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+              <span className="text-blue-700 text-xs font-semibold tracking-wide">Global Payroll Intelligence Platform</span>
             </div>
 
-            <h1 className="font-serif text-5xl lg:text-7xl font-bold text-white leading-[1.0] tracking-tight mb-8">
+            <h1 className="font-serif text-5xl lg:text-7xl font-bold text-slate-950 leading-[1.0] tracking-tight mb-8">
               The world standard<br />
               for global payroll<br />
-              <span className="text-blue-400">intelligence.</span>
+              <span className="text-blue-700">intelligence.</span>
             </h1>
 
-            <p className="text-lg text-slate-400 leading-relaxed max-w-2xl mb-10">
+            <p className="text-lg text-slate-500 leading-relaxed max-w-2xl mb-10">
               Payroll data, calculators, and employment compliance guides for 195 countries.
               The reference platform for EOR firms, HR directors, lawyers, and global finance teams.
             </p>
@@ -124,18 +124,18 @@ export default async function HomePage() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-slate-600 text-xs font-semibold uppercase tracking-wider mr-1">Browse:</span>
+              <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider mr-1">Browse:</span>
               {REGIONS.map(r => (
                 <Link key={r.slug} href={`/countries/?region=${r.slug}`}
-                  className="text-xs font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full px-3 py-1.5 transition-all">
-                  {r.name} <span className="text-slate-600 ml-1">{r.count}</span>
+                  className="text-xs font-medium text-slate-500 hover:text-blue-700 border border-slate-200 hover:border-blue-400 rounded-full px-3 py-1.5 transition-all">
+                  {r.name} <span className="text-slate-300 ml-1">{r.count}</span>
                 </Link>
               ))}
             </div>
           </div>
 
           {/* Stat strip */}
-          <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-8">
+          <div className="mt-16 pt-10 border-t border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
               { value: '195', label: 'Countries', sub: 'Full global coverage' },
               { value: '10,000+', label: 'Data Points', sub: 'Per country record' },
@@ -143,9 +143,9 @@ export default async function HomePage() {
               { value: 'Free', label: 'Core Access', sub: 'No account required' },
             ].map(s => (
               <div key={s.label}>
-                <div className="text-3xl font-black text-white tracking-tight">{s.value}</div>
-                <div className="text-sm font-semibold text-slate-300 mt-1">{s.label}</div>
-                <div className="text-xs text-slate-600 mt-0.5">{s.sub}</div>
+                <div className="text-3xl font-black text-slate-950 tracking-tight">{s.value}</div>
+                <div className="text-sm font-semibold text-slate-700 mt-1">{s.label}</div>
+                <div className="text-xs text-slate-400 mt-0.5">{s.sub}</div>
               </div>
             ))}
           </div>
@@ -330,7 +330,7 @@ export default async function HomePage() {
       )}
 
       {/* ══════ EMAIL CAPTURE ══════ */}
-      <section className="relative bg-slate-950 overflow-hidden">
+      <section className="relative overflow-hidden border-b border-stone-200" style={{backgroundColor: '#f5f0eb'}}>
         <div className="absolute inset-0"
           style={{background: 'radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.12) 0%, transparent 60%)'}} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-24">
