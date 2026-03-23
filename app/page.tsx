@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import CountrySearch from '@/components/homepage/CountrySearch'
-import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { Globe, Calculator, Building2, Shield, ArrowRight, CheckCircle, TrendingUp, Users, Database, RefreshCw } from 'lucide-react'
 
 const FEATURED_COUNTRIES = [
