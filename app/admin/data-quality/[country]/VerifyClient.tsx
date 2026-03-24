@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Sparkles, CheckCircle, XCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { Sparkles, CheckCircle, XCircle, AlertCircle, Loader2, ThumbsUp, ThumbsDown, Check } from 'lucide-react'
 
 interface Props {
   countryCode: string
@@ -12,30 +12,39 @@ interface Props {
   currencyCode: string | null
 }
 
+interface Finding {
+  table: string
+  field: string
+  current_value: string
+  found_value: string
+  status: 'match' | 'mismatch' | 'unverified'
+  source: string
+  note: string
+}
+
 interface VerificationResult {
   summary: string
-  findings: {
-    table: string
-    field: string
-    current_value: string
-    found_value: string
-    status: 'match' | 'mismatch' | 'unverified'
-    source: string
-    note: string
-  }[]
+  findings: Finding[]
 }
 
 export default function VerifyClient({ countryCode, countryName, brackets, ss, rules, currencyCode }: Props) {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<VerificationResult | null>(null)
   const [error, setError] = useState('')
+  const [decisions, setDecisions] = useState<Record<number, 'approved' | 'rejected'>>({})
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
 
   async function runVerification() {
     setLoading(true)
     setError('')
     setResult(null)
+    setDecisions({})
+    setSaved(false)
 
-    const prompt = `You are a payroll data verification expert. Verify the following data for ${countryName} (${countryCode}) against official government sources for tax year 2025.
+    const prompt = `You are a payroll data verification expert. Use web search to verify the following data for ${countryName} (${countryCode}) against official government sources for tax year 2025.
+
+Search for the latest official rates from government websites before responding.
 
 CURRENT DATABASE VALUES:
 
@@ -48,20 +57,20 @@ ${ss.map(r => `- ${r.contribution_type}: employer ${r.employer_rate}%, employee 
 EMPLOYMENT RULES:
 ${rules.map(r => `- ${r.rule_type}: ${r.value_text ?? r.value_numeric + ' ' + (r.value_unit ?? '')} (source: ${r.source_url})`).join('\n')}
 
-Based on your knowledge of ${countryName} tax and employment law for 2025, verify each data point above.
+After searching official sources, verify each data point.
 
-Respond ONLY with a JSON object in this exact format, no other text:
+Respond ONLY with a JSON object in this exact format, no markdown, no code blocks, just raw JSON:
 {
-  "summary": "Brief overall assessment",
+  "summary": "Brief overall assessment mentioning what you searched and found",
   "findings": [
     {
       "table": "tax_brackets|social_security|employment_rules",
       "field": "name of the field or bracket",
       "current_value": "what is in our database",
-      "found_value": "what you believe the correct value is",
+      "found_value": "what official source says",
       "status": "match|mismatch|unverified",
-      "source": "official source URL",
-      "note": "brief explanation"
+      "source": "official government URL you found",
+      "note": "brief explanation of finding"
     }
   ]
 }`
@@ -74,26 +83,15 @@ Respond ONLY with a JSON object in this exact format, no other text:
       })
 
       const data = await response.json()
-      console.log('Full API response:', JSON.stringify(data))
-
-      // Check for API errors
-      if (data.error) throw new Error('API error: ' + data.error.message)
-      if (!data.content || !data.content[0]) throw new Error('Empty response from API: ' + JSON.stringify(data))
+      if (data.error) throw new Error('API error: ' + data.error)
+      if (!data.content || !data.content[0]) throw new Error('Empty response from API')
 
       const text = data.content[0].text ?? ''
-      console.log('Text response:', text.slice(0, 300))
-
-      // Strip markdown code blocks if present
       const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim()
-
-      // Find JSON object in response
       const start = cleaned.indexOf('{')
       const end = cleaned.lastIndexOf('}')
-      if (start === -1 || end === -1) {
-        throw new Error('No JSON in: ' + cleaned.slice(0, 200))
-      }
-      const jsonStr = cleaned.slice(start, end + 1)
-      const parsed = JSON.parse(jsonStr)
+      if (start === -1 || end === -1) throw new Error('No JSON in: ' + cleaned.slice(0, 200))
+      const parsed = JSON.parse(cleaned.slice(start, end + 1))
       setResult(parsed)
     } catch (e: any) {
       setError('Verification failed: ' + e.message)
@@ -102,9 +100,36 @@ Respond ONLY with a JSON object in this exact format, no other text:
     }
   }
 
+  function decide(index: number, decision: 'approved' | 'rejected') {
+    setDecisions(prev => ({ ...prev, [index]: decision }))
+  }
+
+  async function saveDecisions() {
+    setSaving(true)
+    try {
+      // Mark country as verified
+      await fetch('/api/admin-update-country', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          countryCode,
+          action: 'approve_all',
+        }),
+      })
+      setSaved(true)
+    } catch (e: any) {
+      setError('Save failed: ' + e.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const matches    = result?.findings.filter(f => f.status === 'match').length ?? 0
   const mismatches = result?.findings.filter(f => f.status === 'mismatch').length ?? 0
   const unverified = result?.findings.filter(f => f.status === 'unverified').length ?? 0
+  const totalDecisions = Object.keys(decisions).length
+  const totalFindings = result?.findings.length ?? 0
+  const allDecided = totalFindings > 0 && totalDecisions === totalFindings
 
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
@@ -112,7 +137,7 @@ Respond ONLY with a JSON object in this exact format, no other text:
         <div>
           <h2 className="text-white font-bold">AI Verification</h2>
           <p className="text-slate-400 text-xs mt-0.5">
-            Claude will check all data points against official sources for {countryName}
+            Claude searches official government sources to verify {countryName} data
           </p>
         </div>
         <button
@@ -136,8 +161,8 @@ Respond ONLY with a JSON object in this exact format, no other text:
       {loading && (
         <div className="px-6 py-12 text-center">
           <Loader2 size={32} className="animate-spin text-blue-400 mx-auto mb-4" />
-          <p className="text-white font-semibold mb-1">Verifying {countryName} data...</p>
-          <p className="text-slate-400 text-sm">Claude is checking against official government sources</p>
+          <p className="text-white font-semibold mb-1">Searching official sources for {countryName}...</p>
+          <p className="text-slate-400 text-sm">Claude is browsing government websites and verifying each data point</p>
         </div>
       )}
 
@@ -166,12 +191,16 @@ Respond ONLY with a JSON object in this exact format, no other text:
           </div>
 
           {/* Findings */}
-          <div className="space-y-3">
+          <div className="space-y-3 mb-6">
             {result.findings.map((f, i) => (
               <div
                 key={i}
-                className={`border rounded-xl p-4 ${
-                  f.status === 'match'
+                className={`border rounded-xl p-4 transition-all ${
+                  decisions[i] === 'approved'
+                    ? 'bg-emerald-500/5 border-emerald-500/40'
+                    : decisions[i] === 'rejected'
+                    ? 'bg-slate-800 border-slate-600 opacity-60'
+                    : f.status === 'match'
                     ? 'bg-emerald-500/5 border-emerald-500/20'
                     : f.status === 'mismatch'
                     ? 'bg-red-500/5 border-red-500/20'
@@ -180,7 +209,11 @@ Respond ONLY with a JSON object in this exact format, no other text:
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3 flex-1">
-                    {f.status === 'match'
+                    {decisions[i] === 'approved'
+                      ? <Check size={16} className="text-emerald-400 shrink-0 mt-0.5" />
+                      : decisions[i] === 'rejected'
+                      ? <XCircle size={16} className="text-slate-500 shrink-0 mt-0.5" />
+                      : f.status === 'match'
                       ? <CheckCircle size={16} className="text-emerald-400 shrink-0 mt-0.5" />
                       : f.status === 'mismatch'
                       ? <XCircle size={16} className="text-red-400 shrink-0 mt-0.5" />
@@ -199,24 +232,81 @@ Respond ONLY with a JSON object in this exact format, no other text:
                         <div>
                           <p className="text-xs text-slate-500 mb-0.5">AI Found</p>
                           <p className={`text-sm font-mono font-bold ${
+                            decisions[i] === 'approved' ? 'text-emerald-400' :
                             f.status === 'match' ? 'text-emerald-400' :
                             f.status === 'mismatch' ? 'text-red-400' : 'text-amber-400'
                           }`}>{f.found_value}</p>
                         </div>
                       </div>
-                      <p className="text-xs text-slate-400">{f.note}</p>
+                      <p className="text-xs text-slate-400 mb-1">{f.note}</p>
                       {f.source && (
-                        <a href={f.source} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 mt-1 inline-block truncate max-w-xs">{f.source}</a>
+                        <a href={f.source} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 truncate max-w-xs inline-block">{f.source}</a>
                       )}
                     </div>
                   </div>
+
+                  {/* Approve / Reject buttons */}
+                  {!decisions[i] && (
+                    <div className="flex gap-2 shrink-0">
+                      <button
+                        onClick={() => decide(i, 'approved')}
+                        className="flex items-center gap-1.5 bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-600/30 hover:border-emerald-500 text-emerald-400 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
+                      >
+                        <ThumbsUp size={12} /> Approve
+                      </button>
+                      <button
+                        onClick={() => decide(i, 'rejected')}
+                        className="flex items-center gap-1.5 bg-red-600/20 hover:bg-red-600 border border-red-600/30 hover:border-red-500 text-red-400 hover:text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
+                      >
+                        <ThumbsDown size={12} /> Reject
+                      </button>
+                    </div>
+                  )}
+
+                  {decisions[i] && (
+                    <span className={`text-xs font-bold px-3 py-1.5 rounded-lg shrink-0 ${
+                      decisions[i] === 'approved'
+                        ? 'bg-emerald-600/20 text-emerald-400'
+                        : 'bg-slate-700 text-slate-400'
+                    }`}>
+                      {decisions[i] === 'approved' ? '✓ Approved' : '✗ Rejected'}
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
           </div>
 
-          <p className="text-slate-500 text-xs mt-6 text-center">
-            AI verification is a guide only. Always confirm mismatches against official government sources before updating the database.
+          {/* Save button */}
+          {allDecided && !saved && (
+            <button
+              onClick={saveDecisions}
+              disabled={saving}
+              className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold py-3.5 rounded-xl transition-colors"
+            >
+              {saving
+                ? <><Loader2 size={15} className="animate-spin" /> Saving...</>
+                : <><Check size={15} /> Mark {countryName} as Verified</>
+              }
+            </button>
+          )}
+
+          {saved && (
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 text-center">
+              <CheckCircle size={20} className="text-emerald-400 mx-auto mb-2" />
+              <p className="text-emerald-400 font-bold text-sm">{countryName} marked as verified today</p>
+              <p className="text-slate-400 text-xs mt-1">Last updated date has been updated in the database</p>
+            </div>
+          )}
+
+          {!allDecided && totalDecisions > 0 && (
+            <p className="text-slate-500 text-xs text-center">
+              {totalFindings - totalDecisions} findings remaining — approve or reject each one to save
+            </p>
+          )}
+
+          <p className="text-slate-500 text-xs mt-4 text-center">
+            AI verification uses live web search. Always confirm mismatches against official sources before accepting changes.
           </p>
         </div>
       )}
@@ -224,7 +314,7 @@ Respond ONLY with a JSON object in this exact format, no other text:
       {!result && !loading && !error && (
         <div className="px-6 py-12 text-center">
           <Sparkles size={32} className="text-slate-600 mx-auto mb-4" />
-          <p className="text-slate-400 text-sm">Click Run AI Verification to check all data points for {countryName}</p>
+          <p className="text-slate-400 text-sm">Click Run AI Verification to check all {countryName} data points against live government sources</p>
         </div>
       )}
     </div>
