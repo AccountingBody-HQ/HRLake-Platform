@@ -111,21 +111,21 @@ export default async function CountryPage(
 
   // Social security split
   const employeeSS = socialSecurity.filter(r =>
-    r.contribution_type?.toLowerCase().includes('employee')
+    r.employee_rate > 0
   )
   const employerSS = socialSecurity.filter(r =>
-    r.contribution_type?.toLowerCase().includes('employer')
+    r.employer_rate > 0
   )
 
   // Key figures for stat cards
   const incomeTaxRange = taxBrackets.length
-    ? `${taxBrackets[0]?.rate_percent ?? 0}%–${taxBrackets[taxBrackets.length - 1]?.rate_percent ?? 0}%`
+    ? `${taxBrackets[0]?.rate ?? 0}%–${taxBrackets[taxBrackets.length - 1]?.rate ?? 0}%`
     : null
   const employerSSRate = employerSS.length
-    ? employerSS.map(r => `${r.rate_percent}%`).join(' + ')
+    ? employerSS.map(r => `${r.employer_rate}%`).join(' + ')
     : null
   const employeeSSRate = employeeSS.length
-    ? employeeSS.map(r => `${r.rate_percent}%`).join(' + ')
+    ? employeeSS.map(r => `${r.employee_rate}%`).join(' + ')
     : null
 
   // Sanity insights
@@ -352,18 +352,18 @@ export default async function CountryPage(
                       {taxBrackets.map((bracket, i) => (
                         <tr key={i} className="hover:bg-slate-50 transition-colors">
                           <td className="px-6 py-4 text-sm font-medium text-slate-700">
-                            {bracket.bracket_label ?? `Band ${i + 1}`}
+                            {bracket.bracket_name ?? `Band ${i + 1}`}
                           </td>
                           <td className="px-6 py-4 text-sm font-mono text-slate-600">
-                            {fmtCurrency(bracket.min_income, country.currency_code)}
+                            {fmtCurrency(bracket.lower_limit, country.currency_code)}
                             {' — '}
-                            {bracket.max_income
-                              ? fmtCurrency(bracket.max_income, country.currency_code)
+                            {bracket.upper_limit
+                              ? fmtCurrency(bracket.upper_limit, country.currency_code)
                               : 'and above'}
                           </td>
                           <td className="px-6 py-4 text-right">
                             <span className="inline-flex items-center bg-blue-50 text-blue-700 font-bold text-sm px-3 py-1 rounded-full">
-                              {bracket.rate_percent}%
+                              {bracket.rate}%
                             </span>
                           </td>
                         </tr>
@@ -397,16 +397,16 @@ export default async function CountryPage(
                           <div key={i} className="flex items-center justify-between gap-4">
                             <div>
                               <p className="text-sm font-medium text-slate-700">
-                                {row.description ?? row.contribution_type}
+                                {row.contribution_type}
                               </p>
-                              {row.cap_amount && (
+                              {row.employee_cap_annual ?? row.employer_cap_annual && (
                                 <p className="text-xs text-slate-400 mt-0.5">
-                                  Capped at {fmtCurrency(row.cap_amount, country.currency_code)}
+                                  Capped at {fmtCurrency(row.employee_cap_annual ?? row.employer_cap_annual, country.currency_code)}
                                 </p>
                               )}
                             </div>
                             <span className="shrink-0 bg-sky-50 text-sky-700 font-bold text-sm px-3 py-1 rounded-full border border-sky-100">
-                              {row.rate_percent}%
+                              {row.employee_rate !== 0 ? row.employee_rate : row.employer_rate}%
                             </span>
                           </div>
                         ))}
@@ -422,16 +422,16 @@ export default async function CountryPage(
                           <div key={i} className="flex items-center justify-between gap-4">
                             <div>
                               <p className="text-sm font-medium text-slate-700">
-                                {row.description ?? row.contribution_type}
+                                {row.contribution_type}
                               </p>
-                              {row.cap_amount && (
+                              {row.employee_cap_annual ?? row.employer_cap_annual && (
                                 <p className="text-xs text-slate-400 mt-0.5">
-                                  Capped at {fmtCurrency(row.cap_amount, country.currency_code)}
+                                  Capped at {fmtCurrency(row.employee_cap_annual ?? row.employer_cap_annual, country.currency_code)}
                                 </p>
                               )}
                             </div>
                             <span className="shrink-0 bg-indigo-50 text-indigo-700 font-bold text-sm px-3 py-1 rounded-full border border-indigo-100">
-                              {row.rate_percent}%
+                              {row.employee_rate !== 0 ? row.employee_rate : row.employer_rate}%
                             </span>
                           </div>
                         ))}

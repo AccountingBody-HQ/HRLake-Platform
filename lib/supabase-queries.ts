@@ -103,9 +103,24 @@ export async function getEmploymentRules(iso2: string) {
     .select('*')
     .eq('country_code', iso2.toUpperCase())
     .eq('is_current', true)
-    .single()
   if (error) { console.error('getEmploymentRules error:', error.message); return null }
-  return data
+  if (!data || data.length === 0) return null
+  // Transform array of rule rows into keyed object
+  const rules: Record<string, any> = {}
+  for (const row of data) { rules[row.rule_type] = row }
+  return {
+    minimum_wage:         rules['minimum_wage']?.value_numeric ?? null,
+    annual_leave_days:    rules['annual_leave']?.value_numeric ?? null,
+    sick_leave_days:      rules['sick_leave']?.value_numeric ?? null,
+    notice_period_days:   rules['notice_period_min']?.value_numeric ?? null,
+    probation_period_days: rules['probation_period_max']?.value_numeric ?? null,
+    maternity_leave_weeks: rules['maternity_leave']?.value_numeric ?? null,
+    paternity_leave_weeks: rules['paternity_leave']?.value_numeric ?? null,
+    overtime_rate:        rules['overtime_rate']?.value_numeric ?? null,
+    payroll_frequency:    rules['minimum_wage']?.value_unit ?? null,
+    thirteenth_month_pay: !!rules['thirteenth_month_pay'],
+    working_hours_max:    rules['working_hours_max']?.value_numeric ?? null,
+  }
 }
 
 export async function getPayrollCompliance(iso2: string) {
