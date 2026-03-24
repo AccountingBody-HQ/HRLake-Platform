@@ -13,21 +13,38 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
+        max_tokens: 5000,
+        system: 'You are a payroll data verification expert. You have access to web search. Always search official government sources to verify data before responding. Always respond with valid JSON only. No markdown, no explanation, no code blocks. Just the raw JSON object.',
+        tools: [
+          {
+            type: 'web_search_20250305',
+            name: 'web_search',
+          }
+        ],
         messages: [
           {
             role: 'user',
             content: prompt
           }
         ],
-        system: 'You are a payroll data verification expert. Always respond with valid JSON only. No markdown, no explanation, no code blocks. Just the raw JSON object.',
       }),
     })
 
     const data = await response.json()
     console.log('Anthropic response status:', response.status)
-    console.log('Anthropic response:', JSON.stringify(data).slice(0, 500))
-    return NextResponse.json(data)
+
+    // With tools, Claude may return multiple content blocks
+    // We need to find the final text block after tool use
+    let text = ''
+    if (data.content && Array.isArray(data.content)) {
+      // Get the last text block — this is the final answer after web search
+      const textBlocks = data.content.filter((block: any) => block.type === 'text')
+      text = textBlocks[textBlocks.length - 1]?.text ?? ''
+    }
+
+    console.log('Final text response:', text.slice(0, 300))
+    return NextResponse.json({ content: [{ type: 'text', text }] })
+
   } catch (e: any) {
     console.error('verify-country error:', e)
     return NextResponse.json({ error: e.message }, { status: 500 })
