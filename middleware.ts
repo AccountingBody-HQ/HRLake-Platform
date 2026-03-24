@@ -3,22 +3,22 @@ import { NextResponse } from 'next/server'
 
 const ADMIN_USER_ID = 'user_3BEB6ktIKuXbZEqamZxWJ55eLVv'
 
-export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth()
-  const isAdminRoute = req.nextUrl.pathname.startsWith('/admin')
+export default clerkMiddleware(async (auth, request) => {
+  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
 
   if (isAdminRoute) {
+    const { userId } = await auth()
+
     if (!userId) {
-      const signInUrl = new URL('/sign-in', req.url)
-      signInUrl.searchParams.set('redirect_url', req.nextUrl.pathname)
+      const signInUrl = new URL('/sign-in', request.url)
+      signInUrl.searchParams.set('redirect_url', request.nextUrl.pathname)
       return NextResponse.redirect(signInUrl)
     }
+
     if (userId !== ADMIN_USER_ID) {
-      return NextResponse.redirect(new URL('/', req.url))
+      return NextResponse.redirect(new URL('/', request.url))
     }
   }
-
-  return NextResponse.next()
 })
 
 export const config = {
