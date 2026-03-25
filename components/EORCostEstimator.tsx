@@ -86,7 +86,7 @@ export default function EORCostEstimator() {
                 className="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-10 text-slate-800 font-semibold text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
               >
                 {COUNTRIES.map(c => (
-                  <option key={c.code} value={c.code}>{c.flag} {c.name}</option>
+                  <option key={c.code} value={c.code}>{c.name}</option>
                 ))}
               </select>
               <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
