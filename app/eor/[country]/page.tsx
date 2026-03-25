@@ -185,8 +185,9 @@ export async function generateStaticParams() {
   return Object.keys(COUNTRY_DATA).map(code => ({ country: code }))
 }
 
-export async function generateMetadata({ params }: { params: { country: string } }) {
-  const data = COUNTRY_DATA[params.country]
+export async function generateMetadata({ params }: { params: Promise<{ country: string }> }) {
+  const { country } = await params
+  const data = COUNTRY_DATA[country]
   if (!data) return { title: 'EOR Guide | GlobalPayrollExpert' }
   return {
     title: `EOR Guide: ${data.name} | GlobalPayrollExpert`,
@@ -194,8 +195,9 @@ export async function generateMetadata({ params }: { params: { country: string }
   }
 }
 
-export default function EORCountryPage({ params }: { params: { country: string } }) {
-  const data = COUNTRY_DATA[params.country]
+export default async function EORCountryPage({ params }: { params: Promise<{ country: string }> }) {
+  const { country } = await params
+  const data = COUNTRY_DATA[country]
 
   if (!data) {
     return (
@@ -382,7 +384,7 @@ export default function EORCountryPage({ params }: { params: { country: string }
               <p className="text-slate-500 text-sm">Income tax brackets, social security rates, employment law, and payroll calculator.</p>
             </div>
             <div className="flex gap-3 shrink-0">
-              <Link href={`/countries/${params.country}/`}
+              <Link href={`/countries/${country}/`}
                 className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-3 rounded-xl transition-colors text-sm">
                 {data.name} country page <ArrowRight size={14} />
               </Link>
