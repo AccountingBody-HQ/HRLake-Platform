@@ -50,7 +50,7 @@ export default function EORCostEstimator() {
           `)
           .eq('is_current', true)
           .order('country_code')
-        if (data) setCountries(data as Country[])
+        if (data) setCountries(data as unknown as Country[])
       } catch (e) {
         console.error('Failed to fetch EOR countries', e)
       } finally {
