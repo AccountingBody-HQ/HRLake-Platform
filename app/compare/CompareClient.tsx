@@ -24,6 +24,10 @@ interface SSRow {
   contribution_type: string
   employer_rate: number
   employee_rate: number
+  applies_above: number | null
+  applies_below: number | null
+  employer_cap_annual: number | null
+  employee_cap_annual: number | null
 }
 
 interface TaxBracketRow {
@@ -67,15 +71,25 @@ function getRuleDisplay(rules: RuleRow[], type: string): string {
   return '—'
 }
 
+function calcSS(ss: SSRow[], type: 'employer' | 'employee', gross: number): number {
+  let total = 0
+  for (const s of ss) {
+    const rate = type === 'employer' ? Number(s.employer_rate) : Number(s.employee_rate)
+    const floor = s.applies_above !== null ? Number(s.applies_above) : 0
+    const ceiling = s.applies_below !== null ? Number(s.applies_below) : Infinity
+    const cap = type === 'employer' ? s.employer_cap_annual : s.employee_cap_annual
+    const taxable = Math.max(0, Math.min(gross, ceiling) - floor)
+    const base = cap !== null ? Math.min(taxable, Number(cap)) : taxable
+    total += base * (rate / 100)
+  }
+  return total
+}
+
 function getSSRate(ss: SSRow[], type: string): number {
-  // Use the highest single rate rather than summing bands
-  // Multiple rows often represent the same contribution split across salary bands
-  // not additive separate contributions
-  const rates = ss.map(s => {
-    if (type === 'employer') return Number(s.employer_rate)
-    if (type === 'employee') return Number(s.employee_rate)
-    return 0
-  })
+  // Display rate — max rate across all bands for informational display only
+  const rates = ss.map(s =>
+    type === 'employer' ? Number(s.employer_rate) : Number(s.employee_rate)
+  )
   if (rates.length === 0) return 0
   return Math.max(...rates)
 }
@@ -114,7 +128,7 @@ export default function CompareClient({ countries }: Props) {
       supabase
         .schema('gpe')
         .from('social_security')
-        .select('contribution_type, employer_rate, employee_rate')
+        .select('contribution_type, employer_rate, employee_rate, applies_above, applies_below, employer_cap_annual, employee_cap_annual')
         .eq('country_code', code)
         .eq('is_current', true),
       supabase
@@ -177,10 +191,10 @@ export default function CompareClient({ countries }: Props) {
     return sym + Math.round(amount).toLocaleString('en-GB')
   }
 
-  // Calculate estimated employer cost at given salary
+  // Calculate estimated employer cost at given salary using proper threshold logic
   function employerCost(data: CountryData, grossSalary: number): number {
-    const employerSS = getSSRate(data.ss, 'employer')
-    return grossSalary * (1 + employerSS / 100)
+    const employerSS = calcSS(data.ss, 'employer', grossSalary)
+    return grossSalary + employerSS
   }
 
   const grossA = parseFloat(salaryA.replace(/,/g, '')) || 0
@@ -427,12 +441,12 @@ export default function CompareClient({ countries }: Props) {
                 { data: dataB, gross: grossB, color: 'violet', accent: 'border-violet-200 bg-violet-50', badge: 'bg-violet-600', bar: 'bg-violet-500' },
               ].map(({ data: d, gross, color, accent, badge, bar }) => {
                 if (!d || gross <= 0) return null
-                const empSS = Math.round(gross * getSSRate(d.ss, 'employer') / 100)
+                const empSS = Math.round(calcSS(d.ss, 'employer', gross))
                 const totalCost = Math.round(employerCost(d, gross))
                 const currency = d.country.currency_code
                 const sym = ({ GBP: '£', USD: '$', EUR: '€', AUD: 'A$', CAD: 'C$', JPY: '¥', SGD: 'S$', AED: 'د.إ', SEK: 'kr', NOK: 'kr', DKK: 'kr', PLN: 'zł', CHF: 'Fr', INR: '₹' } as Record<string,string>)[currency] ?? currency + ' '
                 const f = (n: number) => sym + Math.round(n).toLocaleString('en-GB')
-                const ssRate = getSSRate(d.ss, 'employer')
+                const ssRate = gross > 0 ? (empSS / gross) * 100 : 0
                 const netRate = ssRate > 0 ? (empSS / totalCost) * 100 : 0
                 const grossRate = (gross / totalCost) * 100
 
