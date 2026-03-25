@@ -169,70 +169,132 @@ export default function CompareClient({ countries }: Props) {
     <div className="space-y-8">
 
       {/* Selector panel */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-        <h2 className="font-semibold text-slate-900 text-lg mb-6">Choose two countries to compare</h2>
-        <div className="grid sm:grid-cols-3 gap-4 items-end">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Country A</label>
-            <select
-              value={codeA}
-              onChange={e => setCodeA(e.target.value)}
-              className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-800 font-medium focus:outline-none focus:border-blue-500 text-sm"
-            >
-              {countries.map(c => (
-                <option key={c.iso2} value={c.iso2}>{c.name}</option>
-              ))}
-            </select>
-          </div>
+      <div className="rounded-2xl overflow-hidden shadow-lg border border-slate-200">
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Country B</label>
-            <select
-              value={codeB}
-              onChange={e => setCodeB(e.target.value)}
-              className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-800 font-medium focus:outline-none focus:border-blue-500 text-sm"
-            >
-              {countries.map(c => (
-                <option key={c.iso2} value={c.iso2}>{c.name}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="space-y-3">
-            <label className="block text-sm font-medium text-slate-700">Annual Gross Salary</label>
-            <div>
-              <span className="text-xs text-slate-500 mb-1 block">Country A salary (local currency)</span>
-              <input
-                type="number"
-                value={salaryA}
-                onChange={e => setSalaryA(e.target.value)}
-                placeholder="e.g. 60000"
-                className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-800 font-medium focus:outline-none focus:border-blue-500 text-sm"
-              />
-            </div>
-            <div>
-              <span className="text-xs text-slate-500 mb-1 block">Country B salary (local currency)</span>
-              <input
-                type="number"
-                value={salaryB}
-                onChange={e => setSalaryB(e.target.value)}
-                placeholder="e.g. 60000"
-                className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-800 font-medium focus:outline-none focus:border-blue-500 text-sm"
-              />
-            </div>
-          </div>
+        {/* Header */}
+        <div className="bg-slate-900 px-8 py-6">
+          <p className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-1">Comparison Tool</p>
+          <h2 className="text-white font-serif text-2xl font-bold">Select two countries to compare</h2>
         </div>
 
-        <button
-          onClick={handleCompare}
-          disabled={loading || codeA === codeB}
-          className="mt-5 w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-colors text-sm"
-        >
-          {loading ? 'Loading…' : 'Compare Countries'}
-        </button>
-        {codeA === codeB && (
-          <p className="text-xs text-red-500 mt-2">Please select two different countries.</p>
-        )}
+        <div className="bg-white p-8 space-y-8">
+
+          {/* Country selectors */}
+          <div className="grid sm:grid-cols-2 gap-6">
+            {/* Country A */}
+            <div className="relative">
+              <div className="absolute -top-3 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
+                Country A
+              </div>
+              <div className="border-2 border-blue-200 hover:border-blue-400 rounded-2xl p-4 pt-5 transition-colors">
+                <div className="flex items-center gap-3 mb-3">
+                  <img
+                    src={`https://flagcdn.com/28x21/${codeA.toLowerCase()}.png`}
+                    width={28} height={21}
+                    alt={countries.find(c => c.iso2 === codeA)?.name ?? ''}
+                    className="rounded-sm shadow-sm shrink-0"
+                  />
+                  <span className="font-semibold text-slate-800 text-sm">
+                    {countries.find(c => c.iso2 === codeA)?.name ?? ''}
+                  </span>
+                </div>
+                <select
+                  value={codeA}
+                  onChange={e => setCodeA(e.target.value)}
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-medium focus:outline-none focus:border-blue-400 text-sm"
+                >
+                  {countries.map(c => (
+                    <option key={c.iso2} value={c.iso2}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* VS divider — hidden on mobile */}
+            <div className="hidden sm:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-slate-900 rounded-full items-center justify-center pointer-events-none z-20">
+              <span className="text-white text-xs font-black">VS</span>
+            </div>
+
+            {/* Country B */}
+            <div className="relative">
+              <div className="absolute -top-3 left-4 bg-violet-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
+                Country B
+              </div>
+              <div className="border-2 border-violet-200 hover:border-violet-400 rounded-2xl p-4 pt-5 transition-colors">
+                <div className="flex items-center gap-3 mb-3">
+                  <img
+                    src={`https://flagcdn.com/28x21/${codeB.toLowerCase()}.png`}
+                    width={28} height={21}
+                    alt={countries.find(c => c.iso2 === codeB)?.name ?? ''}
+                    className="rounded-sm shadow-sm shrink-0"
+                  />
+                  <span className="font-semibold text-slate-800 text-sm">
+                    {countries.find(c => c.iso2 === codeB)?.name ?? ''}
+                  </span>
+                </div>
+                <select
+                  value={codeB}
+                  onChange={e => setCodeB(e.target.value)}
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-medium focus:outline-none focus:border-violet-400 text-sm"
+                >
+                  {countries.map(c => (
+                    <option key={c.iso2} value={c.iso2}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Salary inputs */}
+          <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+            <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-5">Annual Gross Salary — enter in each country's local currency</p>
+            <div className="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                  <span className="w-3 h-3 rounded-full bg-blue-600 shrink-0" />
+                  {countries.find(c => c.iso2 === codeA)?.name ?? 'Country A'} salary
+                  <span className="text-slate-400 font-normal text-xs">({countries.find(c => c.iso2 === codeA)?.currency_code})</span>
+                </label>
+                <input
+                  type="number"
+                  value={salaryA}
+                  onChange={e => setSalaryA(e.target.value)}
+                  placeholder="e.g. 60000"
+                  className="w-full px-4 py-3 bg-white border-2 border-blue-200 focus:border-blue-500 rounded-xl text-slate-800 font-semibold text-lg focus:outline-none transition-colors"
+                />
+              </div>
+              <div>
+                <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                  <span className="w-3 h-3 rounded-full bg-violet-600 shrink-0" />
+                  {countries.find(c => c.iso2 === codeB)?.name ?? 'Country B'} salary
+                  <span className="text-slate-400 font-normal text-xs">({countries.find(c => c.iso2 === codeB)?.currency_code})</span>
+                </label>
+                <input
+                  type="number"
+                  value={salaryB}
+                  onChange={e => setSalaryB(e.target.value)}
+                  placeholder="e.g. 60000"
+                  className="w-full px-4 py-3 bg-white border-2 border-violet-200 focus:border-violet-500 rounded-xl text-slate-800 font-semibold text-lg focus:outline-none transition-colors"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleCompare}
+              disabled={loading || codeA === codeB}
+              className="flex items-center gap-2 px-8 py-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-colors text-sm shadow-lg"
+            >
+              {loading ? 'Loading data…' : '⚖️ Compare Countries'}
+            </button>
+            {codeA === codeB && (
+              <p className="text-xs text-red-500">Please select two different countries.</p>
+            )}
+          </div>
+
+        </div>
       </div>
 
       {/* Results */}
