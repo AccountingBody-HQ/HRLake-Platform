@@ -655,7 +655,7 @@ export default async function CountryPage(
                   flag_emoji={c.flag_emoji}
                   currency={c.currency_code}
                   region={c.region}
-                  coverage_level={c.gpe_coverage_level}
+                  gpe_coverage_level={c.gpe_coverage_level}
                   payroll_complexity_score={c.payroll_complexity_score}
                 />
               ))}
