@@ -284,7 +284,7 @@ export default function CompareClient({ countries }: Props) {
                 <BarChart data={chartData} margin={{ left: 16, right: 16, top: 0, bottom: 0 }}>
                   <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
                   <YAxis tickFormatter={v => '$' + (v / 1000).toFixed(0) + 'k'} tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
-                  <Tooltip formatter={(v: number) => v.toLocaleString()} contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: 13 }} />
+                  <Tooltip formatter={(v) => typeof v === "number" ? v.toLocaleString() : ""} contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: 13 }} />
                   <Legend />
                   <Bar dataKey={dataA.country.name} fill="#3b82f6" radius={[4, 4, 0, 0]} />
                   <Bar dataKey={dataB.country.name} fill="#8b5cf6" radius={[4, 4, 0, 0]} />
