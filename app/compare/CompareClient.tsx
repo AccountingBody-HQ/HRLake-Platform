@@ -26,10 +26,15 @@ interface SSRow {
   employee_rate: number
 }
 
+interface TaxBracketRow {
+  rate: number
+}
+
 interface CountryData {
   country: Country
   rules: RuleRow[]
   ss: SSRow[]
+  taxBrackets: TaxBracketRow[]
 }
 
 interface Props {
@@ -84,6 +89,10 @@ export default function CompareClient({ countries }: Props) {
   const [dataB, setDataB] = useState<CountryData | null>(null)
   const [loading, setLoading] = useState(false)
   const [compared, setCompared] = useState(false)
+  const [rates, setRates] = useState<Record<string, number>>({})
+  const [ratesLoaded, setRatesLoaded] = useState(false)
+  const [showConverted, setShowConverted] = useState(false)
+  const [convertTo, setConvertTo] = useState('USD')
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -94,7 +103,7 @@ export default function CompareClient({ countries }: Props) {
     const country = countryList.find(c => c.iso2 === code)
     if (!country) return null
 
-    const [rulesRes, ssRes] = await Promise.all([
+    const [rulesRes, ssRes, bracketsRes] = await Promise.all([
       supabase
         .schema('gpe')
         .from('employment_rules')
@@ -108,25 +117,64 @@ export default function CompareClient({ countries }: Props) {
         .select('contribution_type, employer_rate, employee_rate')
         .eq('country_code', code)
         .eq('is_current', true),
+      supabase
+        .schema('gpe')
+        .from('tax_brackets')
+        .select('rate')
+        .eq('country_code', code)
+        .eq('is_current', true)
+        .eq('tier', 'free'),
     ])
 
     return {
       country,
       rules: rulesRes.data ?? [],
       ss: ssRes.data ?? [],
+      taxBrackets: bracketsRes.data ?? [],
     }
   }
 
   async function handleCompare() {
     setLoading(true)
-    const [a, b] = await Promise.all([
+    const [a, b, ratesRes] = await Promise.all([
       fetchCountryData(codeA, countries),
       fetchCountryData(codeB, countries),
+      fetch('https://open.er-api.com/v6/latest/USD').then(r => r.json()).catch(() => null),
     ])
     setDataA(a)
     setDataB(b)
+    if (ratesRes?.rates) {
+      setRates(ratesRes.rates)
+      setRatesLoaded(true)
+      // Default convert-to currency is Country A's currency
+      if (a) setConvertTo(a.country.currency_code)
+    }
     setLoading(false)
     setCompared(true)
+  }
+
+  // Derive income tax range from brackets
+  function getTaxRange(brackets: TaxBracketRow[]): string {
+    const nonZero = brackets.map(b => Number(b.rate)).filter(r => r > 0)
+    if (nonZero.length === 0) return '—'
+    const min = Math.min(...nonZero)
+    const max = Math.max(...nonZero)
+    return min === max ? `${min}%` : `${min}–${max}%`
+  }
+
+  // Convert amount from one currency to another via USD base
+  function convertCurrency(amount: number, from: string, to: string): number {
+    if (!rates[from] || !rates[to] || from === to) return amount
+    return (amount / rates[from]) * rates[to]
+  }
+
+  const CURRENCY_SYMBOLS: Record<string, string> = {
+    GBP: '£', USD: '$', EUR: '€', AUD: 'A$', CAD: 'C$', JPY: '¥',
+    SGD: 'S$', AED: 'د.إ', SEK: 'kr', NOK: 'kr', DKK: 'kr', PLN: 'zł', CHF: 'Fr', INR: '₹',
+  }
+  function fmtCurrency(amount: number, currency: string): string {
+    const sym = CURRENCY_SYMBOLS[currency] ?? currency + ' '
+    return sym + Math.round(amount).toLocaleString('en-GB')
   }
 
   // Calculate estimated employer cost at given salary
@@ -157,7 +205,6 @@ export default function CompareClient({ countries }: Props) {
   ] : []
 
   const COMPARISON_ROWS = [
-    { label: 'Income Tax Range',  keyA: 'income_tax_range',    type: 'rule' },
     { label: 'Minimum Wage',      keyA: 'minimum_wage',        type: 'rule' },
     { label: 'Annual Leave',      keyA: 'annual_leave',        type: 'rule' },
     { label: 'Notice Period',     keyA: 'notice_period_min',   type: 'rule' },
@@ -314,9 +361,20 @@ export default function CompareClient({ countries }: Props) {
               </div>
             </div>
 
+            {/* Income tax range from brackets */}
+            <div className="grid grid-cols-[2fr_1fr_1fr] px-6 py-4 items-center">
+              <span className="text-sm font-medium text-slate-600">Income Tax Range</span>
+              <span className="font-mono text-sm font-semibold text-slate-800">
+                {getTaxRange(dataA.taxBrackets)}
+              </span>
+              <span className="font-mono text-sm font-semibold text-slate-800">
+                {getTaxRange(dataB.taxBrackets)}
+              </span>
+            </div>
+
             {COMPARISON_ROWS.map((row, i) => (
               <div key={row.label}
-                className={`grid grid-cols-[2fr_1fr_1fr] px-6 py-4 items-center ${i > 0 ? 'border-t border-slate-100' : ''}`}>
+                className={`grid grid-cols-[2fr_1fr_1fr] px-6 py-4 items-center border-t border-slate-100`}>
                 <span className="text-sm font-medium text-slate-600">{row.label}</span>
                 <span className="font-mono text-sm font-semibold text-slate-800">
                   {getRuleDisplay(dataA.rules, row.keyA)}
@@ -425,6 +483,97 @@ export default function CompareClient({ countries }: Props) {
                   </div>
                 )
               })}
+            </div>
+          )}
+
+          {/* Currency conversion section */}
+          {ratesLoaded && dataA && dataB && (grossA > 0 || grossB > 0) && (
+            <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+              <div className="bg-slate-900 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-white font-semibold">Compare costs in the same currency</h3>
+                  <p className="text-slate-400 text-xs mt-1">Convert both employer costs to a common currency for a fair comparison</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <label className="text-slate-400 text-xs font-medium shrink-0">Convert to</label>
+                  <select
+                    value={convertTo}
+                    onChange={e => setConvertTo(e.target.value)}
+                    className="px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-400"
+                  >
+                    {['USD','GBP','EUR','AUD','CAD','JPY','SGD','CHF','SEK','NOK','DKK','PLN','AED','INR'].map(c => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="p-6">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {[
+                    { data: dataA, gross: grossA, color: 'blue' },
+                    { data: dataB, gross: grossB, color: 'violet' },
+                  ].map(({ data: d, gross, color }) => {
+                    if (!d || gross <= 0) return null
+                    const totalLocal = employerCost(d, gross)
+                    const totalConverted = convertCurrency(totalLocal, d.country.currency_code, convertTo)
+                    const grossConverted = convertCurrency(gross, d.country.currency_code, convertTo)
+                    const ssConverted = totalConverted - grossConverted
+                    const isSame = d.country.currency_code === convertTo
+                    return (
+                      <div key={d.country.iso2}
+                        className={`rounded-xl border-2 p-5 ${color === 'blue' ? 'border-blue-100 bg-blue-50' : 'border-violet-100 bg-violet-50'}`}>
+                        <div className="flex items-center gap-2 mb-4">
+                          <img src={`https://flagcdn.com/20x15/${d.country.iso2.toLowerCase()}.png`} width={20} height={15} alt={d.country.name} className="rounded-sm" />
+                          <span className="font-semibold text-slate-800 text-sm">{d.country.name}</span>
+                          {isSame && <span className="text-xs text-slate-400">(no conversion needed)</span>}
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-slate-500">Gross salary</span>
+                            <span className="font-mono font-semibold text-slate-700">{fmtCurrency(grossConverted, convertTo)}</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-slate-500">Employer SS</span>
+                            <span className="font-mono font-semibold text-slate-700">{fmtCurrency(ssConverted, convertTo)}</span>
+                          </div>
+                          <div className="flex justify-between text-sm pt-2 border-t border-slate-200">
+                            <span className="font-bold text-slate-900">Total employer cost</span>
+                            <span className={`font-mono font-black text-lg ${color === 'blue' ? 'text-blue-700' : 'text-violet-700'}`}>
+                              {fmtCurrency(totalConverted, convertTo)}
+                            </span>
+                          </div>
+                          {!isSame && (
+                            <p className="text-xs text-slate-400 pt-1">
+                              1 {d.country.currency_code} = {rates[convertTo] && rates[d.country.currency_code]
+                                ? (rates[convertTo] / rates[d.country.currency_code]).toFixed(4)
+                                : '—'} {convertTo}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {/* Winner callout */}
+                {dataA && dataB && grossA > 0 && grossB > 0 && (() => {
+                  const costA = convertCurrency(employerCost(dataA, grossA), dataA.country.currency_code, convertTo)
+                  const costB = convertCurrency(employerCost(dataB, grossB), dataB.country.currency_code, convertTo)
+                  const diff = Math.abs(costA - costB)
+                  const cheaper = costA < costB ? dataA.country.name : dataB.country.name
+                  const sym = CURRENCY_SYMBOLS[convertTo] ?? convertTo + ' '
+                  return (
+                    <div className="mt-4 bg-slate-900 rounded-xl px-5 py-4 flex items-center gap-3">
+                      <span className="text-2xl">💡</span>
+                      <p className="text-slate-300 text-sm">
+                        <span className="text-white font-bold">{cheaper}</span> is the lower-cost employer at this salary —
+                        saving approximately <span className="text-green-400 font-bold">{sym}{Math.round(diff).toLocaleString('en-GB')} {convertTo}</span> per year compared to {costA < costB ? dataB.country.name : dataA.country.name}.
+                      </p>
+                    </div>
+                  )
+                })()}
+              </div>
             </div>
           )}
 
