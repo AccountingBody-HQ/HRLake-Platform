@@ -45,18 +45,23 @@ export const metadata = {
 }
 
 async function getEORCountries() {
-  const { data } = await supabase.schema('gpe')
+  const { data: guides } = await supabase.schema('gpe')
     .from('eor_guides')
-    .select(`
-      country_code,
-      risk_level,
-      hire_speed,
-      recommendation_title,
-      countries:country_code ( name, flag_emoji )
-    `)
+    .select('country_code, risk_level, hire_speed, recommendation_title')
     .eq('is_current', true)
     .order('country_code')
-  return data ?? []
+
+  const { data: countries } = await supabase
+    .from('countries')
+    .select('iso2, name, flag_emoji')
+
+  const countryMap = Object.fromEntries((countries ?? []).map(c => [c.iso2, c]))
+
+  return (guides ?? []).map(g => ({
+    ...g,
+    countryName: countryMap[g.country_code]?.name ?? g.country_code,
+    flagEmoji: countryMap[g.country_code]?.flag_emoji ?? '',
+  }))
 }
 
 export default async function EORHubPage() {
@@ -200,15 +205,13 @@ export default async function EORHubPage() {
             <p className="text-slate-500 mt-4 max-w-2xl leading-relaxed">Risk rating, typical onboarding speed, and key compliance notes for major EOR markets.</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {countries.map((c: any) => {
-              const country = Array.isArray(c.countries) ? c.countries[0] : c.countries
-              return (
+            {countries.map((c: any) => (
                 <Link key={c.country_code} href={`/eor/${c.country_code.toLowerCase()}/`}
                   className="group bg-white border border-slate-200 hover:border-blue-300 hover:shadow-lg rounded-2xl p-6 transition-all duration-200 flex flex-col">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl">{country?.flag_emoji}</span>
-                      <span className="font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{country?.name}</span>
+                      <span className="text-2xl">{c.flagEmoji}</span>
+                      <span className="font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{c.countryName}</span>
                     </div>
                     <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${riskColour[c.risk_level]}`}>{c.risk_level} risk</span>
                   </div>
@@ -218,8 +221,7 @@ export default async function EORHubPage() {
                     <span className="flex items-center gap-1 text-blue-600 text-xs font-bold uppercase tracking-wide opacity-0 group-hover:opacity-100 transition-opacity">Full guide <ChevronRight size={11} /></span>
                   </div>
                 </Link>
-              )
-            })}
+              ))}
           </div>
         </div>
       </section>

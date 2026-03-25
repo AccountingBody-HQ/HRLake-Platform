@@ -38,19 +38,23 @@ export default function EORCostEstimator() {
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         )
-        const { data } = await supabase
+        const { data: guides } = await supabase
           .schema('gpe').from('eor_guides')
-          .select(`
-            country_code,
-            ss_employer_rate,
-            provider_fee_low,
-            provider_fee_high,
-            risk_level,
-            countries:country_code ( name, flag_emoji, currency_code, currency_symbol )
-          `)
+          .select('country_code, ss_employer_rate, provider_fee_low, provider_fee_high, risk_level')
           .eq('is_current', true)
           .order('country_code')
-        if (data) setCountries(data as unknown as Country[])
+
+        const { data: countryRows } = await supabase
+          .from('countries')
+          .select('iso2, name, flag_emoji, currency_code, currency_symbol')
+
+        const countryMap = Object.fromEntries((countryRows ?? []).map(c => [c.iso2, c]))
+
+        const merged = (guides ?? []).map(g => ({
+          ...g,
+          countries: countryMap[g.country_code] ?? null,
+        }))
+        setCountries(merged as unknown as Country[])
       } catch (e) {
         console.error('Failed to fetch EOR countries', e)
       } finally {
