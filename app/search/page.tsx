@@ -60,7 +60,7 @@ function CountryCard({ country }: { country: Country }) {
       href={'/countries/' + country.iso2.toLowerCase() + '/'}
       className="group flex items-center gap-4 bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md rounded-2xl px-5 py-4 transition-all duration-200"
     >
-      <span className="text-3xl leading-none shrink-0">{country.flag_emoji}</span>
+      <img src={'https://flagcdn.com/28x21/' + country.iso2.toLowerCase() + '.png'} alt={country.name} width={28} height={21} className="rounded-sm shadow-sm shrink-0" />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap mb-1">
           <span className="font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{country.name}</span>
@@ -223,31 +223,35 @@ function SearchContent() {
           <h1 className="font-serif text-3xl lg:text-4xl font-bold text-white mb-8 tracking-tight">
             {query ? <>Results for <span className="text-blue-400">"{query}"</span></> : 'Search GlobalPayrollExpert'}
           </h1>
-          <form onSubmit={handleSubmit} className="relative max-w-2xl">
-            <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-            <input
-              type="text"
-              value={inputValue}
-              onChange={e => setInputValue(e.target.value)}
-              placeholder="Search countries, payroll guides, tools…"
-              className="w-full pl-14 pr-24 py-4 bg-slate-900 border border-slate-700 focus:border-blue-500 text-white placeholder:text-slate-500 rounded-xl outline-none transition-all text-base font-medium"
-              autoFocus
-            />
-            {inputValue && (
+          <form onSubmit={handleSubmit} className="max-w-2xl">
+            <div className="flex items-center gap-3">
+              <div className="relative flex-1">
+                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={e => setInputValue(e.target.value)}
+                  placeholder="Search countries, payroll guides, tools…"
+                  className="w-full pl-12 pr-10 py-3.5 bg-slate-900 border border-slate-700 focus:border-blue-500 text-white placeholder:text-slate-500 rounded-xl outline-none transition-all text-sm font-medium"
+                  autoFocus
+                />
+                {inputValue && (
+                  <button
+                    type="button"
+                    onClick={() => { setInputValue(''); setQuery(''); setResults(null) }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors p-1"
+                  >
+                    <X size={15} />
+                  </button>
+                )}
+              </div>
               <button
-                type="button"
-                onClick={() => { setInputValue(''); setQuery(''); setResults(null) }}
-                className="absolute right-16 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors p-1"
+                type="submit"
+                className="shrink-0 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold px-6 py-3.5 rounded-xl transition-colors"
               >
-                <X size={16} />
+                Search
               </button>
-            )}
-            <button
-              type="submit"
-              className="absolute right-3 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors"
-            >
-              Search
-            </button>
+            </div>
           </form>
         </div>
       </div>
