@@ -6,6 +6,7 @@ import Calculator from '@/components/Calculator'
 import type { TaxBracket, SocialSecurityRate } from '@/lib/calculator'
 import type { Metadata } from 'next'
 import { Calculator as CalcIcon, ChevronRight, Shield, RefreshCw, Award, ArrowRight } from 'lucide-react'
+import CalculatorModalWrapper from '@/components/CalculatorModalWrapper'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -331,6 +332,7 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
         </section>
 
       </main>
+      <CalculatorModalWrapper />
     </>
   )
 }
