@@ -1,10 +1,8 @@
-'use client'
 // ============================================
 // GLOBALPAYROLLEXPERT — FOOTER COMPONENT
 // ============================================
 import Link from 'next/link'
 import { Globe } from 'lucide-react'
-import EmailCapture from '@/components/EmailCapture'
 
 const footerLinks = {
   'Country Data': [
@@ -79,18 +77,6 @@ export default function Footer() {
               </ul>
             </div>
           ))}
-        </div>
-
-        {/* EMAIL CAPTURE STRIP */}
-        <div className="border-t border-slate-800 py-12">
-          <div className="max-w-xl">
-            <EmailCapture
-              source="footer"
-              variant="dark"
-              title="Monthly global payroll updates."
-              subtitle="Rate changes, new country data, and compliance alerts — once a month, free."
-            />
-          </div>
         </div>
 
         {/* BOTTOM SECTION */}
