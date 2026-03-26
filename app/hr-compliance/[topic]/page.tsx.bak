@@ -112,26 +112,9 @@ export async function generateMetadata({ params }: { params: Promise<{ topic: st
   const { topic } = await params
   const config = TOPICS[topic]
   if (!config) return {}
-  const year = new Date().getFullYear()
-  const title = `${config.title} ${year}`
   return {
-    title,
+    title: `${config.title} | GlobalPayrollExpert`,
     description: config.description,
-    alternates: {
-      canonical: `https://globalpayrollexpert.com/hr-compliance/${topic}/`,
-    },
-    openGraph: {
-      title,
-      description: config.description,
-      url: `https://globalpayrollexpert.com/hr-compliance/${topic}/`,
-      siteName: 'GlobalPayrollExpert',
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description: config.description,
-    },
   }
 }
 

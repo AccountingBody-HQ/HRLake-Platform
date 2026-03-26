@@ -36,7 +36,7 @@ export async function generateMetadata(
   const country = await getCountryByCode(code)
   if (!country) return { title: 'Country Not Found | GlobalPayrollExpert' }
 
-  const title = `${country.name} Payroll Guide ${new Date().getFullYear()}: Tax, Social Security & Employment Rules`
+  const title = `${country.name} Payroll Guide — Tax, Social Security & Employment Law | GlobalPayrollExpert`
   const description = `Complete ${country.name} payroll data: income tax brackets, social security rates, employer costs, employment law, and payroll compliance obligations. Updated monthly from official sources.`
 
   return {
@@ -51,22 +51,11 @@ export async function generateMetadata(
       url: `https://globalpayrollexpert.com/countries/${code.toLowerCase()}/`,
       siteName: 'GlobalPayrollExpert',
       type: 'website',
-      images: [
-        {
-          url: `https://globalpayrollexpert.com/og/country?code=${code.toLowerCase()}&name=${encodeURIComponent(country.name)}&type=payroll`,
-          width: 1200,
-          height: 630,
-          alt: `${country.name} Payroll Guide`,
-        },
-      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [
-        `https://globalpayrollexpert.com/og/country?code=${code.toLowerCase()}&name=${encodeURIComponent(country.name)}&type=payroll`,
-      ],
     },
   }
 }

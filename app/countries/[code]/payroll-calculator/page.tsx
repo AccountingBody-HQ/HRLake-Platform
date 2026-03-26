@@ -26,11 +26,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!country) return { title: 'Payroll Calculator — GlobalPayrollExpert' }
 
+  const name = country.name
+  const title = `${name} Payroll Calculator ${new Date().getFullYear()}`
+  const description = `Calculate net salary, income tax, and employer costs in ${name}. Full bracket breakdown, social security contributions, and PDF export.`
+  const ogImage = `https://globalpayrollexpert.com/og/country?code=${code.toLowerCase()}&name=${encodeURIComponent(name)}&type=calculator`
   return {
-    title: `${country.name} Payroll Calculator ${new Date().getFullYear()} — GlobalPayrollExpert`,
-    description: `Calculate net salary, income tax, and employer costs in ${country.name}. Full bracket breakdown, social security contributions, and PDF export.`,
+    title,
+    description,
     alternates: {
       canonical: `https://globalpayrollexpert.com/countries/${code.toLowerCase()}/payroll-calculator/`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://globalpayrollexpert.com/countries/${code.toLowerCase()}/payroll-calculator/`,
+      siteName: 'GlobalPayrollExpert',
+      type: 'website',
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `${name} Payroll Calculator` }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImage],
     },
   }
 }
