@@ -1,17 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdminClient } from '@/lib/supabase'
 
+// Verify the request is genuinely from Resend
+async function verifyResendWebhook(request: NextRequest, body: string): Promise<boolean> {
+  const secret = process.env.RESEND_WEBHOOK_SECRET
+  if (!secret) return false
+
+  const svixId = request.headers.get('svix-id')
+  const svixTimestamp = request.headers.get('svix-timestamp')
+  const svixSignature = request.headers.get('svix-signature')
+
+  if (!svixId || !svixTimestamp || !svixSignature) return false
+
+  try {
+    const signedContent = `${svixId}.${svixTimestamp}.${body}`
+    const secretBytes = Uint8Array.from(
+      atob(secret.replace('whsec_', '')),
+      c => c.charCodeAt(0)
+    )
+    const key = await crypto.subtle.importKey(
+      'raw', secretBytes, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+    )
+    const signatureBytes = await crypto.subtle.sign(
+      'HMAC', key, new TextEncoder().encode(signedContent)
+    )
+    const computedSignature = 'v1,' + btoa(
+      String.fromCharCode(...new Uint8Array(signatureBytes))
+    )
+    const signatures = svixSignature.split(' ')
+    return signatures.some(sig => sig === computedSignature)
+  } catch {
+    return false
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    const rawBody = await request.text()
+
+    // Verify webhook signature
+    const isValid = await verifyResendWebhook(request, rawBody)
+    if (!isValid) {
+      console.error('Resend webhook: invalid signature')
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+    }
+
+    const body = JSON.parse(rawBody)
     const { type, data } = body
 
-    // Only process email events we care about
-    const relevantEvents = [
-      'email.bounced',
-      'email.complained',
-      'contact.unsubscribed',
-    ]
+    const relevantEvents = ['email.bounced', 'email.complained']
 
     if (!relevantEvents.includes(type)) {
       return NextResponse.json({ received: true })
@@ -25,27 +62,14 @@ export async function POST(request: NextRequest) {
     const supabase = createSupabaseAdminClient()
 
     let newStatus = ''
-    let unsubscribed_at = null
+    if (type === 'email.bounced') newStatus = 'bounced'
+    else if (type === 'email.complained') newStatus = 'complained'
 
-    if (type === 'email.bounced') {
-      newStatus = 'bounced'
-    } else if (type === 'email.complained') {
-      newStatus = 'complained'
-    } else if (type === 'contact.unsubscribed') {
-      newStatus = 'unsubscribed'
-      unsubscribed_at = new Date().toISOString()
-    }
-
-    if (!newStatus) {
-      return NextResponse.json({ received: true })
-    }
-
-    const updateData: any = { status: newStatus }
-    if (unsubscribed_at) updateData.unsubscribed_at = unsubscribed_at
+    if (!newStatus) return NextResponse.json({ received: true })
 
     const { error } = await supabase
       .from('email_subscribers')
-      .update(updateData)
+      .update({ status: newStatus })
       .eq('email', email.toLowerCase().trim())
       .eq('platform', 'gpe')
 
