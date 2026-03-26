@@ -1,6 +1,25 @@
 import Link from 'next/link'
 import { ArrowRight, Globe, Shield, Users, BookOpen, ExternalLink } from 'lucide-react'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'About GlobalPayrollExpert — Methodology, Data Standards & Mission',
+  description: 'GlobalPayrollExpert is the world's most comprehensive global payroll intelligence platform. Learn about our data methodology, verification standards, and mission to cover every country.',
+  alternates: {
+    canonical: 'https://globalpayrollexpert.com/about/',
+  },
+  openGraph: {
+    title: 'About GlobalPayrollExpert — Methodology, Data Standards & Mission',
+    description: 'Learn about our data methodology, verification standards, and mission to cover every country.',
+    url: 'https://globalpayrollexpert.com/about/',
+    siteName: 'GlobalPayrollExpert',
+    type: 'website',
+  },
+}
+
+
+
 const WHO_ITS_FOR = [
   { icon: Users,    title: 'EOR Firms',               body: 'Employer of Record providers calculating total employment costs and compliance obligations across multiple jurisdictions.' },
   { icon: Shield,   title: 'HR Directors',             body: 'Global HR leaders managing payroll compliance, leave entitlements, and employment law across international teams.' },

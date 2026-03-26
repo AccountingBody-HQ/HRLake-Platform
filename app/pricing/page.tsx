@@ -1,6 +1,25 @@
 import Link from 'next/link'
 import { ArrowRight, Check, X } from 'lucide-react'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Pricing — Free and Pro Plans',
+  description: 'GlobalPayrollExpert is free for all country data, calculators, and employment law guides. Upgrade to Pro for saved calculations, PDF exports, AI assistant, and rate-change alerts.',
+  alternates: {
+    canonical: 'https://globalpayrollexpert.com/pricing/',
+  },
+  openGraph: {
+    title: 'Pricing — Free and Pro Plans',
+    description: 'Free country data and calculators. Pro plan for saved calculations, PDF exports, and AI assistant.',
+    url: 'https://globalpayrollexpert.com/pricing/',
+    siteName: 'GlobalPayrollExpert',
+    type: 'website',
+  },
+}
+
+
+
 const FREE_FEATURES = [
   'All country payroll data pages',
   'Income tax brackets and rates',
