@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
         excerpt,
         "category": categories[0]->title
       }`,
-      { query: `*${q}*` }
+      { query: `*${q}*` } as Record<string, unknown>
     )
   } catch (err) {
     console.error("Sanity search error:", err)
