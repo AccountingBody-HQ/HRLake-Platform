@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getHomepageStructuredData, jsonLd } from '@/lib/structured-data'
 import SearchBar from '@/components/SearchBar'
+import EmailCapture from '@/components/EmailCapture'
 import { Globe, Calculator, Building2, Shield, ArrowRight, ChevronRight, Lock, RefreshCw, Award, TrendingUp, CheckCircle } from 'lucide-react'
 
 const FEATURED_COUNTRIES = [
@@ -375,25 +376,12 @@ export default async function HomePage() {
               </p>
             </div>
             <div>
-              <form action="/api/subscribe" method="POST"
-                className="bg-slate-900 rounded-2xl border border-slate-800 p-8">
-                <p className="text-white font-semibold mb-2">Subscribe to updates</p>
-                <p className="text-slate-500 text-sm mb-6">Join thousands of payroll professionals.</p>
-                <div className="space-y-3">
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="your@email.com"
-                    className="w-full px-5 py-3.5 bg-slate-800 border border-slate-700 focus:border-blue-500 text-white placeholder:text-slate-500 rounded-xl outline-none transition-colors"
-                  />
-                  <button type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-colors text-sm">
-                    Subscribe free
-                  </button>
-                </div>
-                <p className="text-slate-600 text-xs mt-4 text-center">No spam · Unsubscribe any time</p>
-              </form>
+              <EmailCapture
+                source="homepage"
+                variant="dark"
+                title="Subscribe to updates"
+                subtitle="Join thousands of payroll professionals."
+              />
             </div>
           </div>
         </div>
