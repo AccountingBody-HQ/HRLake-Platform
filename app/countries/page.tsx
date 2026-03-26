@@ -9,6 +9,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Globe, ChevronRight } from 'lucide-react'
 import { getAllCountries, getCountryCount } from '@/lib/supabase-queries'
+import { Suspense } from 'react'
 import CountriesClient from '@/components/countries/CountriesClient'
 
 export const metadata: Metadata = {
@@ -112,7 +113,9 @@ export default async function CountriesPage() {
             </p>
           </div>
         ) : (
-          <CountriesClient countries={countries} />
+          <Suspense fallback={<div className="text-center py-20 text-slate-400 text-sm">Loading countries...</div>}>
+            <CountriesClient countries={countries} />
+          </Suspense>
         )}
       </section>
 
