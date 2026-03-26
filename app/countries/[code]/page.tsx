@@ -6,7 +6,7 @@
 
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { getCountryStructuredData, jsonLd } from '@/lib/structured-data'
+import { getCountryStructuredData, getBreadcrumbStructuredData, jsonLd } from '@/lib/structured-data'
 import { notFound } from 'next/navigation'
 import {
   ChevronRight, Calculator, BookOpen, Scale, Briefcase,
@@ -173,6 +173,14 @@ export default async function CountryPage(
           last_verified: country.last_data_update ?? undefined,
           official_source_url: country.official_source_url ?? undefined,
         })) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(getBreadcrumbStructuredData([
+          { name: 'Home', href: '/' },
+          { name: 'All Countries', href: '/countries/' },
+          { name: country.name, href: '/countries/' + code.toLowerCase() + '/' },
+        ])) }}
       />
 
       {/* ══════ SECTION 1 — HERO ══════ */}

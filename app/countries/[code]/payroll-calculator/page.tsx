@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getCalculatorStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
+import { getCalculatorStructuredData, getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import { createSupabaseServerClient } from '@/lib/supabase'
 import Calculator from '@/components/Calculator'
 import type { TaxBracket, SocialSecurityRate } from '@/lib/calculator'
@@ -126,6 +126,15 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: toJsonLd(getCalculatorStructuredData({ name: country.name, code: code })) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: toJsonLd(getBreadcrumbStructuredData([
+          { name: 'Home', href: '/' },
+          { name: 'All Countries', href: '/countries/' },
+          { name: country.name, href: '/countries/' + code.toLowerCase() + '/' },
+          { name: country.name + ' Payroll Calculator', href: '/countries/' + code.toLowerCase() + '/payroll-calculator/' },
+        ])) }}
       />
 
       <main className="min-h-screen bg-white">
