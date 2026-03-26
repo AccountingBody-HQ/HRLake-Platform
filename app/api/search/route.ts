@@ -21,7 +21,6 @@ export async function GET(request: NextRequest) {
     .from("countries")
     .select("iso2, name, flag_emoji, region, currency_code, coverage_level, payroll_complexity_score")
     .or(`name.ilike.%${q}%,iso2.ilike.%${q}%,iso3.ilike.%${q}%`)
-    .eq("status", "active")
     .order("name", { ascending: true })
     .limit(10)
 
