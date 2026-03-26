@@ -108,10 +108,10 @@ export default function SearchBar({ variant = 'hero', placeholder, className = '
       {/* ══ HERO variant ══ */}
       {isHero ? (
         <div className="relative">
-          <div className="flex items-center bg-white/[0.08] backdrop-blur-md border border-white/[0.12] hover:border-white/25 focus-within:border-blue-400/60 focus-within:bg-white/[0.12] rounded-2xl transition-all duration-300 overflow-hidden">
+          <div className="flex items-center bg-white rounded-2xl shadow-2xl shadow-black/40 border-2 border-transparent focus-within:border-blue-500 transition-all duration-200 overflow-hidden">
             <div className="flex items-center justify-center w-14 shrink-0 self-stretch">
               {loading
-                ? <Loader2 size={17} className="animate-spin text-blue-400" />
+                ? <Loader2 size={17} className="animate-spin text-blue-500" />
                 : <Search size={17} className="text-slate-400" />
               }
             </div>
@@ -123,13 +123,13 @@ export default function SearchBar({ variant = 'hero', placeholder, className = '
               onKeyDown={handleKeyDown}
               onFocus={() => { if (results && debouncedQuery.length >= 2) setOpen(true) }}
               placeholder={placeholder ?? defaultPlaceholder}
-              className="flex-1 py-4 text-base font-medium text-white placeholder:text-slate-500 bg-transparent outline-none"
+              className="flex-1 py-4 text-base font-medium text-slate-900 placeholder:text-slate-400 bg-transparent outline-none"
               autoComplete="off"
             />
             {query && (
               <button
                 onClick={() => { setQuery(''); setResults(null); setOpen(false); inputRef.current?.focus() }}
-                className="flex items-center justify-center w-8 h-8 mr-1 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-white/10 transition-all shrink-0"
+                className="flex items-center justify-center w-8 h-8 mr-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all shrink-0"
               >
                 <X size={14} />
               </button>
