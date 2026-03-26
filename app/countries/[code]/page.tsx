@@ -6,6 +6,7 @@
 
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { getCountryStructuredData, jsonLd } from '@/lib/structured-data'
 import { notFound } from 'next/navigation'
 import {
   ChevronRight, Calculator, BookOpen, Scale, Briefcase,
@@ -162,6 +163,17 @@ export default async function CountryPage(
 
   return (
     <main className="min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(getCountryStructuredData({
+          name: country.name,
+          code: code,
+          currency_code: country.currency_code ?? undefined,
+          region: country.region ?? undefined,
+          last_verified: country.last_data_update ?? undefined,
+          official_source_url: country.official_source_url ?? undefined,
+        })) }}
+      />
 
       {/* ══════ SECTION 1 — HERO ══════ */}
       <section className="relative bg-slate-950 overflow-hidden">

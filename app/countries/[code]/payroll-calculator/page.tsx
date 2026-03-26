@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { getCalculatorStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import { createSupabaseServerClient } from '@/lib/supabase'
 import Calculator from '@/components/Calculator'
 import type { TaxBracket, SocialSecurityRate } from '@/lib/calculator'
@@ -118,23 +119,13 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
 
   const taxYear = new Date().getFullYear()
 
-  // ── Structured data (JSON-LD) ─────────────────────────────────────────────
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: `${country.name} Payroll Calculator`,
-    url: `https://globalpayrollexpert.com/countries/${code.toLowerCase()}/payroll-calculator/`,
-    description: `Calculate net salary, income tax, and employer costs in ${country.name}.`,
-    applicationCategory: 'FinanceApplication',
-    operatingSystem: 'All',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: country.currency_code },
-  }
+
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: toJsonLd(getCalculatorStructuredData({ name: country.name, code: code })) }}
       />
 
       <main className="min-h-screen bg-white">

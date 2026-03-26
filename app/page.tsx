@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getHomepageStructuredData, jsonLd } from '@/lib/structured-data'
 import SearchBar from '@/components/SearchBar'
 import { Globe, Calculator, Building2, Shield, ArrowRight, ChevronRight, Lock, RefreshCw, Award, TrendingUp, CheckCircle } from 'lucide-react'
 
@@ -95,6 +96,10 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(getHomepageStructuredData()) }}
+      />
 
       {/* ══════ HERO ══════ */}
       <section className="relative bg-slate-950 overflow-hidden">

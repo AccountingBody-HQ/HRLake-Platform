@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { getComparisonStructuredData, jsonLd } from '@/lib/structured-data'
 import CompareClient from './CompareClient'
 
 export const metadata = {
@@ -21,6 +22,13 @@ export default async function ComparePage() {
 
   return (
     <main className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(getComparisonStructuredData([
+          { name: 'United Kingdom', code: 'gb' },
+          { name: 'United States', code: 'us' },
+        ])) }}
+      />
 
       {/* Hero */}
       <section className="relative bg-slate-950 overflow-hidden">
