@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
     // --- SEND WELCOME EMAIL ---
     if (calculation_summary) {
       // Calculation results email
-      await resend.emails.send({
-        from: 'GlobalPayrollExpert <onboarding@resend.dev>',
+      const { data: resendData1, error: resendError1 } = await resend.emails.send({
+        from: 'GlobalPayrollExpert <noreply@accountingbody.com>',
         to: email,
         subject: 'Your payroll calculation — GlobalPayrollExpert',
         html: `
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     } else {
       // Standard welcome email
       await resend.emails.send({
-        from: 'GlobalPayrollExpert <onboarding@resend.dev>',
+        from: 'GlobalPayrollExpert <noreply@accountingbody.com>',
         to: email,
         subject: 'Welcome to GlobalPayrollExpert updates',
         html: `
