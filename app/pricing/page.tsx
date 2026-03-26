@@ -271,7 +271,7 @@ export default function PricingPage() {
               className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-4 rounded-xl transition-colors text-sm">
               Browse free data <ArrowRight size={15} />
             </Link>
-            
+            <a
               href="https://globalpayrollexpert.lemonsqueezy.com/checkout/buy/monthly"
               target="_blank"
               rel="noopener noreferrer"
