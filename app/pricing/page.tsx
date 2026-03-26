@@ -153,7 +153,7 @@ export default function PricingPage() {
 
                 <div className="space-y-3 mb-8">
                   {/* Monthly button — links to Lemon Squeezy checkout */}
-                  
+                  <a
                     href="https://globalpayrollexpert.lemonsqueezy.com/checkout/buy/monthly"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -161,7 +161,7 @@ export default function PricingPage() {
                     Get Pro — £29 / month
                   </a>
                   {/* Annual button */}
-                  
+                  <a
                     href="https://globalpayrollexpert.lemonsqueezy.com/checkout/buy/annual"
                     target="_blank"
                     rel="noopener noreferrer"
