@@ -1,13 +1,8 @@
-// ============================================
-// GLOBALPAYROLLEXPERT — NAVIGATION COMPONENT
-// ============================================
-
 'use client'
 
 import { useState } from 'react'
 import Link from 'next/link'
 import { Menu, X, Globe } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import SearchBar from '@/components/SearchBar'
 
 const navLinks = [
@@ -23,58 +18,53 @@ export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+    <header className="sticky top-0 z-50 w-full bg-slate-950/95 backdrop-blur-md border-b border-slate-800/80">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-4">
+        <div className="flex h-16 items-center gap-6">
 
           {/* LOGO */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Globe className="h-6 w-6 text-blue-600" />
-            <span className="text-lg font-bold text-slate-900 tracking-tight">
-              Global Payroll Expert
+          <Link href="/" className="flex items-center gap-2.5 shrink-0">
+            <Globe className="h-5 w-5 text-blue-500" />
+            <span className="text-base font-bold text-white tracking-tight hidden sm:block">
+              GlobalPayrollExpert
             </span>
           </Link>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-0.5 flex-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-3 py-2 text-sm font-medium text-slate-600 rounded-md hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                className="px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all"
               >
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          {/* SEARCH BAR — desktop */}
-          <div className="hidden md:block w-64 lg:w-72">
-            <SearchBar
-              variant="nav"
-              placeholder="Search countries…"
-            />
+          {/* SEARCH — desktop */}
+          <div className="hidden md:block flex-1 lg:flex-none lg:w-56 xl:w-64">
+            <SearchBar variant="nav" />
           </div>
 
-          {/* DESKTOP CTA */}
-          <div className="hidden md:flex items-center gap-3 shrink-0">
-            <Link
-              href="/sign-in"
-              className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+          {/* CTA */}
+          <div className="hidden md:flex items-center gap-2 shrink-0 ml-auto lg:ml-0">
+            <Link href="/sign-in"
+              className="text-sm font-medium text-slate-400 hover:text-white transition-colors px-3 py-1.5"
             >
               Sign in
             </Link>
-            <Link
-              href="/pricing"
-              className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors"
+            <Link href="/pricing"
+              className="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition-colors"
             >
               Go Pro
             </Link>
           </div>
 
-          {/* MOBILE MENU BUTTON */}
+          {/* MOBILE BUTTON */}
           <button
-            className="md:hidden p-2 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+            className="md:hidden ml-auto p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -85,34 +75,31 @@ export default function Navigation() {
 
       {/* MOBILE MENU */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white px-4 pb-4 pt-3">
-          {/* Mobile search */}
-          <div className="mb-3">
+        <div className="md:hidden bg-slate-950 border-t border-slate-800/80">
+          <div className="px-4 py-3">
             <SearchBar variant="nav" placeholder="Search countries…" />
           </div>
-          <nav className="flex flex-col gap-1">
+          <nav className="px-2 pb-2">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-3 py-2 text-sm font-medium text-slate-600 rounded-md hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                className="flex items-center px-3 py-2.5 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}
               </Link>
             ))}
           </nav>
-          <div className="mt-4 flex flex-col gap-2 border-t border-slate-200 pt-4">
-            <Link
-              href="/sign-in"
-              className="px-3 py-2 text-sm font-medium text-slate-600 rounded-md hover:text-slate-900 hover:bg-slate-100 transition-colors"
+          <div className="px-4 py-3 border-t border-slate-800/80 flex gap-2">
+            <Link href="/sign-in"
+              className="flex-1 text-center px-4 py-2.5 text-sm font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-600 rounded-lg transition-all"
               onClick={() => setMobileOpen(false)}
             >
               Sign in
             </Link>
-            <Link
-              href="/pricing"
-              className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
+            <Link href="/pricing"
+              className="flex-1 text-center px-4 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-all"
               onClick={() => setMobileOpen(false)}
             >
               Go Pro
