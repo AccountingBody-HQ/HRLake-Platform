@@ -21,6 +21,7 @@ export async function POST(req: Request) {
   )
 
   const { error } = await supabase
+    .schema('gpe')
     .from('saved_calculations')
     .insert({
       user_id: userId,
@@ -31,8 +32,8 @@ export async function POST(req: Request) {
     })
 
   if (error) {
-    console.error('Save calculation error:', error)
-    return NextResponse.json({ error: 'Failed to save' }, { status: 500 })
+    console.error('Save calculation error:', error.message, error.details)
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })
