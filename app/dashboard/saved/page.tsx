@@ -67,7 +67,7 @@ export default async function SavedCalculationsPage() {
           <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
 
             {/* Table header */}
-            <div className="grid grid-cols-[1fr_1fr_1fr_120px] px-7 py-4 bg-slate-900 gap-4">
+            <div className="grid grid-cols-[2fr_1fr_1fr_160px] px-7 py-4 bg-slate-900 gap-4">
               <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Label</span>
               <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Country</span>
               <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Saved On</span>
@@ -77,7 +77,7 @@ export default async function SavedCalculationsPage() {
             <div className="divide-y divide-slate-100">
               {calculations.map((calc: any) => (
                 <div key={calc.id}
-                  className="grid grid-cols-[1fr_1fr_1fr_120px] px-7 py-5 items-center gap-4 hover:bg-slate-50 transition-colors">
+                  className="grid grid-cols-[2fr_1fr_1fr_160px] px-7 py-5 items-center gap-4 hover:bg-slate-50 transition-colors">
 
                   <div>
                     <div className="font-semibold text-slate-800 text-sm">
