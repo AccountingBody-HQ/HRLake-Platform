@@ -26,9 +26,12 @@ export async function POST(req: Request) {
     .insert({
       user_id: userId,
       country_code: country_code.toUpperCase(),
-      gross_salary,
-      label: label || `${country_code.toUpperCase()} — ${new Date().toLocaleDateString('en-GB')}`,
-      calculation_result,
+      name: label || `${country_code.toUpperCase()} — ${new Date().toLocaleDateString('en-GB')}`,
+      calculation_type: 'payroll',
+      inputs: { gross_salary, period },
+      results: calculation_result,
+      data_snapshot: calculation_result,
+      rates_valid_as_of: new Date().toISOString().split('T')[0],
     })
 
   if (error) {
