@@ -80,7 +80,7 @@ export function getCalculatorStructuredData(country: {
   name: string
   code: string
 }) {
-  const calcUrl = BASE_URL + "/countries/" + country.code.toLowerCase() + "/payrollcalculator/"
+  const calcUrl = BASE_URL + "/countries/" + country.code.toLowerCase() + "/payroll-calculator/"
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",

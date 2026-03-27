@@ -8,7 +8,7 @@ interface Props {
 
 const SUB_PAGES = [
   {
-    href: (code: string) => `/countries/${code}/payrollcalculator/`,
+    href: (code: string) => `/countries/${code}/payroll-calculator/`,
     icon: Calculator,
     label: 'Payroll Calculator',
     description: 'Calculate net pay, tax, and employer costs',

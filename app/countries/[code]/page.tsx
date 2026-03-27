@@ -246,7 +246,7 @@ export default async function CountryPage(
               {/* Quick-link buttons */}
               <div className="flex flex-wrap gap-3">
                 {[
-                  { href: `/countries/${code}/payrollcalculator/`, icon: Calculator, label: 'Payroll Calculator' },
+                  { href: `/countries/${code}/payroll-calculator/`, icon: Calculator, label: 'Payroll Calculator' },
                   { href: `/countries/${code}/tax-guide/`,          icon: BookOpen,   label: 'Tax Guide' },
                   { href: `/countries/${code}/employmentlaw/`,       icon: Scale,      label: 'Employment Law' },
                   { href: `/countries/${code}/hiring-guide/`,        icon: Briefcase,  label: 'Hiring Guide' },
@@ -615,7 +615,7 @@ export default async function CountryPage(
               <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Explore {country.name}</p>
               <div className="space-y-2">
                 {[
-                  { href: `/countries/${code}/payrollcalculator/`, icon: Calculator, label: 'Full Payroll Calculator',  sub: 'Complete line-by-line breakdown' },
+                  { href: `/countries/${code}/payroll-calculator/`, icon: Calculator, label: 'Full Payroll Calculator',  sub: 'Complete line-by-line breakdown' },
                   { href: `/countries/${code}/tax-guide/`,          icon: BookOpen,   label: 'Tax Guide',               sub: 'All rates and allowances' },
                   { href: `/countries/${code}/employmentlaw/`,       icon: Scale,      label: 'Employment Law',          sub: 'Leave, notice, probation' },
                   { href: `/countries/${code}/hiring-guide/`,        icon: Briefcase,  label: 'Hiring Guide',            sub: 'How to hire in ${country.name}' },

@@ -204,7 +204,7 @@ export default function MiniCalculator({
               )}
             </div>
             <Link
-              href={'/countries/' + countryCode.toLowerCase() + '/payrollcalculator/'}
+              href={'/countries/' + countryCode.toLowerCase() + '/payroll-calculator/'}
               className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-colors text-sm"
             >
               Full breakdown calculator <ArrowRight size={15} />

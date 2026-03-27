@@ -112,7 +112,7 @@ export default async function SavedCalculationsPage() {
 
                   <div className="flex items-center gap-3">
                     <Link
-                      href={`/countries/${calc.country_code?.toLowerCase()}/payrollcalculator/`}
+                      href={`/countries/${calc.country_code?.toLowerCase()}/payroll-calculator/`}
                       className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-semibold transition-colors">
                       <Globe size={12} /> Re-run
                     </Link>
