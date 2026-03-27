@@ -122,6 +122,7 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
   const taxYear = new Date().getFullYear()
   const { userId } = await auth()
   const isAuthenticated = !!userId
+  const { salary: initialSalary, period: initialPeriod } = await searchParams
 
 
 
@@ -230,6 +231,8 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
                   ssRates={ssRates}
                   taxYear={taxYear}
                   isAuthenticated={isAuthenticated}
+                  initialSalary={initialSalary}
+                  initialPeriod={initialPeriod as 'monthly' | 'annual' | undefined}
                 />
               </div>
 

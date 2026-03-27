@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Calculator from '@/components/Calculator'
 import type { TaxBracket, SocialSecurityRate, CalculationResult } from '@/lib/calculator'
 
@@ -12,6 +12,8 @@ interface Props {
   ssRates: SocialSecurityRate[]
   taxYear: number
   isAuthenticated: boolean
+  initialSalary?: string
+  initialPeriod?: 'monthly' | 'annual'
 }
 
 export default function CalculatorWithSave({
@@ -22,6 +24,8 @@ export default function CalculatorWithSave({
   ssRates,
   taxYear,
   isAuthenticated,
+  initialSalary,
+  initialPeriod,
 }: Props) {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
@@ -73,6 +77,8 @@ export default function CalculatorWithSave({
         taxYear={taxYear}
         isAuthenticated={isAuthenticated}
         onSaveRequest={handleSaveRequest}
+        initialSalary={initialSalary}
+        initialPeriod={initialPeriod}
       />
     </div>
   )

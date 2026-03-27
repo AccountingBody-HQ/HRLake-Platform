@@ -29,6 +29,8 @@ interface CalculatorProps {
   taxYear: number
   onSaveRequest?: (result: CalculationResult, gross: number, period: 'monthly' | 'annual') => void
   isAuthenticated?: boolean
+  initialSalary?: string
+  initialPeriod?: 'monthly' | 'annual'
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -67,14 +69,25 @@ export default function Calculator({
   taxYear,
   onSaveRequest,
   isAuthenticated = false,
+  initialSalary,
+  initialPeriod,
 }: CalculatorProps) {
-  const [gross, setGross] = useState<string>('')
-  const [period, setPeriod] = useState<'monthly' | 'annual'>('annual')
+  const [gross, setGross] = useState<string>(initialSalary || '')
+  const [period, setPeriod] = useState<'monthly' | 'annual'>(initialPeriod || 'annual')
   const [view, setView] = useState<'monthly' | 'annual'>('monthly')
   const [result, setResult] = useState<CalculationResult | null>(null)
   const [copied, setCopied] = useState(false)
   const [hasData] = useState(taxBrackets.length > 0 || ssRates.length > 0)
   const resultsRef = useRef<HTMLDivElement>(null)
+
+  // Auto-run calculation if initial salary provided (from Re-run link)
+  useEffect(() => {
+    if (initialSalary && parseFloat(initialSalary) > 0) {
+      const value = parseFloat(initialSalary)
+      const res = calculatePayroll(value, initialPeriod || 'annual', taxBrackets, ssRates, currencyCode, taxYear)
+      setResult(res)
+    }
+  }, [])
 
   // ── Calculate ──────────────────────────────────────────────────────────────
 

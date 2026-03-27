@@ -2,7 +2,8 @@ import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
-import { Calculator, ArrowLeft, Trash2, ArrowRight, Globe } from 'lucide-react'
+import { Calculator, ArrowLeft, ArrowRight, Globe } from 'lucide-react'
+import DeleteButton from '@/components/DeleteButton'
 
 export const metadata = {
   title: 'Saved Calculations',
@@ -112,14 +113,12 @@ export default async function SavedCalculationsPage() {
 
                   <div className="flex items-center gap-3">
                     <Link
-                      href={`/countries/${calc.country_code?.toLowerCase()}/payroll-calculator/`}
+                      href={`/countries/${calc.country_code?.toLowerCase()}/payroll-calculator/?salary=${calc.inputs?.gross_salary}&period=${calc.inputs?.period || 'annual'}`}
                       className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-semibold transition-colors">
                       <Globe size={12} /> Re-run
                     </Link>
                     <span className="text-slate-300">|</span>
-                    <span className="inline-flex items-center gap-1 text-slate-400 hover:text-red-500 text-xs font-semibold transition-colors cursor-pointer">
-                      <Trash2 size={12} /> Delete
-                    </span>
+                    <DeleteButton id={calc.id} />
                   </div>
 
                 </div>
