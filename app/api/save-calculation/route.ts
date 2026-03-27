@@ -20,25 +20,49 @@ export async function POST(req: Request) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  // Ensure user profile exists before saving calculation
+  // Ensure user profile exists
   const user = await currentUser()
   const email = user?.emailAddresses?.[0]?.emailAddress || ''
   const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(' ') || email
 
-  const { error: profileError } = await supabase
+  await supabase
     .from('profiles')
-    .upsert({
-      id: userId,
-      email,
-      full_name: fullName,
-    }, { onConflict: 'id' })
+    .upsert({ id: userId, email, full_name: fullName }, { onConflict: 'id' })
 
-  if (profileError) {
-    console.error('Profile upsert error:', profileError.message)
-    return NextResponse.json({ error: 'Failed to create profile' }, { status: 500 })
+  // Check for duplicate — same user, country, salary, period saved in last 60 seconds
+  const { data: existing } = await supabase
+    .schema('gpe')
+    .from('saved_calculations')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('country_code', country_code.toUpperCase())
+    .eq('calculation_type', 'payroll')
+    .gte('created_at', new Date(Date.now() - 60000).toISOString())
+    .limit(1)
+
+  if (existing && existing.length > 0) {
+    return NextResponse.json({ success: true, duplicate: true })
   }
 
-  // Now save the calculation
+  // Also check for same gross_salary and period combination
+  const { data: sameCalc } = await supabase
+    .schema('gpe')
+    .from('saved_calculations')
+    .select('id, inputs')
+    .eq('user_id', userId)
+    .eq('country_code', country_code.toUpperCase())
+    .eq('calculation_type', 'payroll')
+    .limit(20)
+
+  const isDuplicate = sameCalc?.some((c: any) => 
+    c.inputs?.gross_salary === gross_salary && c.inputs?.period === period
+  )
+
+  if (isDuplicate) {
+    return NextResponse.json({ success: true, duplicate: true, message: 'Already saved' })
+  }
+
+  // Save the calculation
   const { error } = await supabase
     .schema('gpe')
     .from('saved_calculations')
@@ -54,7 +78,7 @@ export async function POST(req: Request) {
     })
 
   if (error) {
-    console.error('Save calculation error:', error.message, error.details)
+    console.error('Save calculation error:', error.message)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 

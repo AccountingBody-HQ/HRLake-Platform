@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import Calculator from '@/components/Calculator'
+import CalculatorWithSave from '@/components/CalculatorWithSave'
 import type { TaxBracket, SocialSecurityRate } from '@/lib/calculator'
+import { useUser } from '@clerk/nextjs'
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
@@ -25,6 +26,7 @@ export default function GlobalCalculatorClient({ countries }: Props) {
   const [loading, setLoading] = useState(false)
 
   const selected = countries.find(c => c.iso2 === selectedCode)
+  const { isSignedIn } = useUser()
 
   useEffect(() => {
     if (!selectedCode) return
@@ -125,14 +127,14 @@ export default function GlobalCalculatorClient({ countries }: Props) {
             <div className="text-slate-400 text-sm">Loading {selected?.name} tax data…</div>
           </div>
         ) : selected ? (
-          <Calculator
+          <CalculatorWithSave
             countryCode={selectedCode}
             countryName={selected.name}
             currencyCode={selected.currency_code}
             taxBrackets={taxBrackets}
             ssRates={ssRates}
             taxYear={new Date().getFullYear()}
-            isAuthenticated={false}
+            isAuthenticated={!!isSignedIn}
           />
         ) : null}
       </div>
