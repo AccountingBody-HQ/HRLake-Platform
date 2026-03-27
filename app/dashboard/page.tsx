@@ -34,8 +34,9 @@ async function getSavedCalculations(userId: string) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
     const { data } = await supabase
+      .schema('gpe')
       .from('saved_calculations')
-      .select('id, country_code, label, created_at, calculation_result')
+      .select('id, country_code, name, created_at, results, inputs')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(5)
