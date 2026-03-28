@@ -129,6 +129,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
     setInput("");
     setLoading(true);
     setThinking(true);
+    setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
     if (!userId) { setAnonCount(incrementAnonCount()); } else { setUsageCount(p => p + 1); }
     try {
       const res = await fetch("/api/chat", {
