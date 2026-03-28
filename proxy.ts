@@ -3,13 +3,12 @@ import { NextResponse } from 'next/server'
 
 const ADMIN_SECRET = 'gpe-admin-2025-secure'
 
-const isProtectedRoute = createRouteMatcher(['/dashboard(.*)', '/ai-assistant(.*)'])
+const isProtectedRoute = createRouteMatcher(['/dashboard(.*)'])
 
 export default clerkMiddleware(async (auth, request) => {
   const path = request.nextUrl.pathname
 
   // Protect /admin routes with password cookie
-  if (path.startsWith('/admin') && !path.startsWith('/admin-login')) {
     const token = request.cookies.get('admin_token')?.value
     if (token !== ADMIN_SECRET) {
       return NextResponse.redirect(new URL('/admin-login', request.url))
