@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
         useCdn: true,
       })
       articles = await sanity.fetch(
-        `*[_type == "post"
+        `*[_type == "article"
           && "globalpayrollexpert" in showOnSites
           && (
             title match $query

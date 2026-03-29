@@ -154,7 +154,7 @@ export default async function CountryPage(
       useCdn: true,
     })
     insights = await sanity.fetch(
-      `*[_type == "post" && "globalpayrollexpert" in showOnSites && $country in countries] | order(publishedAt desc)[0...3] {
+      `*[_type == "article" && "globalpayrollexpert" in showOnSites && $country in countries] | order(publishedAt desc)[0...3] {
         title, slug, publishedAt, excerpt,
         "category": categories[0]->title
       }`,

@@ -10,7 +10,7 @@ interface Props {
 async function getRelatedArticles(countryCode: string): Promise<SanityArticleCard[]> {
   try {
     const articles = await sanityClient.fetch(
-      `*[_type == "post" && "globalpayrollexpert" in showOnSites && $code in countries] | order(publishedAt desc)[0...3] {
+      `*[_type == "article" && "globalpayrollexpert" in showOnSites && $code in countries] | order(publishedAt desc)[0...3] {
         _id, title, slug, excerpt, publishedAt,
         "category": categories[0]->title,
         "categorySlug": categories[0]->slug.current

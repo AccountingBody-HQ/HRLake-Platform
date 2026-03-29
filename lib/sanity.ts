@@ -74,7 +74,7 @@ export async function getInsightArticles(options?: {
   const { topic, search, limit = 24, offset = 0 } = options || {}
 
   const filters: string[] = [
-    '_type == "post"',
+    '_type == "article"',
     '"globalpayrollexpert" in showOnSites',
   ]
 
@@ -110,7 +110,7 @@ export async function getInsightArticles(options?: {
 
 // --- GET SINGLE ARTICLE (article page) ---
 export async function getInsightBySlug(slug: string): Promise<SanityArticle | null> {
-  const query = `*[_type == "post" && slug.current == $slug && "globalpayrollexpert" in showOnSites][0] {
+  const query = `*[_type == "article" && slug.current == $slug && "globalpayrollexpert" in showOnSites][0] {
     _id, title, slug, publishedAt, excerpt, body,
     "category": categories[0]->title,
     "categorySlug": categories[0]->slug.current,
@@ -141,7 +141,7 @@ export async function getRelatedArticles(options: {
     categoryFilter = ' && references(*[_type == "category" && title == $category]._id)'
   }
 
-  const query = `*[_type == "post" && "globalpayrollexpert" in showOnSites && slug.current != $currentSlug${categoryFilter}] | order(publishedAt desc) [0...${limit}] {
+  const query = `*[_type == "article" && "globalpayrollexpert" in showOnSites && slug.current != $currentSlug${categoryFilter}] | order(publishedAt desc) [0...${limit}] {
     _id, title, slug, publishedAt, excerpt,
     "category": categories[0]->title,
     "categorySlug": categories[0]->slug.current
@@ -154,7 +154,7 @@ export async function getRelatedArticles(options: {
     const articles = await sanityClient.fetch(query, params)
 
     if (articles.length < limit) {
-      const fallbackQuery = `*[_type == "post" && "globalpayrollexpert" in showOnSites && slug.current != $currentSlug] | order(publishedAt desc) [0...${limit}] {
+      const fallbackQuery = `*[_type == "article" && "globalpayrollexpert" in showOnSites && slug.current != $currentSlug] | order(publishedAt desc) [0...${limit}] {
         _id, title, slug, publishedAt, excerpt,
         "category": categories[0]->title,
         "categorySlug": categories[0]->slug.current
@@ -177,7 +177,7 @@ export async function getInsightCount(options?: {
   const { topic, search } = options || {}
 
   const filters: string[] = [
-    '_type == "post"',
+    '_type == "article"',
     '"globalpayrollexpert" in showOnSites',
   ]
 
@@ -205,7 +205,7 @@ export async function getInsightCount(options?: {
 
 // --- GET ALL CATEGORIES ---
 export async function getInsightCategories(): Promise<{ title: string; slug: string }[]> {
-  const query = `*[_type == "category" && count(*[_type == "post" && "globalpayrollexpert" in showOnSites && references(^._id)]) > 0] | order(title asc) {
+  const query = `*[_type == "category" && count(*[_type == "article" && "globalpayrollexpert" in showOnSites && references(^._id)]) > 0] | order(title asc) {
     title, "slug": slug.current
   }`
 
