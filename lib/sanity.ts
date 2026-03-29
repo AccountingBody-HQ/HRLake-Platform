@@ -58,6 +58,7 @@ export const INSIGHT_TOPICS = [
   { label: 'EOR',            slug: 'eor' },
   { label: 'Tax',            slug: 'tax' },
   { label: 'HR',             slug: 'hr' },
+  { label: 'Compliance',    slug: 'compliance' },
 ] as const
 
 // =============================================
