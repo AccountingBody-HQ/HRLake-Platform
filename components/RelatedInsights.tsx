@@ -1,32 +1,19 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { createClient as createSanityClient } from '@sanity/client'
-
-interface Article {
-  title: string
-  slug: { current: string }
-  excerpt: string
-  publishedAt: string
-  category: string
-}
+import { sanityClient, type SanityArticleCard } from '@/lib/sanity'
 
 interface Props {
   countryCode: string
   countryName: string
 }
 
-async function getRelatedArticles(countryCode: string): Promise<Article[]> {
+async function getRelatedArticles(countryCode: string): Promise<SanityArticleCard[]> {
   try {
-    const sanity = createSanityClient({
-      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
-      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-      apiVersion: '2024-01-01',
-      useCdn: true,
-    })
-    const articles = await sanity.fetch(
+    const articles = await sanityClient.fetch(
       `*[_type == "post" && "globalpayrollexpert" in showOnSites && $code in countries] | order(publishedAt desc)[0...3] {
-        title, slug, excerpt, publishedAt,
-        "category": categories[0]->title
+        _id, title, slug, excerpt, publishedAt,
+        "category": categories[0]->title,
+        "categorySlug": categories[0]->slug.current
       }`,
       { code: countryCode.toUpperCase() }
     )

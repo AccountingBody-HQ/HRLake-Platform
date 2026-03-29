@@ -1,3 +1,4 @@
+import { getInsightArticles } from '@/lib/sanity'
 import Link from 'next/link'
 import { getHomepageStructuredData, jsonLd } from '@/lib/structured-data'
 import SearchBar from '@/components/SearchBar'
@@ -78,22 +79,8 @@ const STANDARDS = [
 ]
 
 export default async function HomePage() {
-  let insights: any[] = []
-  try {
-    const { createClient } = await import('@sanity/client')
-    const sanity = createClient({
-      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
-      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-      apiVersion: '2024-01-01',
-      useCdn: true,
-    })
-    insights = await sanity.fetch(
-      `*[_type == "post" && "globalpayrollexpert" in showOnSites] | order(publishedAt desc)[0...3] {
-        title, slug, publishedAt, excerpt,
-        "category": categories[0]->title
-      }`
-    )
-  } catch (_) { insights = [] }
+  // Fetch latest 3 Insights articles from Sanity (via centralised client)
+  const insights = await getInsightArticles({ limit: 3 })
 
   return (
     <main className="min-h-screen bg-white">
