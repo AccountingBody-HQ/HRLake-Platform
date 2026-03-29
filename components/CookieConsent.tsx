@@ -96,7 +96,7 @@ export default function CookieConsent() {
   const thumbOff = 'translate-x-0'
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-end justify-center pointer-events-none">
+    <div className="fixed bottom-0 right-0 z-[9999] flex items-end justify-end pointer-events-none p-0 sm:p-6">
       <div className="absolute inset-0 bg-black/20 sm:hidden pointer-events-auto" onClick={handleRejectAll} />
       <div className="relative pointer-events-auto w-full sm:max-w-2xl sm:mb-6 sm:mx-6 bg-slate-950 border-t sm:border border-slate-800 sm:rounded-2xl shadow-2xl shadow-black/40 overflow-hidden">
         <div className="h-0.5 bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600" />
