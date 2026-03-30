@@ -83,7 +83,7 @@ export default async function HomePage() {
   const insights = await getInsightArticles({ limit: 3 })
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="bg-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(getHomepageStructuredData()) }}

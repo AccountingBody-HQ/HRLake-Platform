@@ -68,7 +68,7 @@ export default async function EORHubPage() {
   const countries = await getEORCountries()
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="bg-white">
 
       {/* ══════ HERO ══════ */}
       <section className="relative bg-slate-950 overflow-hidden">

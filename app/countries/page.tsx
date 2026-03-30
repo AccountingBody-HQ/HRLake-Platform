@@ -33,7 +33,7 @@ export default async function CountriesPage() {
   ])
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="bg-slate-50">
 
       {/* ── Page header ── */}
       <section className="relative bg-slate-950 border-b border-slate-800 overflow-hidden">

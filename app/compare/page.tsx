@@ -21,7 +21,7 @@ export default async function ComparePage() {
     .order('name', { ascending: true })
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="bg-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(getComparisonStructuredData([

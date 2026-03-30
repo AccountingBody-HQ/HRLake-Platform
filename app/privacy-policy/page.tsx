@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="bg-white">
 
       {/* HERO */}
       <section className="relative bg-slate-950 overflow-hidden">

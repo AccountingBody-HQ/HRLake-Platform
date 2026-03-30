@@ -180,7 +180,7 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
   const otherTopics = Object.entries(TOPICS).filter(([k]) => k !== topic)
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="bg-white">
 
       {/* Hero */}
       <section className="relative bg-slate-950 overflow-hidden">

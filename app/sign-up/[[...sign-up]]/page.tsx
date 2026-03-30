@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function SignUpPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center px-4"
+    <main className="flex items-center justify-center px-4"
       style={{background: 'radial-gradient(ellipse at 50% 0%, rgba(30,111,255,0.1) 0%, transparent 60%), #020817'}}>
       <div className="w-full max-w-[400px]">
 
