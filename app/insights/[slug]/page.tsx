@@ -245,7 +245,7 @@ export default async function InsightArticlePage({
   ])
 
   return (
-    <div className="bg-white">
+    <div className="bg-white flex-1">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(articleStructuredData) }}

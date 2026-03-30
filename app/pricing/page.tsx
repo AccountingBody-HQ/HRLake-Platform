@@ -93,7 +93,7 @@ const FAQS = [
 
 export default function PricingPage() {
   return (
-    <main className="bg-white">
+    <main className="bg-white flex-1">
 
       {/* HERO */}
       <section className="relative bg-slate-950 overflow-hidden">

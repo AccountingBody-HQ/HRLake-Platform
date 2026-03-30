@@ -58,7 +58,7 @@ export default async function DashboardPage() {
   const firstName = user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split('@')[0] || 'there'
 
   return (
-    <main className="bg-slate-50">
+    <main className="bg-slate-50 flex-1">
 
       {/* Header */}
       <div className="bg-slate-950 border-b border-slate-800">

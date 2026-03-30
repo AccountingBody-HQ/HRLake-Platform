@@ -142,7 +142,7 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
         ])) }}
       />
 
-      <main className="bg-white">
+      <main className="bg-white flex-1">
 
         {/* ══════ HERO HEADER ══════ */}
         <section className="relative bg-slate-950 overflow-hidden">

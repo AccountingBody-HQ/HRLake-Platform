@@ -117,7 +117,7 @@ export default async function HRCompliancePage() {
     .in('iso2', sampleCodes)
 
   return (
-    <main className="bg-white">
+    <main className="bg-white flex-1">
 
       {/* Hero */}
       <section className="relative bg-slate-950 overflow-hidden">

@@ -182,7 +182,7 @@ export default async function CountryPage(
   }
 
   return (
-    <main className="bg-slate-50">
+    <main className="bg-slate-50 flex-1">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd(getCountryStructuredData({

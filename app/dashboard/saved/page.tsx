@@ -35,7 +35,7 @@ export default async function SavedCalculationsPage() {
   const calculations = await getSavedCalculations(userId)
 
   return (
-    <main className="bg-slate-50">
+    <main className="bg-slate-50 flex-1">
 
       {/* Header */}
       <div className="bg-slate-950 border-b border-slate-800">
