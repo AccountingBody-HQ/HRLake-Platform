@@ -79,19 +79,7 @@ function estimateReadTime(body: any[]): number {
   return Math.max(1, Math.ceil(wordCount / 220))
 }
 
-function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
-  const isExternal = href.startsWith("http")
-  const extraProps = isExternal ? { target: "_blank" as const, rel: "noopener noreferrer" } : {}
-  return (
-    
-      href={href}
-      className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
-      {...extraProps}
-    >
-      {children}
-    </a>
-  )
-}
+
 
 const portableTextComponents = {
   block: {
@@ -138,9 +126,21 @@ const portableTextComponents = {
       <strong className="font-semibold text-slate-800">{children}</strong>
     ),
     em: ({ children }: any) => <em>{children}</em>,
-    link: ({ value, children }: any) => (
-      <ExternalLink href={value?.href || "#"}>{children}</ExternalLink>
-    ),
+    link: ({ value, children }: any) => {
+      const href = value?.href || "#"
+      if (href.startsWith("http")) {
+        return (
+          <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors">
+            {children}
+          </a>
+        )
+      }
+      return (
+        <a href={href} className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors">
+          {children}
+        </a>
+      )
+    },
     code: ({ children }: any) => (
       <code className="bg-slate-100 text-slate-800 text-sm px-1.5 py-0.5 rounded font-mono">
         {children}
