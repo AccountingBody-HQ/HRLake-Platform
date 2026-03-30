@@ -76,9 +76,9 @@ export default function CookiePolicyPage() {
                   <thead className="bg-slate-900 text-slate-300">
                     <tr>
                       <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Cookie</th>
-                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Provider</th>
+                      <th className="hidden sm:table-cell text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Provider</th>
                       <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Purpose</th>
-                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Duration</th>
+                      <th className="hidden sm:table-cell text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Duration</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -90,9 +90,9 @@ export default function CookiePolicyPage() {
                     ].map(row => (
                       <tr key={row.name} className="hover:bg-slate-50">
                         <td className="px-5 py-3 font-mono text-xs text-slate-700">{row.name}</td>
-                        <td className="px-5 py-3 text-slate-600">{row.provider}</td>
+                        <td className="hidden sm:table-cell px-5 py-3 text-slate-600">{row.provider}</td>
                         <td className="px-5 py-3 text-slate-600">{row.purpose}</td>
-                        <td className="px-5 py-3 text-slate-500">{row.duration}</td>
+                        <td className="hidden sm:table-cell px-5 py-3 text-slate-500">{row.duration}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -107,9 +107,9 @@ export default function CookiePolicyPage() {
                   <thead className="bg-slate-900 text-slate-300">
                     <tr>
                       <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Cookie</th>
-                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Provider</th>
+                      <th className="hidden sm:table-cell text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Provider</th>
                       <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Purpose</th>
-                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Duration</th>
+                      <th className="hidden sm:table-cell text-left px-5 py-3 text-xs font-bold uppercase tracking-wider">Duration</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -120,9 +120,9 @@ export default function CookiePolicyPage() {
                     ].map(row => (
                       <tr key={row.name} className="hover:bg-slate-50">
                         <td className="px-5 py-3 font-mono text-xs text-slate-700">{row.name}</td>
-                        <td className="px-5 py-3 text-slate-600">{row.provider}</td>
+                        <td className="hidden sm:table-cell px-5 py-3 text-slate-600">{row.provider}</td>
                         <td className="px-5 py-3 text-slate-600">{row.purpose}</td>
-                        <td className="px-5 py-3 text-slate-500">{row.duration}</td>
+                        <td className="hidden sm:table-cell px-5 py-3 text-slate-500">{row.duration}</td>
                       </tr>
                     ))}
                   </tbody>
