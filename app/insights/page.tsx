@@ -11,7 +11,6 @@ import { getBreadcrumbStructuredData, jsonLd } from "@/lib/structured-data"
 import InsightsClient from "./InsightsClient"
 import EmailCapture from "@/components/EmailCapture"
 
-// --- METADATA ---
 export const metadata: Metadata = {
   title: "Insights — Global Payroll Analysis & Intelligence",
   description:
@@ -28,7 +27,6 @@ export const metadata: Metadata = {
   },
 }
 
-// --- PAGE ---
 export default async function InsightsPage({
   searchParams,
 }: {
@@ -90,7 +88,6 @@ export default async function InsightsPage({
             </p>
           </div>
 
-          {/* Stat strip */}
           <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
               { value: "195",     label: "Countries Covered" },
@@ -109,7 +106,7 @@ export default async function InsightsPage({
 
       {/* ══════ FILTERS ══════ */}
       <section className="bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
           <InsightsClient />
         </div>
       </section>
@@ -119,27 +116,25 @@ export default async function InsightsPage({
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
 
           {/* Article count */}
-          <div className="flex items-center justify-between mb-10">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center">
-                <Layers size={16} className="text-white" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-slate-900">
-                  {totalCount === 0
-                    ? "No articles found"
-                    : totalCount === 1
-                    ? "1 article"
-                    : totalCount + " articles"}
-                </p>
-                <p className="text-xs text-slate-500">
-                  {search
-                    ? `matching "${search}"`
-                    : topic !== "all"
-                    ? `in ${topic.replace("-", " ")}`
-                    : "across all topics"}
-                </p>
-              </div>
+          <div className="flex items-center gap-3 mb-10">
+            <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center">
+              <Layers size={14} className="text-white" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-slate-900">
+                {totalCount === 0
+                  ? "No articles found"
+                  : totalCount === 1
+                  ? "1 article"
+                  : totalCount + " articles"}
+              </p>
+              <p className="text-xs text-slate-500">
+                {search
+                  ? "matching " + "“" + search + "”"
+                  : topic !== "all"
+                  ? "in " + topic.replace("-", " ")
+                  : "across all topics"}
+              </p>
             </div>
           </div>
 
@@ -150,23 +145,23 @@ export default async function InsightsPage({
                 <Link
                   key={article._id}
                   href={"/insights/" + article.slug?.current + "/"}
-                  className="group bg-white border border-slate-200 hover:border-blue-300 hover:shadow-lg rounded-2xl overflow-hidden transition-all duration-200 flex flex-col"
+                  className="group flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden hover:border-blue-400 hover:shadow-lg transition-all duration-200"
                 >
-                  {/* Hover-reveal top accent — matches homepage card style */}
-                  <div className="h-1.5 bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  {/* Solid top bar — always visible, not hover-only */}
+                  <div className="h-1 bg-gradient-to-r from-blue-600 to-blue-400" />
 
-                  <div className="p-7 flex flex-col flex-1">
-                    {/* Category label — plain, matches homepage */}
+                  <div className="flex flex-col flex-1 p-6">
+                    {/* Category */}
                     {article.category && (
-                      <span className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-3">
-                        {article.category}
-                      </span>
+                      <div className="mb-3">
+                        <span className="inline-block bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-md border border-blue-100">
+                          {article.category}
+                        </span>
+                      </div>
                     )}
 
                     {/* Title */}
-                    <h2
-                      className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-blue-700 transition-colors"
-                    >
+                    <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-blue-700 transition-colors">
                       {article.title}
                     </h2>
 
@@ -177,9 +172,14 @@ export default async function InsightsPage({
                       </p>
                     )}
 
-                    {/* Read more */}
-                    <div className="mt-6 flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-2.5 transition-all">
-                      Read article <ArrowRight size={14} />
+                    {/* Footer */}
+                    <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-blue-600 text-sm font-semibold group-hover:text-blue-700 transition-colors">
+                        Read article
+                      </span>
+                      <div className="w-7 h-7 rounded-lg bg-slate-100 group-hover:bg-blue-600 flex items-center justify-center transition-all duration-200">
+                        <ArrowRight size={13} className="text-slate-500 group-hover:text-white transition-colors" />
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -187,16 +187,14 @@ export default async function InsightsPage({
             </div>
           ) : (
             <div className="text-center py-24">
-              <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-5">
-                <BookOpen size={28} className="text-slate-400" />
+              <div className="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center mx-auto mb-5">
+                <BookOpen size={24} className="text-slate-400" />
               </div>
-              <h3 className="font-serif text-2xl font-bold text-slate-900 mb-3">
-                No articles found
-              </h3>
+              <h3 className="font-bold text-xl text-slate-900 mb-2">No articles found</h3>
               <p className="text-slate-500 text-sm max-w-md mx-auto leading-relaxed">
                 {search
                   ? "Try a different search term or clear the filters to browse all articles."
-                  : "Articles will appear here once published. Check back soon for expert payroll analysis."}
+                  : "Articles will appear here once published. Check back soon."}
               </p>
             </div>
           )}
@@ -205,13 +203,7 @@ export default async function InsightsPage({
           {totalPages > 1 && (
             <div className="mt-16 flex items-center justify-center gap-1.5">
               {page > 1 && (
-                <PaginationLink
-                  page={page - 1}
-                  topic={topic}
-                  search={search}
-                  label="Prev"
-                  variant="text"
-                />
+                <PaginationLink page={page - 1} topic={topic} search={search} label="Prev" variant="text" />
               )}
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                 <PaginationLink
@@ -224,13 +216,7 @@ export default async function InsightsPage({
                 />
               ))}
               {page < totalPages && (
-                <PaginationLink
-                  page={page + 1}
-                  topic={topic}
-                  search={search}
-                  label="Next"
-                  variant="text"
-                />
+                <PaginationLink page={page + 1} topic={topic} search={search} label="Next" variant="text" />
               )}
             </div>
           )}
@@ -238,15 +224,11 @@ export default async function InsightsPage({
       </section>
 
       {/* ══════ EMAIL CAPTURE ══════ */}
-      <section
-        className="relative overflow-hidden"
-        style={{ backgroundColor: "#0d1f3c" }}
-      >
+      <section className="relative overflow-hidden" style={{ backgroundColor: "#0d1f3c" }}>
         <div
           className="absolute inset-0"
           style={{
-            background:
-              "radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.12) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at 80% 50%, rgba(30,111,255,0.12) 0%, transparent 60%)",
           }}
         />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-24">
@@ -278,14 +260,8 @@ export default async function InsightsPage({
   )
 }
 
-// --- PAGINATION LINK COMPONENT ---
 function PaginationLink({
-  page,
-  topic,
-  search,
-  label,
-  isActive,
-  variant,
+  page, topic, search, label, isActive, variant,
 }: {
   page: number
   topic: string
@@ -303,10 +279,7 @@ function PaginationLink({
 
   if (variant === "text") {
     return (
-      <Link
-        href={href}
-        className="px-4 py-2.5 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors"
-      >
+      <Link href={href} className="px-4 py-2.5 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors">
         {label}
       </Link>
     )
@@ -316,10 +289,10 @@ function PaginationLink({
     <Link
       href={href}
       className={
-        "w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all " +
+        "w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold transition-all " +
         (isActive
-          ? "bg-slate-900 text-white shadow-lg"
-          : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50")
+          ? "bg-slate-900 text-white shadow-md"
+          : "bg-white text-slate-600 border border-slate-200 hover:border-slate-400 hover:bg-slate-50")
       }
     >
       {label}
