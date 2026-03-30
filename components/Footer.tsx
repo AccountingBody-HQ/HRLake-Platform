@@ -42,7 +42,7 @@ export default function Footer() {
   const pathname = usePathname()
   const isHomepage = pathname === '/'
   return (
-    <footer className="bg-slate-900 border-t border-slate-800">
+    <footer className="bg-slate-900 border-t border-slate-800 mt-auto">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
 
         {/* TOP SECTION */}
