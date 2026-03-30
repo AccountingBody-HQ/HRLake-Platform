@@ -301,7 +301,7 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
                   <ul className="space-y-1">
                     {[
                       { label: 'Country Overview',  href: `/countries/${code.toLowerCase()}/` },
-                      { label: 'Employment Law',     href: `/countries/${code.toLowerCase()}/employment-law/` },
+                      { label: 'Employment Law',     href: `/countries/${code.toLowerCase()}/employmentlaw/` },
                       { label: 'Tax Guide',          href: `/countries/${code.toLowerCase()}/tax-guide/` },
                       { label: 'Hiring Guide',       href: `/countries/${code.toLowerCase()}/hiring-guide/` },
                     ].map((link) => (
