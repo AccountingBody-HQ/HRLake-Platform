@@ -13,7 +13,6 @@ import { getInsightBySlug, getRelatedArticles, urlFor } from "@/lib/sanity"
 import { getArticleStructuredData, getBreadcrumbStructuredData, jsonLd } from "@/lib/structured-data"
 import EmailCapture from "@/components/EmailCapture"
 
-// --- DYNAMIC METADATA WITH CANONICAL → ACCOUNTINGBODY ---
 export async function generateMetadata({
   params,
 }: {
@@ -55,7 +54,6 @@ export async function generateMetadata({
   }
 }
 
-// --- HELPERS ---
 function formatDate(dateString: string): string {
   try {
     return new Date(dateString).toLocaleDateString("en-GB", {
@@ -77,11 +75,34 @@ function estimateReadTime(body: any[]): number {
         : ""
     )
     .join(" ")
-  const words = text.split(/\s+/).filter(Boolean).length
-  return Math.max(1, Math.ceil(words / 220))
+  const wordCount = text.split(" ").filter((w: string) => w.length > 0).length
+  return Math.max(1, Math.ceil(wordCount / 220))
 }
 
-// --- PORTABLE TEXT COMPONENTS ---
+function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const isExternal = href.startsWith("http")
+  if (isExternal) {
+    return (
+      
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
+      >
+        {children}
+      </a>
+    )
+  }
+  return (
+    
+      href={href}
+      className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
+    >
+      {children}
+    </a>
+  )
+}
+
 const portableTextComponents = {
   block: {
     h2: ({ children }: any) => (
@@ -127,19 +148,9 @@ const portableTextComponents = {
       <strong className="font-semibold text-slate-800">{children}</strong>
     ),
     em: ({ children }: any) => <em>{children}</em>,
-    link: ({ value, children }: any) => {
-      const href = value?.href || "#"
-      const isExternal = href.startsWith("http")
-      return (
-        
-          href={href}
-          className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
-          {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
-        >
-          {children}
-        </a>
-      )
-    },
+    link: ({ value, children }: any) => (
+      <ExternalLink href={value?.href || "#"}>{children}</ExternalLink>
+    ),
     code: ({ children }: any) => (
       <code className="bg-slate-100 text-slate-800 text-sm px-1.5 py-0.5 rounded font-mono">
         {children}
@@ -168,7 +179,6 @@ const portableTextComponents = {
   },
 }
 
-// --- COUNTRY MAP ---
 const COUNTRY_MAP: Record<string, { name: string; code: string }> = {
   GB: { name: "United Kingdom", code: "gb" },
   US: { name: "United States",  code: "us" },
@@ -208,7 +218,6 @@ const COUNTRY_MAP: Record<string, { name: string; code: string }> = {
   FI: { name: "Finland",        code: "fi" },
 }
 
-// --- PAGE ---
 export default async function InsightArticlePage({
   params,
 }: {
@@ -247,8 +256,14 @@ export default async function InsightArticlePage({
 
   return (
     <div className="min-h-screen bg-white">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(articleStructuredData) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbData) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(articleStructuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbData) }}
+      />
 
       {/* ══════ ARTICLE HEADER ══════ */}
       <section className="relative bg-slate-950 overflow-hidden">
@@ -260,8 +275,6 @@ export default async function InsightArticlePage({
           }}
         />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-20">
-
-          {/* Back link */}
           <Link
             href="/insights/"
             className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm font-medium transition-colors mb-10"
@@ -271,7 +284,6 @@ export default async function InsightArticlePage({
           </Link>
 
           <div className="max-w-3xl">
-            {/* Category + meta row */}
             <div className="flex flex-wrap items-center gap-4 mb-6">
               {article.category && (
                 <span className="inline-flex items-center gap-1.5 bg-blue-600/10 border border-blue-500/20 rounded-full px-3 py-1 text-xs font-bold text-blue-300 uppercase tracking-widest">
@@ -293,7 +305,6 @@ export default async function InsightArticlePage({
               </div>
             </div>
 
-            {/* Title */}
             <h1
               className="font-serif text-3xl lg:text-5xl font-bold text-white leading-tight mb-6"
               style={{ letterSpacing: "-0.025em" }}
@@ -301,14 +312,12 @@ export default async function InsightArticlePage({
               {article.title}
             </h1>
 
-            {/* Excerpt */}
             {article.excerpt && (
               <p className="text-lg text-slate-400 leading-relaxed max-w-2xl">
                 {article.excerpt}
               </p>
             )}
 
-            {/* Author */}
             {article.author?.name && (
               <div className="flex items-center gap-3 mt-10 pt-8 border-t border-slate-800">
                 {article.author.image ? (
@@ -337,9 +346,7 @@ export default async function InsightArticlePage({
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
           <div className="grid lg:grid-cols-[1fr_300px] gap-16">
 
-            {/* Main content */}
             <article>
-              {/* Hero image */}
               {article.mainImage && (
                 <figure className="mb-12">
                   <img
@@ -350,7 +357,6 @@ export default async function InsightArticlePage({
                 </figure>
               )}
 
-              {/* Body */}
               {article.body && (
                 <PortableText
                   value={article.body}
@@ -358,8 +364,7 @@ export default async function InsightArticlePage({
                 />
               )}
 
-              {/* Bottom nav */}
-              <div className="mt-16 pt-8 border-t border-slate-100 flex items-center justify-between">
+              <div className="mt-16 pt-8 border-t border-slate-100">
                 <Link
                   href="/insights/"
                   className="inline-flex items-center gap-2 text-slate-500 hover:text-blue-600 text-sm font-semibold transition-colors"
@@ -374,7 +379,6 @@ export default async function InsightArticlePage({
             <aside className="hidden lg:block">
               <div className="sticky top-24 space-y-6">
 
-                {/* Related countries */}
                 {relatedCountries.length > 0 && (
                   <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
                     <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
@@ -405,7 +409,6 @@ export default async function InsightArticlePage({
                   </div>
                 )}
 
-                {/* Quick links */}
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
                   <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest mb-4">
                     Explore
@@ -432,7 +435,6 @@ export default async function InsightArticlePage({
                   </div>
                 </div>
 
-                {/* Disclaimer */}
                 <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
                   <p className="text-xs text-amber-800 leading-relaxed">
                     <span className="font-bold">Data disclaimer:</span> This article is for
@@ -440,6 +442,7 @@ export default async function InsightArticlePage({
                     official sources or a qualified professional.
                   </p>
                 </div>
+
               </div>
             </aside>
           </div>
