@@ -52,13 +52,14 @@ export interface SanityArticleCard {
 
 // --- TOPIC FILTER CATEGORIES ---
 export const INSIGHT_TOPICS = [
-  { label: 'All',            slug: 'all' },
-  { label: 'Payroll',        slug: 'payroll' },
-  { label: 'Employment Law', slug: 'employment-law' },
-  { label: 'EOR',            slug: 'eor' },
-  { label: 'Tax',            slug: 'tax' },
-  { label: 'HR',             slug: 'hr' },
-  { label: 'Compliance',    slug: 'compliance' },
+  { label: 'All',              slug: 'all' },
+  { label: 'Payroll',          slug: 'payroll' },
+  { label: 'Employment Law',   slug: 'employment-law' },
+  { label: 'EOR',              slug: 'eor' },
+  { label: 'Tax',              slug: 'tax' },
+  { label: 'HR',               slug: 'hr' },
+  { label: 'Compliance',       slug: 'compliance' },
+  { label: 'Country Report',   slug: 'country-report' },
 ] as const
 
 // =============================================
