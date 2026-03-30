@@ -150,12 +150,7 @@ export default async function InsightsPage({
                     <h2 className="font-bold text-slate-900 text-lg leading-snug mb-3 group-hover:text-blue-700 transition-colors">
                       {article.title}
                     </h2>
-                    {article.excerpt && (
-                      <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 flex-1">
-                        {article.excerpt}
-                      </p>
-                    )}
-                    <div className="mt-6 flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-2.5 transition-all">
+                    <div className="mt-6 flex items-center gap-1.5 text-blue-600 text-sm font-semibold group-hover:gap-2.5 transition-all flex-1 items-end">
                       Read article <ArrowRight size={14} />
                     </div>
                   </div>
