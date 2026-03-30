@@ -162,7 +162,7 @@ export default function RootLayout({
         <body className="min-h-screen bg-white font-sans antialiased">
           <GoogleTagManagerBody />
           <Navigation />
-          <main>{children}</main>
+          <div className="flex flex-col flex-1">{children}</div>
           <Footer />
           <Analytics />
           <SpeedInsights />
