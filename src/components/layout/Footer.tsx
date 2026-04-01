@@ -70,9 +70,7 @@ export default function Footer() {
               <div className="w-8 h-8 rounded-lg bg-gradient-blue flex items-center justify-center shadow-sm">
                 <Globe size={18} className="text-white" strokeWidth={2.5} />
               </div>
-              <div className="flex items-baseline leading-none gap-0">
-                <span style={{background:"linear-gradient(90deg,#ffffff 0%,#ffffff 42%,#2dd4bf 42%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",fontWeight:900,fontSize:"0.875rem",letterSpacing:"-0.01em"}}>HRLake</span>
-              </div>
+              <span style={{fontWeight:900,fontSize:"0.9rem",letterSpacing:"-0.01em"}}>HR<span style={{color:"#2dd4bf"}}>Lake</span></span>
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed mb-4">
               Where global HR knowledge dives deep.
