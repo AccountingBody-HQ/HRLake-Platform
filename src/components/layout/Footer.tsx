@@ -71,7 +71,7 @@ export default function Footer() {
                 <Globe size={18} className="text-white" strokeWidth={2.5} />
               </div>
               <div className="flex items-baseline leading-none gap-0">
-                <span className="font-black text-white text-sm tracking-tight">HR</span><span className="font-black text-teal-400 text-sm tracking-tight" >Lake</span>
+                <span style={{background:"linear-gradient(90deg,#ffffff 0%,#ffffff 42%,#2dd4bf 42%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",fontWeight:900,fontSize:"0.875rem",letterSpacing:"-0.01em"}}>HRLake</span>
               </div>
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed mb-4">
