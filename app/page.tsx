@@ -105,7 +105,7 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════════════
           HERO — The deep
       ══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{backgroundColor: 'var(--lake-abyss)'}}>
+      <section className="relative overflow-hidden" style={{backgroundColor: '#010a14'}}>
 
         {/* Lake light caustics — abstract depth suggestion */}
         <div className="absolute inset-0 pointer-events-none" style={{
@@ -242,7 +242,7 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════════════
           DEPTH PROPOSITION — What HRLake means
       ══════════════════════════════════════════════ */}
-      <section style={{backgroundColor: 'var(--lake-deep)'}}>
+      <section style={{backgroundColor: '#020c18'}}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
           <div className="grid md:grid-cols-3 gap-6">
             {DEPTH_FEATURES.map((f, i) => (
@@ -262,7 +262,7 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════════════
           CAPABILITIES
       ══════════════════════════════════════════════ */}
-      <section className="bg-white" style={{borderTop: '1px solid var(--color-slate-100)', borderBottom: '1px solid var(--color-slate-100)'}}>
+      <section className="bg-white" style={{borderTop: '1px solid #f0f2f7', borderBottom: '1px solid #f0f2f7'}}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28">
           <div className="mb-16">
             <div className="lake-badge mb-5 w-fit" style={{background: 'rgba(13,148,136,0.08)', borderColor: 'rgba(13,148,136,0.18)', color: '#0d9488'}}>
@@ -273,7 +273,7 @@ export default async function HomePage() {
               <h2 className="font-serif" style={{fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#0a1128', letterSpacing: '-0.03em', lineHeight: 1.1}}>
                 Everything you need<br />for global payroll.
               </h2>
-              <p className="hidden lg:block" style={{color: 'var(--color-slate-500)', maxWidth: '360px', lineHeight: 1.75, fontSize: '0.95rem'}}>
+              <p className="hidden lg:block" style={{color: '#64748b', maxWidth: '360px', lineHeight: 1.75, fontSize: '0.95rem'}}>
                 One authoritative source for country payroll data, calculations, EOR intelligence,
                 and employment law — verified, current, and free to access.
               </p>
@@ -286,7 +286,7 @@ export default async function HomePage() {
                 className="group flex flex-col rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
                 style={{
                   background: '#ffffff',
-                  border: '1px solid var(--color-slate-200)',
+                  border: '1px solid #e2e6ef',
                   boxShadow: 'var(--shadow-sm)',
                 }}>
                 {/* Top colour bar */}
@@ -297,7 +297,7 @@ export default async function HomePage() {
                     <cap.icon size={20} style={{color: cap.iconColor}} />
                   </div>
                   <h3 style={{fontSize: '1rem', fontWeight: 700, color: '#0a1128', marginBottom: '0.75rem', lineHeight: 1.3}}>{cap.title}</h3>
-                  <p style={{fontSize: '0.875rem', color: 'var(--color-slate-500)', lineHeight: 1.75, flex: 1}}>{cap.body}</p>
+                  <p style={{fontSize: '0.875rem', color: '#64748b', lineHeight: 1.75, flex: 1}}>{cap.body}</p>
                   <div className="mt-6 flex items-center gap-2 transition-all group-hover:gap-3"
                     style={{fontSize: '0.8rem', fontWeight: 700, color: cap.accent, letterSpacing: '0.01em'}}>
                     {cap.cta} <ArrowRight size={13} />
@@ -312,7 +312,7 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════════════
           COUNTRY TABLE
       ══════════════════════════════════════════════ */}
-      <section style={{backgroundColor: 'var(--color-slate-50)'}}>
+      <section style={{backgroundColor: '#f8f9fc'}}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28">
           <div className="flex items-end justify-between mb-14">
             <div>
@@ -332,10 +332,10 @@ export default async function HomePage() {
           </div>
 
           {/* Desktop table */}
-          <div className="hidden lg:block rounded-2xl overflow-hidden" style={{border: '1px solid var(--color-slate-200)', boxShadow: 'var(--shadow-md)'}}>
+          <div className="hidden lg:block rounded-2xl overflow-hidden" style={{border: '1px solid #e2e6ef', boxShadow: 'var(--shadow-md)'}}>
             <div className="grid px-6 py-4" style={{
               gridTemplateColumns: '2.5fr 1fr 1fr 1fr 140px',
-              backgroundColor: 'var(--lake-abyss)',
+              backgroundColor: '#010a14',
               borderBottom: '1px solid rgba(13,148,136,0.15)'
             }}>
               {['Country','Income Tax','Employer SS','Currency',''].map(h => (
@@ -347,7 +347,7 @@ export default async function HomePage() {
                 className="grid items-center px-6 py-4 group transition-all"
                 style={{
                   gridTemplateColumns: '2.5fr 1fr 1fr 1fr 140px',
-                  borderTop: i > 0 ? '1px solid var(--color-slate-100)' : 'none',
+                  borderTop: i > 0 ? '1px solid #f0f2f7' : 'none',
                   backgroundColor: 'transparent',
                 }}>
                 <div className="flex items-center gap-4">
@@ -370,7 +370,7 @@ export default async function HomePage() {
             {FEATURED_COUNTRIES.map(c => (
               <Link key={c.code} href={`/countries/${c.code}/`}
                 className="group bg-white rounded-xl p-5 transition-all"
-                style={{border: '1px solid var(--color-slate-200)', boxShadow: 'var(--shadow-sm)'}}>
+                style={{border: '1px solid #e2e6ef', boxShadow: 'var(--shadow-sm)'}}>
                 <div className="flex items-center gap-3 mb-4">
                   <img src={`https://flagcdn.com/28x21/${c.code}.png`} alt={c.name} width={28} height={21} className="rounded-sm" />
                   <span style={{fontWeight: 700, color: '#1e293b', fontSize: '0.9rem'}}>{c.name}</span>
@@ -405,7 +405,7 @@ export default async function HomePage() {
               <h2 className="font-serif mb-6" style={{fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#0a1128', letterSpacing: '-0.03em', lineHeight: 1.1}}>
                 Data held to<br />the highest standard.
               </h2>
-              <p style={{fontSize: '1.1rem', color: 'var(--color-slate-500)', lineHeight: 1.8, marginBottom: '1.5rem'}}>
+              <p style={{fontSize: '1.1rem', color: '#64748b', lineHeight: 1.8, marginBottom: '1.5rem'}}>
                 Every data point on HRLake is sourced directly from official government
                 and tax authority publications, verified by qualified payroll professionals,
                 and updated monthly.
@@ -430,7 +430,7 @@ export default async function HomePage() {
                     <s.icon size={20} className="text-white" />
                   </div>
                   <h3 style={{fontSize: '0.95rem', fontWeight: 700, color: '#0a1128', marginBottom: '0.5rem'}}>{s.title}</h3>
-                  <p style={{fontSize: '0.85rem', color: 'var(--color-slate-500)', lineHeight: 1.7}}>{s.body}</p>
+                  <p style={{fontSize: '0.85rem', color: '#64748b', lineHeight: 1.7}}>{s.body}</p>
                 </div>
               ))}
             </div>
@@ -442,7 +442,7 @@ export default async function HomePage() {
           INSIGHTS
       ══════════════════════════════════════════════ */}
       {insights.length > 0 && (
-        <section style={{backgroundColor: 'var(--color-slate-50)', borderTop: '1px solid var(--color-slate-100)', borderBottom: '1px solid var(--color-slate-100)'}}>
+        <section style={{backgroundColor: '#f8f9fc', borderTop: '1px solid #f0f2f7', borderBottom: '1px solid #f0f2f7'}}>
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28">
             <div className="flex items-end justify-between mb-14">
               <div>
@@ -464,7 +464,7 @@ export default async function HomePage() {
               {insights.map((article: any) => (
                 <Link key={article.slug?.current} href={`/insights/${article.slug?.current}/`}
                   className="group flex flex-col bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
-                  style={{border: '1px solid var(--color-slate-200)', boxShadow: 'var(--shadow-sm)'}}>
+                  style={{border: '1px solid #e2e6ef', boxShadow: 'var(--shadow-sm)'}}>
                   <div style={{height: '3px', background: 'linear-gradient(90deg, #0369a1, #2dd4bf)', opacity: 0}} className="group-hover:opacity-100 transition-opacity" />
                   <div className="p-7 flex flex-col flex-1">
                     {article.category && (
@@ -473,7 +473,7 @@ export default async function HomePage() {
                     <h3 style={{fontSize: '1rem', fontWeight: 700, color: '#0a1128', marginTop: '0.5rem', marginBottom: '0.75rem', lineHeight: 1.4}}
                       className="group-hover:text-teal-700 transition-colors">{article.title}</h3>
                     {article.excerpt && (
-                      <p style={{fontSize: '0.875rem', color: 'var(--color-slate-500)', lineHeight: 1.75, flex: 1}} className="line-clamp-3">{article.excerpt}</p>
+                      <p style={{fontSize: '0.875rem', color: '#64748b', lineHeight: 1.75, flex: 1}} className="line-clamp-3">{article.excerpt}</p>
                     )}
                     <div className="mt-6 flex items-center gap-2 transition-all group-hover:gap-3"
                       style={{fontSize: '0.8rem', fontWeight: 700, color: '#0d9488'}}>
@@ -490,7 +490,7 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════════════
           EMAIL CAPTURE — The depths
       ══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{backgroundColor: 'var(--lake-abyss)'}}>
+      <section className="relative overflow-hidden" style={{backgroundColor: '#010a14'}}>
         <div className="absolute inset-0 pointer-events-none" style={{
           background: `
             radial-gradient(ellipse 70% 60% at 90% 50%, rgba(13,148,136,0.1) 0%, transparent 60%),
