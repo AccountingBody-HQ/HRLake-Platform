@@ -106,7 +106,7 @@ export default async function HomePage() {
 
             {/* Headline */}
             <h1 className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-6" style={{letterSpacing: '-0.025em'}}>
-              The deep source for<br /><span className="text-blue-400">global payroll</span><br />intelligence.
+              The deep source for<br /><span className="text-blue-400">global HR</span><br />intelligence.
             </h1>
 
             {/* Sub */}
