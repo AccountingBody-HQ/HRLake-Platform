@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import {
-  Globe, Menu, X, Search,
-  Building2, Scale, Calculator, BookOpen, Tag, LogIn, Droplets
+  Globe, ChevronDown, Menu, X, Search,
+  Building2, Scale, Calculator, BookOpen, Tag, LogIn
 } from "lucide-react";
 
 const cn = (...inputs: Parameters<typeof clsx>) => twMerge(clsx(inputs));
@@ -54,12 +54,11 @@ export default function Navigation() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 shrink-0 group" aria-label="HRLake home">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm transition-shadow group-hover:shadow-md" style={{background: 'linear-gradient(135deg, #0369a1 0%, #0d9488 100%)'}}>
-                <Droplets size={17} className="text-white" strokeWidth={2.5} />
+              <div className="w-8 h-8 rounded-lg bg-gradient-blue flex items-center justify-center shadow-sm group-hover:shadow-glow transition-shadow">
+                <Globe size={18} className="text-white" strokeWidth={2.5} />
               </div>
-              <div className="hidden sm:flex items-baseline gap-0 leading-none">
-                <span className="font-black text-slate-900 text-base tracking-tight">HR</span>
-                <span className="font-black text-teal-600 text-base tracking-tight">Lake</span>
+              <div className="hidden sm:flex items-baseline leading-none">
+                <span className="font-black text-slate-900 text-sm tracking-tight">HR</span><span className="font-black text-teal-600 text-sm tracking-tight">Lake</span>
               </div>
             </Link>
 
@@ -83,7 +82,7 @@ export default function Navigation() {
             <div className="hidden lg:flex items-center gap-2">
               <Link
                 href="/search/"
-                className="w-9 h-9 flex items-center justify-center rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                className="w-9 h-9 flex items-center justify-center rounded-md text-slate-500 hover:text-navy-900 hover:bg-slate-100 transition-colors"
                 aria-label="Search"
               >
                 <Search size={18} />
@@ -97,8 +96,7 @@ export default function Navigation() {
               </Link>
               <Link
                 href="/sign-up/"
-                className="inline-flex items-center gap-1.5 h-9 px-4 text-sm font-semibold rounded-md text-white transition-colors shadow-sm"
-                style={{background: 'linear-gradient(135deg, #0369a1 0%, #0d9488 100%)'}}
+                className="inline-flex items-center gap-1.5 h-9 px-4 text-sm font-semibold rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors shadow-sm"
               >
                 Get Started
               </Link>
@@ -108,14 +106,14 @@ export default function Navigation() {
             <div className="flex lg:hidden items-center gap-2">
               <Link
                 href="/search/"
-                className="w-9 h-9 flex items-center justify-center rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                className="w-9 h-9 flex items-center justify-center rounded-md text-slate-500 hover:text-navy-900 hover:bg-slate-100 transition-colors"
                 aria-label="Search"
               >
                 <Search size={18} />
               </Link>
               <button
                 onClick={() => setOpen(!open)}
-                className="w-9 h-9 flex items-center justify-center rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                className="w-9 h-9 flex items-center justify-center rounded-md text-slate-600 hover:text-navy-900 hover:bg-slate-100 transition-colors"
                 aria-label={open ? "Close menu" : "Open menu"}
                 aria-expanded={open}
               >
@@ -130,7 +128,7 @@ export default function Navigation() {
       {/* Mobile Menu Overlay */}
       {open && (
         <div className="fixed inset-0 z-40 lg:hidden" onClick={() => setOpen(false)}>
-          <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-navy-950/60 backdrop-blur-sm" />
         </div>
       )}
 
@@ -149,8 +147,8 @@ export default function Navigation() {
               className={cn(
                 "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
                 isActive(href)
-                  ? "bg-teal-50 text-teal-700"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-blue-50 text-blue-500"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-navy-900"
               )}
             >
               <Icon size={18} className="shrink-0" />
@@ -160,15 +158,14 @@ export default function Navigation() {
           <div className="border-t border-slate-100 mt-2 pt-3 flex flex-col gap-2">
             <Link
               href="/sign-in/"
-              className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-navy-900 transition-colors"
             >
               <LogIn size={18} className="shrink-0" />
               Sign in
             </Link>
             <Link
               href="/sign-up/"
-              className="flex items-center justify-center gap-2 mx-4 py-3 rounded-lg text-sm font-semibold text-white transition-colors"
-              style={{background: 'linear-gradient(135deg, #0369a1 0%, #0d9488 100%)'}}
+              className="flex items-center justify-center gap-2 mx-4 py-3 rounded-lg text-sm font-semibold bg-blue-500 text-white hover:bg-blue-600 transition-colors"
             >
               Get Started Free
             </Link>
