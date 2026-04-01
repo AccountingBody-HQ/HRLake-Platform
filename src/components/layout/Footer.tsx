@@ -70,7 +70,7 @@ export default function Footer() {
               <div className="w-8 h-8 rounded-lg bg-gradient-blue flex items-center justify-center shadow-sm">
                 <Globe size={18} className="text-white" strokeWidth={2.5} />
               </div>
-              <span style={{fontWeight:900,fontSize:"0.9rem",letterSpacing:"-0.01em"}}>HR<span style={{color:"#2dd4bf"}}>Lake</span></span>
+              <span style={{fontWeight:900,fontSize:"0.9rem",letterSpacing:"-0.06em",fontFamily:"Inter,sans-serif"}}>HR<span style={{color:"#2dd4bf",letterSpacing:"-0.06em"}}>Lake</span></span>
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed mb-4">
               Where global HR knowledge dives deep.
