@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function SignInPage() {
   return (
-    <main className="flex items-center justify-center px-4"
+    <main className="flex items-start justify-center px-4"
       style={{background: 'radial-gradient(ellipse at 50% 0%, rgba(30,111,255,0.1) 0%, transparent 60%), #020817', minHeight: '100vh', paddingTop: '80px', paddingBottom: '80px'}}>
       <div className="w-full max-w-[400px]">
 
