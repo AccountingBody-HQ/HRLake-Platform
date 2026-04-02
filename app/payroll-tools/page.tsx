@@ -3,7 +3,7 @@ import { ArrowRight, Calculator, Globe, RefreshCw, BarChart2 } from 'lucide-reac
 
 export const metadata = {
   title: 'Payroll Tools | HRLake',
-  description: 'Free payroll calculators and tools — net pay, employer cost, country comparison, and salary currency conversion for 195 countries.',
+  description: 'Free payroll and HR tools — net pay calculators, employer cost breakdowns, country comparisons, and salary currency conversion for 195 countries.',
 }
 
 const TOOLS = [
@@ -66,7 +66,7 @@ export default function PayrollToolsPage() {
               Payroll calculators<br />and <span className="text-blue-400">tools</span>.
             </h1>
             <p className="text-slate-400 text-lg leading-relaxed max-w-2xl">
-              Free tools for calculating net pay, employer costs, and salary conversions — built on verified government data for 195 countries.
+              Free tools for HR and finance teams — net pay, employer costs, and salary conversions built on verified government data for 195 countries.
             </p>
           </div>
 
