@@ -64,7 +64,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: profileError.message }, { status: 500 })
     }
 
-    // Create platform membership for GPE
+    // Create platform membership for HRLake
     const { error: membershipError } = await supabase
       .from('platform_memberships')
       .upsert({

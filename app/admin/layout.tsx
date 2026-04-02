@@ -17,7 +17,7 @@ export default function AdminLayout({
               <Shield size={16} className="text-white" />
             </div>
             <div>
-              <p className="text-white font-bold text-sm">GPE Admin</p>
+              <p className="text-white font-bold text-sm">HRLake Admin</p>
               <p className="text-slate-500 text-xs">Internal tools</p>
             </div>
           </div>

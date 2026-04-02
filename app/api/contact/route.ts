@@ -46,8 +46,8 @@ export async function POST(req: Request) {
     if (process.env.RESEND_API_KEY) {
       try {
         const subject = form_type === 'correction'
-          ? `[GPE] Data correction request — ${country || 'Unknown country'}`
-          : `[GPE] Contact form — ${full_name}`
+          ? `[HRLake] Data correction request — ${country || 'Unknown country'}`
+          : `[HRLake] Contact form — ${full_name}`
 
         const html = form_type === 'correction'
           ? `
