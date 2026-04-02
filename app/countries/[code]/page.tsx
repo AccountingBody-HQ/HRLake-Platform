@@ -507,14 +507,23 @@ export default async function CountryPage(
                 <div className="grid sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
                   {[
                     { label: 'Minimum Wage',       value: fmtCurrency(employmentRules.minimum_wage, country.currency_code),         icon: '💰' },
-                    { label: 'Annual Leave',        value: fmt(employmentRules.annual_leave_days, ' days'),                      icon: '🏖️' },
+                    { label: 'Annual Leave', value: employmentRules.annual_leave_days ? `${employmentRules.annual_leave_days} ${employmentRules.annual_leave_days === 1 ? 'day' : 'days'}` : '—', icon: '🏖️' },
                     { label: 'Sick Leave',          value: fmt(employmentRules.sick_leave_days, ' days'),                        icon: '🏥' },
-                    { label: 'Notice Period',       value: fmt(employmentRules.notice_period_days, ' days'),                     icon: '📋' },
+                    { label: 'Notice Period', value: employmentRules.notice_period_days ? `${employmentRules.notice_period_days} ${employmentRules.notice_period_days === 1 ? 'day' : 'days'}` : '—', icon: '📋' },
                     { label: 'Probation Period',    value: fmt(employmentRules.probation_period_days, ' days'),                  icon: '⏱️' },
                     { label: 'Maternity Leave',     value: fmt(employmentRules.maternity_leave_weeks, ' weeks'),                 icon: '👶' },
                     { label: 'Paternity Leave',     value: fmt(employmentRules.paternity_leave_weeks, ' weeks'),                 icon: '👨‍👧' },
                     { label: 'Overtime Rate',       value: fmt(employmentRules.overtime_rate, '× standard rate'),               icon: '⚡' },
-                    { label: 'Payroll Frequency',   value: fmt(employmentRules.payroll_frequency),                               icon: '📅' },
+                    { label: 'Payroll Frequency', value: (() => {
+                      const freq = employmentRules.payroll_frequency ?? ''
+                      const map: Record<string, string> = {
+                        'GBP_per_hour': 'Per hour', 'USD_per_hour': 'Per hour',
+                        'EUR_per_hour': 'Per hour', 'monthly': 'Monthly',
+                        'weekly': 'Weekly', 'annually': 'Annually',
+                        'bi-weekly': 'Bi-weekly', 'fortnightly': 'Fortnightly',
+                      }
+                      return map[freq] ?? (freq || '—')
+                    })(), icon: '📅' },
                     { label: '13th Month Pay',      value: employmentRules.thirteenth_month_pay ? 'Required' : 'Not required',  icon: '🎁' },
                   ].map(item => (
                     <div key={item.label} className="px-6 py-4 flex items-center gap-3">
