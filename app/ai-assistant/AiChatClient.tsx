@@ -33,7 +33,7 @@ function CopyButton({ text }: { text: string }) {
 function SignUpPrompt() {
   return (
     <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 text-center my-2">
-      <h3 className="text-slate-900 font-bold text-lg mb-1">Enjoying PayrollExpert AI?</h3>
+      <h3 className="text-slate-900 font-bold text-lg mb-1">Enjoying HRLake AI?</h3>
       <p className="text-slate-500 text-sm mb-4">Create a free account for 10 questions per month.</p>
       <div className="flex gap-2 justify-center">
         <a href="/sign-up/" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors">Create free account</a>
@@ -176,8 +176,8 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
               </svg>
             </div>
             <div>
-              <div className="text-slate-900 font-bold text-sm">PayrollExpert AI</div>
-              <div className="text-slate-400 text-xs">Global payroll · EOR · HR compliance</div>
+              <div className="text-slate-900 font-bold text-sm">HRLake AI</div>
+              <div className="text-slate-400 text-xs">HR intelligence · EOR · Payroll compliance</div>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -201,7 +201,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
                 </svg>
               </div>
-              <h1 className="text-slate-900 font-bold text-2xl mb-1">PayrollExpert AI</h1>
+              <h1 className="text-slate-900 font-bold text-2xl mb-1">HRLake AI</h1>
               <p className="text-slate-500 text-sm">Specialist AI for global payroll, EOR, HR compliance, and employment law</p>
             </div>
             <div className="grid grid-cols-2 gap-2.5 mb-5">
@@ -252,7 +252,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
                     <div className="flex-1 group">
                       <div className="flex items-center gap-2 mb-2">
                         <AIIcon />
-                        <span className="text-slate-400 text-xs font-semibold uppercase tracking-wide">PayrollExpert AI</span>
+                        <span className="text-slate-400 text-xs font-semibold uppercase tracking-wide">HRLake AI</span>
                       </div>
                       <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-sm px-6 py-5 shadow-sm">
                         <div className="prose prose-sm max-w-none text-slate-700 prose-headings:text-slate-900 prose-headings:font-bold prose-strong:text-slate-900 prose-li:text-slate-700 prose-a:text-blue-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1 prose-code:rounded">
@@ -270,7 +270,7 @@ export default function AiChatClient({ countries, userId, isPro, monthlyUsage, f
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <AIIcon />
-                      <span className="text-slate-400 text-xs font-semibold uppercase tracking-wide">PayrollExpert AI</span>
+                      <span className="text-slate-400 text-xs font-semibold uppercase tracking-wide">HRLake AI</span>
                     </div>
                     <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-sm px-5 py-4 shadow-sm inline-flex items-center gap-2">
                       <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{animationDelay:"0ms"}}/>
