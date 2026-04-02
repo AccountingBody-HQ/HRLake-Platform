@@ -44,7 +44,7 @@ const SLUG_TO_REGION: Record<string, string> = {
 const SORT_OPTIONS: { label: string; value: SortOption }[] = [
   { label: 'A-Z',        value: 'az' },
   { label: 'Region',     value: 'region' },
-  { label: 'Complexity', value: 'complexity' },
+
 ]
 
 interface CountriesClientProps {
