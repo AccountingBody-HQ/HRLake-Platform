@@ -4,7 +4,7 @@ import CompareClient from './CompareClient'
 
 export const metadata = {
   title: 'Country Comparison Tool — Employer Cost Side-by-Side | HRLake',
-  description: 'Compare employer costs, tax rates, and employment law side-by-side for any two countries. Free payroll comparison tool.',
+  description: 'Compare employer costs, tax rates, and employment law side-by-side for any two countries. Free HR and payroll comparison tool for global hiring decisions.',
 }
 
 export const dynamic = 'force-dynamic'
@@ -33,8 +33,13 @@ export default async function ComparePage() {
       {/* Hero */}
       <section className="relative bg-slate-950 overflow-hidden">
         <div className="absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%)' }} />
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-14">
+          style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)' }} />
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-14">
+          <nav className="flex items-center gap-2 text-sm text-slate-500 mb-8">
+            <a href="/" className="hover:text-slate-300 transition-colors">Home</a>
+            <span className="text-slate-700">›</span>
+            <span className="text-slate-400">Compare Countries</span>
+          </nav>
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-6">
               <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
