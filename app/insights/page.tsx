@@ -1,7 +1,3 @@
-// ============================================
-// GLOBALPAYROLLEXPERT — INSIGHTS LISTING PAGE
-// ============================================
-
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight, BookOpen, Layers } from "lucide-react"
@@ -11,12 +7,12 @@ import InsightsClient from "./InsightsClient"
 import EmailCapture from "@/components/EmailCapture"
 
 export const metadata: Metadata = {
-  title: "Insights — Global Payroll Analysis & Intelligence",
+  title: "Insights — Global HR, EOR & Payroll Intelligence",
   description:
     "Expert analysis on global payroll, employment law, EOR strategy, tax compliance, and HR policy. In-depth articles for payroll professionals and global employers.",
   alternates: { canonical: "https://hrlake.com/insights/" },
   openGraph: {
-    title: "Insights — Global Payroll Analysis & Intelligence",
+    title: "Insights — Global HR, EOR & Payroll Intelligence",
     description: "Expert analysis on global payroll, employment law, EOR strategy, tax compliance, and HR policy.",
     url: "https://hrlake.com/insights/",
     type: "website",
@@ -75,7 +71,7 @@ export default async function InsightsPage({
               className="font-serif text-4xl lg:text-6xl font-bold text-white leading-[1.08] mb-6"
               style={{ letterSpacing: "-0.025em" }}
             >
-              Global payroll<br />
+              Global HR &amp; payroll<br />
               <span className="text-blue-400">insights.</span>
             </h1>
             <p className="text-lg text-slate-400 leading-relaxed max-w-2xl">
@@ -205,7 +201,7 @@ export default async function InsightsPage({
             <div>
               <p className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">Stay Informed</p>
               <h2 className="font-serif text-3xl lg:text-4xl font-bold text-white leading-tight tracking-tight mb-6">
-                Get the latest payroll<br />intelligence delivered.
+                Get the latest HR and payroll<br />intelligence delivered.
               </h2>
               <p className="text-slate-400 leading-relaxed text-lg max-w-md">
                 Rate changes, employment law updates, and compliance alerts — once
@@ -217,7 +213,7 @@ export default async function InsightsPage({
                 source="insights"
                 variant="dark"
                 title="Subscribe to updates"
-                subtitle="Join thousands of payroll professionals."
+                subtitle="Join thousands of HR and payroll professionals."
               />
             </div>
           </div>
