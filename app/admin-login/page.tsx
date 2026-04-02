@@ -21,7 +21,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="bg-slate-950 flex items-center justify-center" style={{minHeight: "auto", paddingTop: "80px", paddingBottom: "80px"}}>
+    <div className="bg-slate-950 flex items-center justify-center" style={{minHeight: "100vh", paddingTop: "80px", paddingBottom: "80px"}}>
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 w-full max-w-sm">
         <h1 className="text-white font-bold text-xl mb-6">Admin Access</h1>
         <input
