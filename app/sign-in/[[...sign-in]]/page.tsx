@@ -1,7 +1,7 @@
 import { SignIn } from '@clerk/nextjs'
 
 export const metadata = {
-  title: 'Sign In',
+  title: 'Sign In | HRLake',
   description: 'Sign in to your HRLake account.',
 }
 
