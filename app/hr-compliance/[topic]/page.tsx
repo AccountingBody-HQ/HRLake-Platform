@@ -185,12 +185,13 @@ export default async function TopicPage({ params }: { params: Promise<{ topic: s
       {/* Hero */}
       <section className="relative bg-slate-950 overflow-hidden">
         <div className="absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.12) 0%, transparent 60%)' }} />
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-14">
-          <Link href="/hr-compliance/"
-            className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm font-medium transition-colors mb-8">
-            <ArrowLeft size={15} /> HR Compliance
-          </Link>
+          style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)' }} />
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-14">
+          <nav className="flex items-center gap-2 text-sm text-slate-500 mb-8">
+            <Link href="/hr-compliance/" className="hover:text-slate-300 transition-colors">HR Compliance</Link>
+            <span className="text-slate-700">›</span>
+            <span className="text-slate-400">{config.title}</span>
+          </nav>
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-6">
               <span className="text-blue-300 text-xs font-semibold tracking-wide">Employment Law · {rows.length} Countries</span>
