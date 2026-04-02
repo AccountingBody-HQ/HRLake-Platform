@@ -12,7 +12,7 @@ interface Country {
   region: string
   currency_code: string
   hrlake_coverage_level: string
-  payroll_complexity_score: number
+  payroll_complexity_score?: number
 }
 
 interface Article {
@@ -68,9 +68,7 @@ function CountryCard({ country }: { country: Country }) {
         </div>
         <div className="text-xs text-slate-400">
           {country.region} · {country.currency_code}
-          {country.payroll_complexity_score > 0 && (
-            <span className="ml-3">Complexity {country.payroll_complexity_score}/10</span>
-          )}
+
         </div>
       </div>
       <div className="shrink-0 flex items-center gap-1 text-blue-600 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
@@ -219,7 +217,11 @@ function SearchContent() {
     <main className="bg-slate-50 flex-1">
       <div className="bg-slate-950 border-b border-slate-800">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 py-12">
-          <p className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">Search</p>
+          <nav className="flex items-center gap-2 text-xs text-slate-400 mb-4">
+            <a href="/" className="hover:text-slate-200 transition-colors">Home</a>
+            <span>›</span>
+            <span className="text-slate-300">Search</span>
+          </nav>
           <h1 className="font-serif text-3xl lg:text-4xl font-bold text-white mb-8 tracking-tight">
             {query ? <>Results for <span className="text-blue-400">"{query}"</span></> : 'Search HRLake'}
           </h1>
@@ -232,7 +234,7 @@ function SearchContent() {
                 type="text"
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
-                placeholder="Search countries, payroll guides, tools…"
+                placeholder="Search countries, employment law, EOR, payroll guides…"
                 className="flex-1 py-4 text-sm font-medium text-slate-900 placeholder:text-slate-400 bg-transparent outline-none min-w-0"
                 autoFocus
               />
