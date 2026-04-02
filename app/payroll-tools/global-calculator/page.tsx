@@ -3,7 +3,7 @@ import GlobalCalculatorClient from './GlobalCalculatorClient'
 
 export const metadata = {
   title: 'Global Payroll Calculator — All Countries | HRLake',
-  description: 'Calculate net salary, income tax, and total employer cost for any country. Full payroll breakdown with PDF export — free, no sign-in required.',
+  description: 'Calculate net salary, income tax, and total employer cost for any country. Full payroll and employment cost breakdown for HR and finance teams — free, no sign-in required.',
 }
 
 export const dynamic = 'force-dynamic'
@@ -26,8 +26,13 @@ export default async function GlobalCalculatorPage() {
       {/* Hero */}
       <section className="relative bg-slate-950 overflow-hidden">
         <div className="absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%)' }} />
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-14">
+          style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)' }} />
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-14">
+          <nav className="flex items-center gap-2 text-sm text-slate-500 mb-8">
+            <a href="/payroll-tools/" className="hover:text-slate-300 transition-colors">Payroll Tools</a>
+            <span className="text-slate-700">›</span>
+            <span className="text-slate-400">Global Calculator</span>
+          </nav>
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-6">
               <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
