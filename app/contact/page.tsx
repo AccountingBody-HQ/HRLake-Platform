@@ -38,6 +38,11 @@ export default function ContactPage() {
         <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%)'}} />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-20">
           <div className="max-w-3xl">
+            <nav className="flex items-center gap-2 text-xs text-slate-400 mb-6">
+              <a href="/" className="hover:text-slate-200 transition-colors">Home</a>
+              <span>›</span>
+              <span className="text-slate-300">Contact</span>
+            </nav>
             <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8">
               <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
               <span className="text-blue-300 text-xs font-semibold tracking-wide">Contact</span>
