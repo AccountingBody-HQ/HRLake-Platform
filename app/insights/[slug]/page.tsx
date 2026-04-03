@@ -20,7 +20,12 @@ export async function generateMetadata({
     title: article.title,
     description: article.excerpt || undefined,
     alternates: {
-      canonical: "https://hrlake.com/insights/" + slug + "/",
+      canonical: (() => {
+        const owner = article.canonicalOwner
+        if (owner === 'AccountingBody') return "https://accountingbody.com/blog/" + slug + "/"
+        if (owner === 'EthioTax') return "https://ethiotax.com/articles/" + slug + "/"
+        return "https://hrlake.com/insights/" + slug + "/"
+      })(),
     },
     openGraph: {
       title: article.title,

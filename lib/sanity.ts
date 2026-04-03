@@ -1,5 +1,5 @@
 // ============================================
-// GLOBALPAYROLLEXPERT — SANITY CLIENT
+// HRLAKE — SANITY CLIENT
 // Connects to shared Sanity CMS project
 // Filters all content to hrlake only
 // ============================================
@@ -34,6 +34,7 @@ export interface SanityArticle {
   categorySlug: string | null
   countries: string[]
   mainImage: any | null
+  canonicalOwner: string | null
   author: {
     name: string
     image: any | null
@@ -117,6 +118,7 @@ export async function getInsightBySlug(slug: string): Promise<SanityArticle | nu
     "category": categories[0]->title,
     "categorySlug": categories[0]->slug.current,
     "countries": coalesce(countries, []),
+    canonicalOwner,
     mainImage,
     "author": author->{name, image}
   }`
