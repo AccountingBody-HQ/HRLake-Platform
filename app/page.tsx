@@ -348,7 +348,7 @@ export default async function HomePage() {
                     <div className="font-mono font-semibold text-slate-800 text-sm">{c.income}</div>
                   </div>
                   <div>
-                    <div className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Employer SS</div>
+                    <div className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Employer Contribution</div>
                     <div className="font-mono font-semibold text-slate-800 text-sm">{c.ss_employer}</div>
                   </div>
                 </div>

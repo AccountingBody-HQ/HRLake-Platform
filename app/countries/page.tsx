@@ -1,5 +1,5 @@
 // ============================================
-// GLOBALPAYROLLEXPERT — ALL COUNTRIES PAGE
+// HRLAKE — ALL COUNTRIES PAGE
 // Route: /countries/
 // Server Component — fetches data from Supabase
 // Passes data to CountriesClient for interactivity

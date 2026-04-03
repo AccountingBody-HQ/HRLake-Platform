@@ -1,5 +1,5 @@
 // ============================================
-// GLOBALPAYROLLEXPERT — DYNAMIC OG IMAGE
+// HRLAKE — DYNAMIC OG IMAGE
 // Route: /og/country?code=GB&name=United+Kingdom
 // ============================================
 
@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
               }}
             />
             <span style={{ color: '#94a3b8', fontSize: '18px', fontWeight: 600, letterSpacing: '0.05em' }}>
-              GLOBALPAYROLLEXPERT.COM
+              HRLAKE.COM
             </span>
           </div>
 

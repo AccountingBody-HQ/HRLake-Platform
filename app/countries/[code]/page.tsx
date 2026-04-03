@@ -1,5 +1,5 @@
 // ============================================
-// GLOBALPAYROLLEXPERT — COUNTRY HUB PAGE
+// HRLAKE — COUNTRY HUB PAGE
 // Route: /countries/[code]/
 // Server Component — all data fetched server-side
 // ============================================
@@ -303,7 +303,7 @@ export default async function CountryPage(
                 bg: 'bg-blue-50',
               },
               {
-                label: 'Employer SS Rate',
+                label: 'Employer Contribution Rate',
                 value: employerSSRate ?? '—',
                 sub: 'On gross salary',
                 icon: Building2,

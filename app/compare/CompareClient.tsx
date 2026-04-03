@@ -207,7 +207,7 @@ export default function CompareClient({ countries }: Props) {
       [dataB.country.name]: grossB,
     },
     {
-      name: 'Employer SS',
+      name: 'Employer Contribution',
       [dataA.country.name]: Math.round(grossA * getSSRate(dataA.ss, 'employer') / 100),
       [dataB.country.name]: Math.round(grossB * getSSRate(dataB.ss, 'employer') / 100),
     },
@@ -398,7 +398,7 @@ export default function CompareClient({ countries }: Props) {
 
             {/* SS rows */}
             <div className="grid grid-cols-[2fr_1fr_1fr] px-6 py-4 items-center border-t border-slate-100">
-              <span className="text-sm font-medium text-slate-600">Employer SS Rate</span>
+              <span className="text-sm font-medium text-slate-600">Employer Contribution Rate</span>
               <span className="font-mono text-sm font-semibold text-slate-800">
                 {getSSRate(dataA.ss, 'employer').toFixed(1)}%
               </span>
@@ -462,7 +462,7 @@ export default function CompareClient({ countries }: Props) {
                     <div className="bg-white mx-4 mb-4 rounded-xl overflow-hidden border border-slate-100">
                       {[
                         { label: 'Gross Salary', value: f(gross), sub: null },
-                        { label: 'Employer SS', value: f(empSS), sub: `${ssRate.toFixed(1)}% of gross` },
+                        { label: 'Employer Contribution', value: f(empSS), sub: `${ssRate.toFixed(1)}% of gross` },
                         { label: 'Total Employer Cost', value: f(totalCost), sub: null, highlight: true },
                       ].map((row, i) => (
                         <div key={row.label} className={`flex items-center justify-between px-5 py-3.5 ${i > 0 ? 'border-t border-slate-100' : ''} ${row.highlight ? 'bg-slate-50' : ''}`}>
@@ -480,14 +480,14 @@ export default function CompareClient({ countries }: Props) {
                       <div className="text-xs text-slate-500 mb-2">Cost composition</div>
                       <div className="flex rounded-full overflow-hidden h-3 bg-slate-200">
                         <div className={`${bar} opacity-60 h-full transition-all`} style={{ width: `${grossRate}%` }} title={`Gross: ${grossRate.toFixed(0)}%`} />
-                        <div className={`${bar} h-full transition-all`} style={{ width: `${netRate}%` }} title={`Employer SS: ${netRate.toFixed(0)}%`} />
+                        <div className={`${bar} h-full transition-all`} style={{ width: `${netRate}%` }} title={`Employer Contribution: ${netRate.toFixed(0)}%`} />
                       </div>
                       <div className="flex gap-4 mt-2">
                         <div className="flex items-center gap-1.5 text-xs text-slate-500">
                           <div className={`w-2.5 h-2.5 rounded-sm ${bar} opacity-60`} /> Gross salary
                         </div>
                         <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                          <div className={`w-2.5 h-2.5 rounded-sm ${bar}`} /> Employer SS
+                          <div className={`w-2.5 h-2.5 rounded-sm ${bar}`} /> Employer Contribution
                         </div>
                       </div>
                     </div>
@@ -545,7 +545,7 @@ export default function CompareClient({ countries }: Props) {
                             <span className="font-mono font-semibold text-slate-700">{fmtCurrency(grossConverted, convertTo)}</span>
                           </div>
                           <div className="flex justify-between text-sm">
-                            <span className="text-slate-500">Employer SS</span>
+                            <span className="text-slate-500">Employer Contribution</span>
                             <span className="font-mono font-semibold text-slate-700">{fmtCurrency(ssConverted, convertTo)}</span>
                           </div>
                           <div className="flex justify-between text-sm pt-2 border-t border-slate-200">

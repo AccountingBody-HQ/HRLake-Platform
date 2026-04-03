@@ -12,7 +12,6 @@ interface Country {
   region: string
   currency_code: string
   hrlake_coverage_level: string
-  payroll_complexity_score?: number
 }
 
 interface Article {

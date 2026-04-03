@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
   const { data: countries, error: countriesError } = await supabase
     .from("countries")
-    .select("iso2, name, flag_emoji, region, currency_code, hrlake_coverage_level, payroll_complexity_score")
+    .select("iso2, name, flag_emoji, region, currency_code, hrlake_coverage_level")
     .or(`name.ilike.%${q}%,iso2.ilike.%${q}%,iso3.ilike.%${q}%`)
     .order("name", { ascending: true })
     .limit(10)
