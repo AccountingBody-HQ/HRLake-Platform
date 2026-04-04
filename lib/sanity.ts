@@ -29,6 +29,7 @@ export interface SanityArticle {
   slug: { current: string }
   publishedAt: string
   excerpt: string | null
+  mcqUrl?: string | null
   body: any[] // Portable Text blocks
   category: string | null
   categorySlug: string | null
@@ -47,6 +48,7 @@ export interface SanityArticleCard {
   slug: { current: string }
   publishedAt: string
   excerpt: string | null
+  mcqUrl?: string | null
   category: string | null
   categorySlug: string | null
 }
