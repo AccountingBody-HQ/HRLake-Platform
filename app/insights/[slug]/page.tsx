@@ -117,14 +117,14 @@ const portableTextComponents = {
       </ul>
     ),
     number: ({ children }: any) => (
-      <ol className="list-decimal list-outside pl-6 mb-6 space-y-2 text-slate-600 leading-relaxed text-[17px]">
+      <ol className="list-decimal list-outside pl-6 mb-6 space-y-2 text-slate-600 leading-relaxed text-[17px] marker:text-slate-500 marker:font-semibold">
         {children}
       </ol>
     ),
   },
   listItem: {
     bullet: ({ children }: any) => <li>{children}</li>,
-    number: ({ children }: any) => <li>{children}</li>,
+    number: ({ children }: any) => <li className="text-slate-600 leading-relaxed pl-2 marker:text-slate-500 marker:font-semibold">{children}</li>,
   },
   marks: {
     strong: ({ children }: any) => (
