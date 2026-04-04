@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@supabase/supabase-js'
+import { sanityClient } from '@/lib/sanity'
 
 const BASE_URL = 'https://hrlake.com'
 
@@ -53,37 +54,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const code = country.iso2.toLowerCase()
       const mod  = country.updated_at ? new Date(country.updated_at) : new Date()
 
-      // Country hub page
-      countryPages.push({
-        url:             `${BASE_URL}/countries/${code}/`,
-        lastModified:    mod,
-        changeFrequency: 'monthly',
-        priority:        0.8,
-      })
-
-      // Country payroll calculator
-      countryPages.push({
-        url:             `${BASE_URL}/countries/${code}/payroll-calculator/`,
-        lastModified:    mod,
-        changeFrequency: 'monthly',
-        priority:        0.7,
-      })
-
-      // Country employment law
-      countryPages.push({
-        url:             `${BASE_URL}/countries/${code}/employment-law/`,
-        lastModified:    mod,
-        changeFrequency: 'monthly',
-        priority:        0.7,
-      })
-
-      // Country tax guide
-      countryPages.push({
-        url:             `${BASE_URL}/countries/${code}/tax-guide/`,
-        lastModified:    mod,
-        changeFrequency: 'monthly',
-        priority:        0.7,
-      })
+      countryPages.push({ url: `${BASE_URL}/countries/${code}/`,                      lastModified: mod, changeFrequency: 'monthly', priority: 0.8 })
+      countryPages.push({ url: `${BASE_URL}/countries/${code}/payroll-calculator/`,   lastModified: mod, changeFrequency: 'monthly', priority: 0.7 })
+      countryPages.push({ url: `${BASE_URL}/countries/${code}/employment-law/`,       lastModified: mod, changeFrequency: 'monthly', priority: 0.7 })
+      countryPages.push({ url: `${BASE_URL}/countries/${code}/tax-guide/`,            lastModified: mod, changeFrequency: 'monthly', priority: 0.7 })
     }
   }
 
@@ -95,14 +69,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:        0.7,
   }))
 
-  // ── Insights articles intentionally EXCLUDED ──────────────────────────────
-  // Canonical owner is accountingbody.com — HRLake must not submit these to
-  // Google. The /insights/ listing page is included in STATIC_PAGES above
-  // but individual article URLs are omitted here.
+  // ── Sanity articles where HRLake is the canonical owner ───────────────────
+  // Only articles with canonicalOwner == 'hrlake' are submitted to Google.
+  // Articles owned by accountingbody or ethiotax are excluded — each site
+  // claims only what it owns. showOnSites controls display; canonicalOwner
+  // controls SEO ownership.
+  let insightPages: MetadataRoute.Sitemap = []
+  try {
+    const articles = await sanityClient.fetch<{ slug: string; updatedAt: string }[]>(
+      `*[_type == "article" && canonicalOwner == "hrlake" && defined(slug.current)]
+       | order(_updatedAt desc)
+       { "slug": slug.current, "updatedAt": _updatedAt }`
+    )
+    insightPages = articles.map(a => ({
+      url:             `${BASE_URL}/insights/${a.slug}/`,
+      lastModified:    a.updatedAt ? new Date(a.updatedAt) : new Date(),
+      changeFrequency: 'monthly' as const,
+      priority:        0.8,
+    }))
+  } catch (e) {
+    console.error('Sitemap: Sanity fetch failed', e)
+  }
 
   return [
     ...STATIC_PAGES,
     ...countryPages,
     ...hrPages,
+    ...insightPages,
   ]
 }
