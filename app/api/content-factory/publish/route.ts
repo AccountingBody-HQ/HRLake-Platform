@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
     }
 
     const mutation  = { mutations: [{ create: doc }] }
-    const url       = `https://\${projectId}.api.sanity.io/v2021-06-07/data/mutate/\${dataset}`
+    const url       = `https://${projectId}.api.sanity.io/v2021-06-07/data/mutate/${dataset}`
     const sanityRes = await fetch(url, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer \${token}` },
