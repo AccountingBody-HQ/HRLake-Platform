@@ -6,7 +6,7 @@ import {
 } from 'lucide-react'
 
 const SITES = ['HRLake', 'AccountingBody', 'EthioTax']
-const CONTENT_TYPES = ['Country Report', 'Explainer', 'HR Management', 'EOR Guide', 'Tax Guide', 'Payroll Guide', 'Accounting Guide', 'Course', 'Article']
+const CONTENT_TYPES = ['Country Report', 'Explainer', 'HR Management', 'EOR Guide', 'Tax Guide', 'Payroll Guide', 'Accounting Guide', 'Course', 'Article', 'Hiring Guide', 'HR Compliance Guide', 'Leave and Benefits', 'Compliance Calendar']
 const TONES = [
   { label: 'Authoritative', desc: 'Expert, confident, definitive' },
   { label: 'Educational',   desc: 'Clear, accessible, structured' },

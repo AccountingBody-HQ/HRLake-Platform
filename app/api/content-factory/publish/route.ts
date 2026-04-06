@@ -16,6 +16,10 @@ const CONTENT_TYPE_MAP: Record<string, string> = {
   'Course': 'tutorial',
   'Payroll Guide': 'guide',
   'Accounting Guide': 'guide',
+  'Hiring Guide': 'hiring-guide',
+  'HR Compliance Guide': 'hr-compliance-guide',
+  'Leave and Benefits': 'leave-and-benefits',
+  'Compliance Calendar': 'compliance-calendar',
   'Article': 'article',
 }
 

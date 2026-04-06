@@ -227,6 +227,80 @@ INSIGHT DENSITY FOR ACCOUNTING GUIDES:
 - The common errors section must name actual, specific mistakes — "failing to disaggregate performance obligations under IFRS 15 when a contract contains both a product sale and an installation service" is a specific error. "Not understanding the standard" is not
 - The worked illustration must demonstrate something genuinely instructive — not just a mechanical calculation, but a scenario that illuminates a judgement call or a common misconception`,
 
+  'Hiring Guide': `
+CONTENT TYPE: Hiring Guide
+PURPOSE: Practical authoritative guide to hiring in a specific country for HR directors and talent teams.
+REQUIRED SECTIONS:
+1. Hiring Overview - labour market context, typical hiring timelines
+2. Right to Work and Legal Eligibility - verification requirements, work permit rules
+3. Employment Contract Requirements - mandatory clauses, contract types, probation rules
+4. Job Advertising and Anti-Discrimination Rules - protected characteristics, what employers cannot ask
+5. Background Checks - what is legally permitted, what is prohibited, data protection constraints
+6. Onboarding Compliance - mandatory registrations, notifications to authorities
+7. Employer Registration Requirements - what to register, with which authority, by when
+8. Common Hiring Mistakes - specific errors employers make in this jurisdiction
+9. Official Sources - named government bodies and resource links
+ACCURACY RULES:
+- All permit requirements must carry jurisdiction-specific detail
+- Distinguish legal requirements from market practice
+`,
+  'HR Compliance Guide': `
+CONTENT TYPE: HR Compliance Guide
+PURPOSE: Comprehensive guide to HR compliance obligations in a specific country for HR directors and General Counsel.
+REQUIRED SECTIONS:
+1. HR Compliance Overview - regulatory framework, key legislation, enforcement bodies
+2. Employment Contract Compliance - mandatory terms, prohibited clauses, variation rules
+3. Working Time Compliance - hours limits, rest breaks, overtime recording
+4. Payroll Compliance Obligations - what HR must ensure payroll does correctly
+5. Discrimination and Equal Treatment - protected characteristics, pay equity reporting
+6. Data Protection and Employee Privacy - monitoring rules, retention obligations, employee rights
+7. Health and Safety Obligations - employer safety duties, risk assessment, accident reporting
+8. Disciplinary and Grievance Procedures - statutory minimum requirements, documentation
+9. HR Record-Keeping Requirements - what to keep, how long, what format
+10. Regulatory Inspections and Enforcement - which authorities inspect, what triggers inspection
+11. Common HR Compliance Failures - specific named failures that generate enforcement action
+12. Official Compliance Resources - named authorities and portals
+ACCURACY RULES:
+- All retention periods and timeframes must be jurisdiction-specific with verification caveats
+- Distinguish legal minimums from best practice
+`,
+  'Leave and Benefits': `
+CONTENT TYPE: Leave and Benefits Guide
+PURPOSE: Precise complete guide to statutory leave entitlements and mandatory benefits in a specific country.
+REQUIRED SECTIONS:
+1. Leave and Benefits Overview - statutory framework, key legislation, enforcement body
+2. Annual Leave - statutory minimum days, accrual method, carry-over rules, payout on termination
+3. Public Holidays - full list for current year, mandatory vs discretionary, pay treatment
+4. Sick Leave and Sick Pay - entitlement, employer vs government pay, notification requirements
+5. Maternity and Adoption Leave - duration, pay structure, notification obligations, return to work protections
+6. Paternity and Shared Parental Leave - entitlement, pay, notification, qualifying conditions
+7. Other Statutory Leave - bereavement, jury service, study leave, emergency dependant leave
+8. Mandatory Benefits Beyond Leave - pension contributions, health insurance, 13th month salary where applicable
+9. Benefits Market Practice - what employers typically offer above the statutory minimum
+10. Benefits Administration Obligations - what the employer must report or pay to authorities
+11. Common Leave and Benefits Errors - specific mistakes employers make in this jurisdiction
+12. Official Sources - named authorities for leave and benefits compliance
+ACCURACY RULES:
+- All leave entitlements must carry current tax year and verification caveat
+- Distinguish statutory entitlement from contractual enhancement
+`,
+  'Compliance Calendar': `
+CONTENT TYPE: Compliance Calendar
+PURPOSE: Structured actionable annual compliance calendar for employers in a specific country.
+REQUIRED SECTIONS:
+1. Compliance Calendar Overview - compliance framework, key authorities, cost of missing deadlines
+2. Monthly Payroll Compliance Obligations - recurring monthly filings and payments with exact deadlines
+3. Quarterly Compliance Obligations - quarterly returns and payments with exact deadlines
+4. Annual Compliance Calendar - month-by-month breakdown of all annual obligations chronologically
+5. Employee Lifecycle Compliance Triggers - obligations on hiring, changes and termination
+6. Penalty and Enforcement Summary - specific penalties for missing each category of deadline
+7. Compliance Tools and Filing Portals - named official portals and submission methods
+8. Compliance Calendar Quick Reference - condensed table: obligation, deadline, authority, consequence
+ACCURACY RULES:
+- All deadlines must be specific dates or date formulas not vague descriptions
+- All deadlines must carry verification caveat with authority name
+- Every obligation must name the specific authority responsible
+`,
   'Article': `
 CONTENT TYPE: Article
 PURPOSE: A high-quality, well-researched editorial article on a topic relevant to the platform audience. Must be original, insightful and go beyond what a reader could find by Googling for 30 seconds.
