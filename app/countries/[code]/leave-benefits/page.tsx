@@ -62,7 +62,7 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
     { label: 'Annual Leave', value: employmentRules.annual_leave_days ? `${employmentRules.annual_leave_days} days` : '—' },
     { label: 'Sick Leave', value: employmentRules.sick_leave_days ? `${employmentRules.sick_leave_days} days` : '—' },
     { label: 'Maternity Leave', value: employmentRules.maternity_leave_weeks ? `${employmentRules.maternity_leave_weeks} weeks` : '—' },
-    { label: 'Paternity Leave', value: employmentRules.paternity_leave_days ? `${employmentRules.paternity_leave_days} days` : '—' },
+    { label: 'Paternity Leave', value: employmentRules.paternity_leave_weeks ? `${employmentRules.paternity_leave_weeks} days` : '—' },
     { label: 'Public Holidays', value: holidays.length > 0 ? `${holidays.length} days` : '—' },
     { label: '13th Month Pay', value: employmentRules.thirteenth_month_pay ? 'Required' : 'Not required' },
   ] : []
