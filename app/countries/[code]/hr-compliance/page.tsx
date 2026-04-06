@@ -173,7 +173,7 @@ export default async function HRCompliancePage({ params }: PageProps) {
                 </div>
               </div>
 
-              {compliance.length > 0 && (
+              {(compliance ?? []).length > 0 {compliance.length > 0 && ({compliance.length > 0 && ( (
                 <div>
                   <h2 className="font-serif text-2xl font-bold text-slate-900 mb-6">Compliance Obligations</h2>
                   <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">

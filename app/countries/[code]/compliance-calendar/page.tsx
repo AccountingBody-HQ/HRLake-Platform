@@ -51,7 +51,7 @@ export default async function ComplianceCalendarPage({ params }: PageProps) {
 
   if (!country) notFound()
 
-  const [compliance, filingCalendarRows, sanityArticle] = await Promise.all([
+  const [sanityArticle, compliance, filingCalendarRows] = await Promise.all([
     getCountryArticle(upperCode, 'compliance-calendar'),
     getPayrollCompliance(upperCode),
     supabase.from('filing_calendar').select('*').eq('country_code', upperCode).order('due_month', { ascending: true }),
@@ -114,7 +114,7 @@ export default async function ComplianceCalendarPage({ params }: PageProps) {
             <div className="lg:col-span-2 space-y-10">
 
               {frequencyGroups.map(({ label, frequency }) => {
-                const items = compliance.filter((c: any) => c.frequency === frequency)
+                const items = (compliance ?? []).filter((c: any) => c.frequency === frequency)
                 if (items.length === 0) return null
                 return (
                   <div key={frequency}>
