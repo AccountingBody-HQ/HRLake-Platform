@@ -1,7 +1,5 @@
 'use client'
-// ============================================
-// GLOBALPAYROLLEXPERT — FOOTER COMPONENT
-// ============================================
+
 import Link from 'next/link'
 import { Globe } from 'lucide-react'
 import { usePathname } from 'next/navigation'
@@ -9,31 +7,34 @@ import EmailCapture from '@/components/EmailCapture'
 import CookieSettingsButton from '@/components/CookieSettingsButton'
 
 const footerLinks = {
-  'Country Data': [
-    { label: 'All Countries',      href: '/countries/' },
-    { label: 'Compare Countries',  href: '/compare/' },
-    { label: 'Payroll Tools',      href: '/payroll-tools/' },
-    { label: 'Global Calculator',  href: '/payroll-tools/global-calculator/' },
+  'Country Intelligence': [
+    { label: 'All Countries',       href: '/countries/' },
+    { label: 'United Kingdom',      href: '/countries/gb/' },
+    { label: 'United States',       href: '/countries/us/' },
+    { label: 'Germany',             href: '/countries/de/' },
+    { label: 'France',              href: '/countries/fr/' },
+    { label: 'Compare Countries',   href: '/compare/' },
   ],
-  'Global Intelligence': [
-    { label: 'EOR Intelligence',   href: '/eor/' },
-    { label: 'HR Compliance',      href: '/hr-compliance/' },
-    { label: 'Insights',           href: '/insights/' },
-    { label: 'AI Assistant',       href: '/ai-assistant/' },
+  'Payroll & EOR': [
+    { label: 'EOR Intelligence',    href: '/eor/' },
+    { label: 'Payroll Tools',       href: '/payroll-tools/' },
+    { label: 'Global Calculator',   href: '/payroll-tools/global-calculator/' },
+    { label: 'Currency Converter',  href: '/payroll-tools/currency-converter/' },
+    { label: 'HR Compliance',       href: '/hr-compliance/' },
   ],
-  'Account': [
-    { label: 'Pricing',            href: '/pricing/' },
-    { label: 'Sign In',            href: '/sign-in/' },
-    { label: 'Sign Up',            href: '/sign-up/' },
-    { label: 'Dashboard',          href: '/dashboard/' },
+  'Resources': [
+    { label: 'Insights',            href: '/insights/' },
+    { label: 'AI Assistant',        href: '/ai-assistant/' },
+    { label: 'Pricing',             href: '/pricing/' },
+    { label: 'Dashboard',           href: '/dashboard/' },
   ],
   'Company': [
-    { label: 'About',              href: '/about/' },
-    { label: 'Contact',            href: '/contact/' },
-    { label: 'Privacy Policy',     href: '/privacy-policy/' },
-    { label: 'Terms',              href: '/terms/' },
-    { label: 'Disclaimer',         href: '/disclaimer/' },
-    { label: 'Cookie Policy',      href: '/cookie-policy/' },
+    { label: 'About',               href: '/about/' },
+    { label: 'Contact',             href: '/contact/' },
+    { label: 'Privacy Policy',      href: '/privacy-policy/' },
+    { label: 'Terms',               href: '/terms/' },
+    { label: 'Disclaimer',          href: '/disclaimer/' },
+    { label: 'Cookie Policy',       href: '/cookie-policy/' },
   ],
 }
 
@@ -41,8 +42,9 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
   const pathname = usePathname()
   const isHomepage = pathname === '/'
+
   return (
-    <footer className="bg-slate-900 border-t border-slate-800 mt-auto">
+    <footer className="bg-slate-950 border-t border-slate-800 mt-auto">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
 
         {/* TOP SECTION */}
@@ -52,17 +54,22 @@ export default function Footer() {
           <div className="col-span-2 lg:col-span-2 pr-8">
             <Link href="/" className="flex items-center gap-2.5 mb-5">
               <Globe className="h-5 w-5 text-blue-400 shrink-0" />
-              <span className="text-base font-bold text-white tracking-tight">
-                HRLake
-              </span>
+              <span className="text-base font-bold text-white tracking-tight">HRLake</span>
             </Link>
             <p className="text-sm leading-relaxed text-slate-400 mb-6">
-              Global HR, EOR and payroll intelligence. Employment data,
-              compliance guides, and workforce cost tools for every country.
+              Where HR, EOR and payroll knowledge dives deep.
+              Employment data, compliance guides, and workforce
+              cost tools for 20 countries — and growing.
             </p>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-400" />
-              <span className="text-xs text-slate-500">Data updated monthly</span>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                <span className="text-xs text-slate-500">Data updated monthly from official sources</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-blue-400" />
+                <span className="text-xs text-slate-500">20 countries — 57 country target</span>
+              </div>
             </div>
           </div>
 
@@ -86,7 +93,7 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* EMAIL CAPTURE STRIP — shown on all pages except homepage */}
+        {/* EMAIL CAPTURE STRIP */}
         {!isHomepage && (
           <div className="border-t border-slate-800 py-12">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -136,7 +143,7 @@ export default function Footer() {
           <p className="text-xs text-slate-600 text-left sm:text-right max-w-lg leading-relaxed">
             Data is provided for reference purposes only and does not constitute
             professional legal, tax, or payroll advice. Always verify with a
-            qualified local adviser.{` `}
+            qualified local adviser.{" "}
             <Link href="/disclaimer/"
               className="text-slate-500 underline underline-offset-2 hover:text-slate-300 transition-colors">
               Read our disclaimer.
