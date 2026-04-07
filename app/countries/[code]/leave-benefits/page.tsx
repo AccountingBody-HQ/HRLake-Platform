@@ -51,7 +51,7 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
 
   if (!country) notFound()
 
-  const [employmentRules, statutoryLeaveRows, publicHolidays, sanityArticle] = await Promise.all([
+  const [sanityArticle, employmentRules, statutoryLeaveRows, publicHolidays] = await Promise.all([
     getCountryArticle(upperCode, 'leave-and-benefits'),
     getEmploymentRules(upperCode),
     supabase.from('statutory_leave').select('*').eq('country_code', upperCode),

@@ -57,7 +57,7 @@ export default async function HRCompliancePage({ params }: PageProps) {
     .eq('country_code', upperCode)
     .single()
 
-  const [employmentRules, compliance, sanityArticle] = await Promise.all([
+  const [sanityArticle, employmentRules, compliance] = await Promise.all([
     getCountryArticle(upperCode, 'hr-compliance-guide'),
     getEmploymentRules(upperCode),
     getPayrollCompliance(upperCode),
@@ -173,7 +173,7 @@ export default async function HRCompliancePage({ params }: PageProps) {
                 </div>
               </div>
 
-              {(compliance ?? []).length > 0 {compliance.length > 0 && ({compliance.length > 0 && ( (
+              {(compliance ?? []).length > 0 && (
                 <div>
                   <h2 className="font-serif text-2xl font-bold text-slate-900 mb-6">Compliance Obligations</h2>
                   <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">

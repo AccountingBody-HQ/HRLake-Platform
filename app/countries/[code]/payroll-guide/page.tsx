@@ -51,7 +51,7 @@ export default async function PayrollGuidePage({ params }: PageProps) {
 
   if (!country) notFound()
 
-  const [employmentRules, compliance, sanityArticle] = await Promise.all([
+  const [sanityArticle, employmentRules, compliance] = await Promise.all([
     getCountryArticle(upperCode, 'guide'),
     getEmploymentRules(upperCode),
     getPayrollCompliance(upperCode),
