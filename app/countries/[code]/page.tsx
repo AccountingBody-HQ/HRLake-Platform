@@ -27,6 +27,7 @@ import CountryCard from '@/components/CountryCard'
 import MiniCalculator from '@/components/countries/MiniCalculator'
 import AiCountryWidget from '@/components/AiCountryWidget'
 import { auth } from '@clerk/nextjs/server'
+import CountrySubNav from '@/components/CountrySubNav'
 import { createClient } from '@supabase/supabase-js'
 
 // ── Revalidate every 24 hours ──────────────────────────────────────────────
@@ -294,33 +295,7 @@ export default async function CountryPage(
       </section>
 
 
-      {/* ══════ COUNTRY SUB-NAVIGATION STRIP ══════ */}
-      <nav className="bg-white border-b border-slate-200 sticky top-16 z-40 overflow-x-auto">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center gap-0 min-w-max">
-            {[
-              { href: `/countries/${code}/`,                    label: 'Overview' },
-              { href: `/countries/${code}/payroll-calculator/`, label: 'Calculator' },
-              { href: `/countries/${code}/tax-guide/`,          label: 'Tax Guide' },
-              { href: `/countries/${code}/payroll-guide/`,      label: 'Payroll Guide' },
-              { href: `/countries/${code}/employmentlaw/`,      label: 'Employment Law' },
-              { href: `/countries/${code}/hiring-guide/`,       label: 'Hiring Guide' },
-              { href: `/countries/${code}/hr-compliance/`,      label: 'HR Compliance' },
-              { href: `/countries/${code}/leave-benefits/`,     label: 'Leave & Benefits' },
-              { href: `/countries/${code}/compliance-calendar/`,label: 'Compliance Calendar' },
-              { href: `/eor/${code}/`,                          label: 'EOR Guide' },
-            ].map(tab => (
-              <Link
-                key={tab.href}
-                href={tab.href}
-                className="shrink-0 px-4 py-3.5 text-sm font-medium text-slate-500 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all whitespace-nowrap"
-              >
-                {tab.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </nav>
+      <CountrySubNav code={code} countryName={country.name} />
 
       {/* ══════ SECTION 2 — KEY PAYROLL FIGURES ══════ */}
       <section className="bg-white border-b border-slate-200">
