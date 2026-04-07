@@ -284,6 +284,40 @@ export default async function CountryPage(
               </div>
             </div>
 
+            {/* Right — data snapshot card */}
+            <div className="hidden lg:block shrink-0 w-72">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm overflow-hidden">
+                <div className="px-5 py-3.5 border-b border-white/10 flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">At a glance</span>
+                  {country.hrlake_coverage_level === 'full' && (
+                    <span className="flex items-center gap-1 text-xs font-bold text-emerald-400">
+                      <CheckCircle size={10} /> Verified
+                    </span>
+                  )}
+                </div>
+                <div className="divide-y divide-white/[0.06]">
+                  {[
+                    { label: 'Income Tax',         value: incomeTaxRange ?? '—' },
+                    { label: 'Employer SS',         value: employerSSRate ?? '—' },
+                    { label: 'Employee SS',         value: employeeSSRate ?? '—' },
+                    { label: 'Currency',            value: country.currency_code ?? '—' },
+                  ].map(row => (
+                    <div key={row.label} className="flex items-center justify-between px-5 py-3">
+                      <span className="text-xs text-slate-500">{row.label}</span>
+                      <span className="text-sm font-bold text-white font-mono">{row.value}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="px-5 py-3.5 border-t border-white/10">
+                  <Link
+                    href={`/countries/${code}/payroll-calculator/`}
+                    className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all"
+                  >
+                    <Calculator size={13} /> Run payroll calculation
+                  </Link>
+                </div>
+              </div>
+            </div>
 
           </div>
         </div>
