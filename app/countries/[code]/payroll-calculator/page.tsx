@@ -9,6 +9,7 @@ import { auth } from '@clerk/nextjs/server'
 import { Calculator as CalcIcon, ChevronRight, Shield, RefreshCw, Award, ArrowRight } from 'lucide-react'
 import CalculatorModalWrapper from '@/components/CalculatorModalWrapper'
 import CountrySubNav from '@/components/CountrySubNav'
+import RelatedInsights from '@/components/RelatedInsights'
 
 
 // ─── Types ────────────────────────────────────────────────────────────────────

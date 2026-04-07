@@ -5,6 +5,7 @@ import { getEmploymentRules } from '@/lib/supabase-queries'
 import { ChevronRight, Scale, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
 import CountrySubNav from '@/components/CountrySubNav'
+import RelatedInsights from '@/components/RelatedInsights'
 
 
 interface PageProps {
@@ -257,6 +258,9 @@ export default async function EmploymentLawPage({ params }: PageProps) {
         </div>
       </section>
 
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pb-16">
+        <RelatedInsights countryCode={code.toUpperCase()} countryName={country.name} />
+      </div>
     </main>
   )
 }
