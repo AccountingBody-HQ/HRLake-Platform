@@ -437,6 +437,7 @@ THE DENSITY BENCHMARK: Read any randomly selected paragraph from the finished ar
 const OUTPUT_FORMAT = `
 OUTPUT FORMAT — FOLLOW EXACTLY:
 - Output the full article content in markdown only
+- Do NOT use markdown tables (no pipe | characters). Present all tabular data as structured prose, numbered lists, or definition-style lists instead.
 - No preamble, no meta-commentary, no "here is your article" framing
 - No qualification tags (CIPD, SHRM, ACCA, CIMA, CPA etc.) anywhere in the content
 - After the article, on a new line, write exactly: ---AI_SUMMARY---
