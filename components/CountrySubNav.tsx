@@ -18,6 +18,7 @@ const tabs = [
   { label: 'HR Compliance',       path: '/hr-compliance' },
   { label: 'Leave & Benefits',    path: '/leave-benefits' },
   { label: 'Compliance Calendar', path: '/compliance-calendar' },
+  { label: 'EOR Guide',           path: '/eor' },
 ]
 
 export default function CountrySubNav({ code, countryName }: Props) {
@@ -27,10 +28,12 @@ export default function CountrySubNav({ code, countryName }: Props) {
   return (
     <nav className="bg-white border-b border-slate-200 sticky top-16 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center overflow-x-auto scrollbar-hide -mb-px">
+        <div className="flex items-center overflow-x-auto -mb-px">
           {tabs.map(tab => {
-            const href = `${base}${tab.path}/`
-            const isActive = pathname === href || pathname === href.slice(0,-1)
+            const href = tab.label === 'EOR Guide'
+              ? `/eor/${code.toLowerCase()}/`
+              : `${base}${tab.path}/`
+            const isActive = pathname === href || pathname === href.slice(0, -1)
             return (
               <Link
                 key={href}
@@ -45,12 +48,6 @@ export default function CountrySubNav({ code, countryName }: Props) {
               </Link>
             )
           })}
-          
-            href={`/eor/${code.toLowerCase()}/`}
-            className="shrink-0 px-4 py-3.5 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-blue-600 hover:border-blue-300 transition-all whitespace-nowrap"
-          >
-            EOR Guide
-          </a>
         </div>
       </div>
     </nav>
