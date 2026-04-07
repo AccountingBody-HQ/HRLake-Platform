@@ -66,10 +66,6 @@ export default function Footer() {
                 <div className="w-2 h-2 rounded-full bg-emerald-400" />
                 <span className="text-xs text-slate-500">Data updated monthly from official sources</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-blue-400" />
-
-              </div>
             </div>
           </div>
 
