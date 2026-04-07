@@ -153,6 +153,7 @@ export default async function HomePage() {
                     {label}
                   </span>
                 ))}
+                </div>
               </div>
 
               {/* Search */}
