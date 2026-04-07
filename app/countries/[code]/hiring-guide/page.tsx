@@ -249,7 +249,7 @@ export default async function HiringGuidePage({ params }: PageProps) {
                   <p className="text-sm text-slate-500 mt-1">An Employer of Record handles all local compliance on your behalf.</p>
                 </div>
                 <Link
-                  href="/eor/"
+                  href={`/eor/${code.toLowerCase()}/`}
                   className="shrink-0 inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-colors"
                 >
                   Explore EOR <ArrowRight size={14} />
@@ -289,7 +289,7 @@ export default async function HiringGuidePage({ params }: PageProps) {
                     { label: 'HR Compliance', href: `/countries/${code.toLowerCase()}/hr-compliance/` },
                     { label: 'Leave & Benefits', href: `/countries/${code.toLowerCase()}/leave-benefits/` },
                     { label: 'Compliance Calendar', href: `/countries/${code.toLowerCase()}/compliance-calendar/` },
-                    { label: 'EOR Guide', href: `/countries/${code.toLowerCase()}/eor-guide/` },
+                    { label: 'EOR Guide', href: `/eor/${code.toLowerCase()}/` },
                   ].map((link) => (
                     <li key={link.href}>
                       <Link

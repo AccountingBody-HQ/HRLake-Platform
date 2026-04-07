@@ -196,7 +196,7 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
                   <p className="font-semibold text-slate-900">Manage leave compliance in {country.name} via EOR.</p>
                   <p className="text-sm text-slate-500 mt-1">An Employer of Record administers all statutory leave and benefits on your behalf.</p>
                 </div>
-                <Link href="/eor/" className="shrink-0 inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-colors">
+                <Link href={`/eor/${code.toLowerCase()}/`} className="shrink-0 inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-colors">
                   Explore EOR <ArrowRight size={14} />
                 </Link>
               </div>
@@ -228,7 +228,7 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
                     { label: 'Hiring Guide', href: `/countries/${code.toLowerCase()}/hiring-guide/` },
                     { label: 'HR Compliance', href: `/countries/${code.toLowerCase()}/hr-compliance/` },
                     { label: 'Compliance Calendar', href: `/countries/${code.toLowerCase()}/compliance-calendar/` },
-                    { label: 'EOR Guide', href: `/countries/${code.toLowerCase()}/eor-guide/` },
+                    { label: 'EOR Guide', href: `/eor/${code.toLowerCase()}/` },
                   ].map((link) => (
                     <li key={link.href}>
                       <Link href={link.href} className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors group">

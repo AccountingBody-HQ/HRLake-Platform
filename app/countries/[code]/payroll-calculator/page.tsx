@@ -255,7 +255,7 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
                     { label: 'HR Compliance', href: `/countries/${code.toLowerCase()}/hr-compliance/` },
                     { label: 'Leave & Benefits', href: `/countries/${code.toLowerCase()}/leave-benefits/` },
                     { label: 'Compliance Calendar', href: `/countries/${code.toLowerCase()}/compliance-calendar/` },
-                    { label: 'EOR Guide', href: `/countries/${code.toLowerCase()}/eor-guide/` },
+                    { label: 'EOR Guide', href: `/eor/${code.toLowerCase()}/` },
                   ].map((link) => (
                       <li key={link.href}>
                         <Link

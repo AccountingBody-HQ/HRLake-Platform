@@ -211,7 +211,7 @@ export default async function EmploymentLawPage({ params }: PageProps) {
                     { label: 'HR Compliance', href: `/countries/${code.toLowerCase()}/hr-compliance/` },
                     { label: 'Leave & Benefits', href: `/countries/${code.toLowerCase()}/leave-benefits/` },
                     { label: 'Compliance Calendar', href: `/countries/${code.toLowerCase()}/compliance-calendar/` },
-                    { label: 'EOR Guide', href: `/countries/${code.toLowerCase()}/eor-guide/` },
+                    { label: 'EOR Guide', href: `/eor/${code.toLowerCase()}/` },
                   ].map((link) => (
                     <li key={link.href}>
                       <Link
@@ -244,7 +244,7 @@ export default async function EmploymentLawPage({ params }: PageProps) {
                     An Employer of Record handles local employment law compliance on your behalf. Explore EOR options for {country.name}.
                   </p>
                   <Link
-                    href="/eor/"
+                    href={`/eor/${code.toLowerCase()}/`}
                     className="block rounded-xl bg-teal-600 hover:bg-teal-500 px-4 py-3 text-center text-sm font-bold text-white transition-colors"
                   >
                     Explore EOR for {country.name}

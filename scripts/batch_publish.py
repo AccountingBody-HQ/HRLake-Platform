@@ -22,7 +22,17 @@ content_types = [
 ]
 
 # Add already published articles here as ("CC", "Content Type") to skip them
-skip = {("GB", "Country Report")}
+skip = {
+  ("GB", "Country Report"), ("GB", "Tax Guide"), ("GB", "EOR Guide"),
+  ("GB", "Payroll Guide"), ("GB", "Hiring Guide"), ("GB", "HR Compliance Guide"),
+  ("GB", "Leave and Benefits"), ("GB", "Compliance Calendar"),
+  ("US", "Country Report"), ("US", "Tax Guide"), ("US", "EOR Guide"),
+  ("US", "Payroll Guide"), ("US", "Hiring Guide"), ("US", "HR Compliance Guide"),
+  ("US", "Leave and Benefits"), ("US", "Compliance Calendar"),
+  ("DE", "Country Report"), ("DE", "Tax Guide"), ("DE", "EOR Guide"),
+  ("DE", "Payroll Guide"), ("DE", "Hiring Guide"), ("DE", "HR Compliance Guide"),
+  ("DE", "Leave and Benefits"), ("DE", "Compliance Calendar"),
+}
 
 LOG_PATH = "/workspaces/HRLake-Platform/scripts/batch_log.txt"
 
