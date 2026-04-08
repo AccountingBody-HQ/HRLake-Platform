@@ -81,8 +81,8 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
     url: `https://hrlake.com/countries/${code.toLowerCase()}/leave-benefits/`,
   }
   const breadcrumb = getBreadcrumbStructuredData([
-    { name: 'Home', url: 'https://hrlake.com' },
-    { name: 'Countries', url: 'https://hrlake.com/countries/' },
+    { name: 'Home', href: 'https://hrlake.com' },
+    { name: 'Countries', href: 'https://hrlake.com/countries/' },
     { name: country.name, url: `https://hrlake.com/countries/${code.toLowerCase()}/` },
     { name: 'Leave and Benefits', url: `https://hrlake.com/countries/${code.toLowerCase()}/leave-benefits/` },
   ])
