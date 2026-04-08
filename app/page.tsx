@@ -1,4 +1,5 @@
 import { getInsightArticles } from '@/lib/sanity'
+import { getAllCountries } from '@/lib/supabase-queries'
 import Link from 'next/link'
 import { getHomepageStructuredData, jsonLd } from '@/lib/structured-data'
 import SearchBar from '@/components/SearchBar'
@@ -85,7 +86,7 @@ const STANDARDS = [
   { icon: Award,      title: 'Government-sourced',     body: 'Every data point traced to an official tax authority or government publication.' },
   { icon: RefreshCw,  title: 'Updated monthly',        body: 'Employment rates and statutory thresholds reviewed on a rolling monthly cycle.' },
   { icon: Lock,       title: 'Expert verified',        body: 'Data reviewed by qualified HR and employment law professionals before publication.' },
-  { icon: TrendingUp, title: 'Continuously expanding', body: 'Coverage growing toward complete global depth across all 20 countries.' },
+  { icon: TrendingUp, title: 'Continuously expanding', body: 'Coverage growing continuously toward our target of 57 countries.' },
 ]
 
 const UPDATE_ITEMS = [
@@ -97,6 +98,7 @@ const UPDATE_ITEMS = [
 
 export default async function HomePage() {
   const insights = await getInsightArticles({ limit: 3 })
+  const countries = await getAllCountries()
 
   return (
     <main className="bg-white flex-1">
@@ -189,7 +191,7 @@ export default async function HomePage() {
               <div className="pt-2">
                 <span className="text-slate-500 text-xs font-semibold uppercase tracking-wider block mb-3">Browse by region:</span>
                 <div className="flex flex-wrap items-center gap-2">
-                {REGIONS.map(r => (
+                {REGIONS.filter(r => r.count > 0).map(r => (
                   <Link key={r.slug} href={`/countries/?region=${r.slug}`}
                     className="shrink-0 text-xs font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full px-3 py-1.5 transition-all">
                     {r.name} <span className="text-slate-500 ml-1">{r.count}</span>
@@ -228,7 +230,7 @@ export default async function HomePage() {
                 <div className="border-t border-white/10 bg-blue-600/10 px-5 py-3.5">
                   <Link href="/countries/"
                     className="flex items-center justify-between text-xs text-blue-400 hover:text-blue-300 font-semibold transition-colors group">
-                    <span>View all 20 countries</span>
+                    <span>View all countries</span>
                     <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                   </Link>
                 </div>
@@ -243,7 +245,7 @@ export default async function HomePage() {
           {/* Stat strip */}
           <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
-              { value: '195',     label: 'Countries',   sub: 'Core jurisdictions live' },
+              { value: countries.length.toString(), label: 'Countries', sub: 'Countries live and growing' },
               { value: '50,000+', label: 'Data Points', sub: 'Per country record' },
               { value: 'Monthly', label: 'Updates',     sub: 'Always current' },
               { value: 'Free',    label: 'Core Access', sub: 'No account required' },
