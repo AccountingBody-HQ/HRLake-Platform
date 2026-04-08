@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createSupabaseServerClient } from '@/lib/supabase'
 import { getEmploymentRules, getPayrollCompliance } from '@/lib/supabase-queries'
 import { ChevronRight, ShieldCheck, ArrowRight } from 'lucide-react'
+import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import { PortableText } from '@portabletext/react'
 import { getCountryArticle } from '@/lib/sanity'
 import type { Metadata } from 'next'
@@ -106,7 +107,17 @@ export default async function HRCompliancePage({ params }: PageProps) {
   ] : []
 
   return (
-    <main className="bg-white flex-1">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: toJsonLd(getBreadcrumbStructuredData([
+          { name: 'Home', href: '/' },
+          { name: 'All Countries', href: '/countries/' },
+          { name: country.name, href: '/countries/' + code.toLowerCase() + '/' },
+          { name: country.name + ' HR Compliance', href: '/countries/' + code.toLowerCase() + '/hr-compliance/' },
+        ])) }}
+      />
+      <main className="bg-white flex-1">
       <CountrySubNav code={code} countryName={country.name} />
       <section className="relative bg-slate-950 overflow-hidden">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)' }} />
@@ -280,5 +291,6 @@ export default async function HRCompliancePage({ params }: PageProps) {
         </div>
       </section>
     </main>
+    </>
   )
 }
