@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title,
       description,
-      href: `https://hrlake.com/countries/${code.toLowerCase()}/leave-benefits/`,
+      url: `https://hrlake.com/countries/${code.toLowerCase()}/leave-benefits/`,
       siteName: 'HRLake',
       type: 'website',
     },
