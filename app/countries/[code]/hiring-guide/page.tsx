@@ -3,6 +3,9 @@ import Link from 'next/link'
 import { createSupabaseServerClient } from '@/lib/supabase'
 import { getEmploymentRules, getPayrollCompliance } from '@/lib/supabase-queries'
 import { ChevronRight, Briefcase, ArrowRight } from 'lucide-react'
+import { PortableText } from '@portabletext/react'
+import { getCountryArticle } from '@/lib/sanity'
+import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import type { Metadata } from 'next'
 import CountrySubNav from '@/components/CountrySubNav'
 
@@ -61,7 +64,8 @@ export default async function HiringGuidePage({ params }: PageProps) {
 
   if (!country) notFound()
 
-  const [employmentRules, compliance] = await Promise.all([
+  const [sanityArticle, employmentRules, compliance] = await Promise.all([
+    getCountryArticle(upperCode, 'hiring-guide'),
     getEmploymentRules(upperCode),
     getPayrollCompliance(upperCode),
   ])
@@ -109,7 +113,17 @@ export default async function HiringGuidePage({ params }: PageProps) {
   ]
 
   return (
-    <main className="bg-white flex-1">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: toJsonLd(getBreadcrumbStructuredData([
+          { name: 'Home', href: '/' },
+          { name: 'All Countries', href: '/countries/' },
+          { name: country.name, href: '/countries/' + code.toLowerCase() + '/' },
+          { name: 'Hiring in ' + country.name, href: '/countries/' + code.toLowerCase() + '/hiring-guide/' },
+        ])) }}
+      />
+      <main className="bg-white flex-1">
       <CountrySubNav code={code} countryName={country.name} />
 
       {/* ══════ HERO ══════ */}
@@ -241,6 +255,18 @@ export default async function HiringGuidePage({ params }: PageProps) {
                 </div>
               )}
 
+              {/* Sanity article */}
+              {sanityArticle?.body && (
+                <div className="prose max-w-none">
+                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-6">
+                    Hiring in {country.name} — Full Guide
+                  </h2>
+                  <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                    <PortableText value={sanityArticle.body} />
+                  </div>
+                </div>
+              )}
+
               {/* EOR CTA */}
               <div className="rounded-2xl border border-teal-100 bg-teal-50 p-6 flex flex-wrap items-center justify-between gap-4">
                 <div>
@@ -336,5 +362,6 @@ export default async function HiringGuidePage({ params }: PageProps) {
       </section>
 
     </main>
+    </>
   )
 }
