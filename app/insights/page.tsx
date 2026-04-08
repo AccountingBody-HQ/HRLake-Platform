@@ -76,12 +76,12 @@ export default async function InsightsPage({
             </h1>
             <p className="text-lg text-slate-400 leading-relaxed max-w-2xl">
               Expert analysis on payroll regulations, employment law changes, EOR
-              strategy, tax compliance, and HR policy across 195 jurisdictions.
+              strategy, tax compliance, and HR policy across 20 live countries and growing.
             </p>
           </div>
           <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
-              { value: "195",     label: "Countries Covered" },
+              { value: "20",  label: "Countries Covered" },
               { value: "Expert",  label: "Verified Content"  },
               { value: "Monthly", label: "New Analysis"      },
               { value: "Free",    label: "Full Access"       },

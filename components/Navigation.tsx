@@ -133,6 +133,7 @@ export default function Navigation() {
               )}
             </div>
             <Link href="/insights/" className="px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all">Insights</Link>
+            <Link href="/insights/?category=education" className="px-3 py-1.5 text-sm font-medium text-slate-400 rounded-lg hover:text-white hover:bg-white/5 transition-all">Learning</Link>
           </nav>
 
           {/* SEARCH — desktop */}
@@ -144,14 +145,9 @@ export default function Navigation() {
           {!isSignedIn && (
             <div className="hidden md:flex items-center gap-2 shrink-0 ml-auto lg:ml-0">
               <Link href="/sign-in"
-                className="text-sm font-medium text-slate-400 hover:text-white transition-colors px-3 py-1.5"
-              >
-                Sign in
-              </Link>
-              <Link href="/pricing/"
                 className="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition-colors"
               >
-                Go Pro
+                Sign In
               </Link>
             </div>
           )}
@@ -159,11 +155,7 @@ export default function Navigation() {
           {/* USER MENU — signed in */}
           {isSignedIn && (
             <div className="hidden md:flex items-center gap-2 shrink-0 ml-auto lg:ml-0 relative">
-              <Link href="/pricing/"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-blue-500/30 bg-blue-600/10 hover:bg-blue-600/20 px-3 py-1.5 text-sm font-semibold text-blue-400 transition-colors"
-              >
-                <Crown size={13} /> Go Pro
-              </Link>
+
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg px-3 py-1.5 transition-colors"
@@ -230,6 +222,7 @@ export default function Navigation() {
             {[
               { label: 'HR Compliance', href: '/hr-compliance/' },
               { label: 'Insights', href: '/insights/' },
+              { label: 'Learning', href: '/insights/?category=education' },
             ].map((link) => (
               <Link
                 key={link.href}
@@ -245,16 +238,10 @@ export default function Navigation() {
             {!isSignedIn ? (
               <>
                 <Link href="/sign-in"
-                  className="flex-1 text-center px-4 py-2.5 text-sm font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-600 rounded-lg transition-all"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Sign in
-                </Link>
-                <Link href="/pricing/"
                   className="flex-1 text-center px-4 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-all"
                   onClick={() => setMobileOpen(false)}
                 >
-                  Go Pro
+                  Sign In
                 </Link>
               </>
             ) : (
