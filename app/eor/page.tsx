@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import { createClient } from '@supabase/supabase-js'
 import EORCostEstimator from '@/components/EORCostEstimator'
 import { ArrowRight, Building2, Globe, Shield, Zap, Clock, DollarSign, ChevronRight } from 'lucide-react'
@@ -40,8 +41,9 @@ const speedColour: Record<string, string> = {
 }
 
 export const metadata = {
-  title: 'EOR Intelligence — The World\'s Most Comprehensive EOR Resource | HRLake',
-  description: 'The world\'s most comprehensive EOR intelligence platform. Employer of Record guides, cost estimators, compliance data, and hiring intelligence for 195 countries.',
+  title: 'EOR Intelligence — Employer of Record Guides | HRLake',
+  description: 'Employer of Record guides, cost estimators, compliance risk ratings, and hiring intelligence for 20 countries. The deepest EOR intelligence resource on the web.',
+  alternates: { canonical: 'https://hrlake.com/eor/' },
 }
 
 async function getEORCountries() {
@@ -69,6 +71,13 @@ export default async function EORHubPage() {
 
   return (
     <main className="bg-white flex-1">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: toJsonLd(getBreadcrumbStructuredData([
+          { name: 'Home', href: '/' },
+          { name: 'EOR Intelligence', href: '/eor/' },
+        ])) }}
+      />
 
       {/* ══════ HERO ══════ */}
       <section className="relative bg-slate-950 overflow-hidden">
@@ -96,7 +105,7 @@ export default async function EORHubPage() {
           </div>
           <div className="mt-16 pt-10 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
-              { value: '195',   label: 'Countries',      sub: 'EOR availability data' },
+              { value: '20',    label: 'Countries',      sub: 'Full EOR guides live' },
               { value: '8–20%', label: 'Typical markup', sub: 'On employer cost' },
               { value: 'Days',  label: 'To hire via EOR', sub: 'vs months direct' },
               { value: 'Free',  label: 'EOR intelligence', sub: 'No account needed' },
@@ -198,10 +207,10 @@ export default async function EORHubPage() {
           <div className="mb-12">
             <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">By Country</p>
             <div className="flex items-end justify-between">
-              <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">EOR complexity by country.</h2>
+              <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">Browse EOR guides by country.</h2>
               <Link href="/countries/" className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm">All countries <ArrowRight size={15} /></Link>
             </div>
-            <p className="text-slate-500 mt-4 max-w-2xl leading-relaxed">Risk rating, typical onboarding speed, and key compliance notes for major EOR markets.</p>
+            <p className="text-slate-500 mt-4 max-w-2xl leading-relaxed">Compliance risk levels, typical hire speed, and EOR recommendations for all 20 active countries.</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {countries.map((c: any) => (
