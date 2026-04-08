@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 
 export const metadata: Metadata = {
   title: 'Search — Countries, Calculators and Payroll Guides',
@@ -11,6 +12,16 @@ export const metadata: Metadata = {
   },
 }
 
+const breadcrumb = getBreadcrumbStructuredData([
+  { name: 'Home', href: 'https://hrlake.com' },
+  { name: 'Search', href: 'https://hrlake.com/search/' },
+])
+
 export default function SearchLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toJsonLd(breadcrumb) }} />
+      {children}
+    </>
+  )
 }
