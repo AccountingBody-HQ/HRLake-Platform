@@ -1,4 +1,7 @@
 import Link from 'next/link'
+import { PortableText } from '@portabletext/react'
+import { getCountryArticle } from '@/lib/sanity'
+import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import { notFound } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
 import { ArrowRight, ArrowLeft, CheckCircle, XCircle, AlertCircle, Building2, ChevronRight } from 'lucide-react'
@@ -58,8 +61,16 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const countryData = await getCountry(country)
   if (!countryData) return { title: 'EOR Guide | HRLake' }
   return {
-    title: `EOR Guide: ${countryData.name} | HRLake`,
+    title: `${countryData.name} EOR Guide — Employer of Record ${new Date().getFullYear()}`,
     description: `Employer of Record guide for ${countryData.name}. EOR availability, provider fees, compliance risks, and EOR vs direct employment comparison.`,
+    alternates: { canonical: `https://hrlake.com/eor/${country.toLowerCase()}/` },
+    openGraph: {
+      title: `${countryData.name} EOR Guide — Employer of Record ${new Date().getFullYear()}`,
+      description: `Employer of Record guide for ${countryData.name}. EOR availability, provider fees, compliance risks, and EOR vs direct employment comparison.`,
+      url: `https://hrlake.com/eor/${country.toLowerCase()}/`,
+      siteName: 'HRLake',
+      type: 'website',
+    },
   }
 }
 
@@ -69,6 +80,10 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
     getEORGuide(country),
     getCountry(country),
   ])
+
+  const sanityArticle = guide && countryData
+    ? await getCountryArticle(countryData.iso2, 'eor-guide').catch(() => null)
+    : null
 
   if (!guide || !countryData) {
     return (
@@ -93,7 +108,16 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
   const keyFacts: { label: string; value: string }[] = guide.key_facts ?? []
 
   return (
-    <main className="bg-white flex-1">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: toJsonLd(getBreadcrumbStructuredData([
+          { name: 'Home', href: '/' },
+          { name: 'EOR Hub', href: '/eor/' },
+          { name: countryData.name + ' EOR Guide', href: '/eor/' + country.toLowerCase() + '/' },
+        ])) }}
+      />
+      <main className="bg-white flex-1">
       <CountrySubNav code={countryData.iso2} countryName={countryData.name} />
 
       {/* ══════ HERO ══════ */}
@@ -270,6 +294,25 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
         </div>
       </section>
 
+      {/* ══════ SANITY ARTICLE ══════ */}
+      {sanityArticle?.body && (
+        <section className="bg-white border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+            <div className="max-w-3xl">
+              <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">Full Guide</p>
+              <h2 className="font-serif text-3xl font-bold text-slate-900 mb-8">
+                {countryData.name} EOR Guide — Deep Dive
+              </h2>
+              <div className="prose max-w-none">
+                <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                  <PortableText value={sanityArticle.body} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ══════ FOOTER CTA ══════ */}
       <section className="bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
@@ -278,10 +321,14 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
               <p className="font-bold text-slate-900 mb-1">Need full payroll data for {countryData.name}?</p>
               <p className="text-slate-500 text-sm">Income tax brackets, social security rates, employment law, and payroll calculator.</p>
             </div>
-            <div className="flex gap-3 shrink-0">
+            <div className="flex gap-3 shrink-0 flex-wrap">
               <Link href={`/countries/${country}/`}
                 className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-3 rounded-xl transition-colors text-sm">
                 {countryData.name} country page <ArrowRight size={14} />
+              </Link>
+              <Link href={`/countries/${country}/payroll-calculator/`}
+                className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-blue-200 hover:text-blue-600 text-slate-700 font-semibold px-5 py-3 rounded-xl transition-colors text-sm">
+                Payroll Calculator <ArrowRight size={14} />
               </Link>
               <Link href="/eor/"
                 className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-semibold px-5 py-3 rounded-xl transition-colors text-sm">
@@ -293,5 +340,6 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
       </section>
 
     </main>
+    </>
   )
 }
