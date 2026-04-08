@@ -55,7 +55,7 @@ export default async function HiringGuidePage({ params }: PageProps) {
 
   const { data: country } = await supabase
     .from('countries')
-    .select('iso2, name, currency_code, flag_emoji')
+    .select('iso2, name, currency_code, currency_symbol, flag_emoji')
     .eq('iso2', upperCode)
     .single()
 
@@ -100,7 +100,7 @@ export default async function HiringGuidePage({ params }: PageProps) {
   ]
 
   const keyFacts = [
-    { label: 'Minimum Wage', value: employmentRules?.minimum_wage ? fmtCurrency(employmentRules.minimum_wage, country.currency_code) : '—' },
+    { label: 'Minimum Wage', value: employmentRules?.minimum_wage ? fmtCurrency(employmentRules.minimum_wage, country.currency_symbol ?? country.currency_code) : '—' },
     { label: 'Annual Leave', value: employmentRules?.annual_leave_days ? `${employmentRules.annual_leave_days} ${employmentRules.annual_leave_days === 1 ? 'day' : 'days'}` : '—' },
     { label: 'Notice Period (min)', value: employmentRules?.notice_period_days ? `${employmentRules.notice_period_days} ${employmentRules.notice_period_days === 1 ? 'day' : 'days'}` : '—' },
     { label: 'Probation Period (max)', value: fmt(employmentRules?.probation_period_days, ' days') },
