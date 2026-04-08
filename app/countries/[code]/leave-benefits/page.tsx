@@ -67,7 +67,7 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
     { label: 'Annual Leave', value: employmentRules.annual_leave_days ? `${employmentRules.annual_leave_days} days` : '—' },
     { label: 'Sick Leave', value: employmentRules.sick_leave_days ? `${employmentRules.sick_leave_days} days` : '—' },
     { label: 'Maternity Leave', value: employmentRules.maternity_leave_weeks ? `${employmentRules.maternity_leave_weeks} weeks` : '—' },
-    { label: 'Paternity Leave', value: employmentRules.paternity_leave_weeks ? `${employmentRules.paternity_leave_weeks} days` : '—' },
+    { label: 'Paternity Leave', value: employmentRules.paternity_leave_weeks ? `${employmentRules.paternity_leave_weeks} weeks` : '—' },
     { label: 'Public Holidays', value: holidays.length > 0 ? `${holidays.length} days` : '—' },
     { label: '13th Month Pay', value: employmentRules.thirteenth_month_pay ? 'Required' : 'Not required' },
   ] : []
@@ -169,7 +169,7 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
                         {holidays.map((h: any, i: number) => (
                           <tr key={i} className="hover:bg-slate-50 transition-colors">
                             <td className="px-6 py-4 text-sm font-medium text-slate-900">{h.name ?? "—"}</td>
-                            <td className="px-6 py-4 text-sm text-slate-600">{h.date ?? "—"}</td>
+                            <td className="px-6 py-4 text-sm text-slate-600">{h.date ? new Date(h.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</td>
                           </tr>
                         ))}
                       </tbody>
