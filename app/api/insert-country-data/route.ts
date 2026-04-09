@@ -13,15 +13,19 @@ const HRLAKE_TABLES = [
 ]
 
 function applyDefaults(table: string, row: any, countryCode: string) {
-  const base = { ...row, country_code: countryCode.toUpperCase() }
-  const withYear = { tax_year: 2025, is_current: true, tier: "free", ...base }
-  if (table === "tax_brackets") return { currency_code: countryCode === "GB" ? "GBP" : "USD", ...withYear }
-  if (table === "social_security") return { currency_code: "USD", ...withYear }
-  if (table === "public_holidays") return { year: 2025, tier: "free", is_mandatory: true, ...base }
-  if (table === "working_hours") return { is_current: true, tier: "free", tax_year: 2025, ...base }
-  if (table === "termination_rules") return { is_current: true, tier: "free", tax_year: 2025, ...base }
-  if (table === "pension_schemes") return { is_current: true, tier: "free", tax_year: 2025, ...base }
-  return withYear
+  const base = {
+    tax_year: 2025,
+    valid_from: "2025-01-01",
+    is_current: true,
+    tier: "free",
+    ...row,
+    country_code: countryCode.toUpperCase(),
+  }
+  if (table === "tax_brackets") return { currency_code: "USD", ...base }
+  if (table === "social_security") return { currency_code: "USD", ...base }
+  if (table === "payroll_compliance") return { compliance_type: "payroll", ...base }
+  if (table === "public_holidays") return { year: 2025, tier: "free", is_mandatory: true, ...row, country_code: countryCode.toUpperCase() }
+  return base
 }
 
 export async function POST(req: NextRequest) {
