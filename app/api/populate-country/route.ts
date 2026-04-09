@@ -26,8 +26,7 @@ export async function POST(req: NextRequest) {
 
     const tableList = Object.entries(TABLE_SCHEMAS)
       .map(([k, v], i) => `${i + 1}. ${k} — include country_code:"${countryCode}" in every record. Fields: ${v}`)
-      .join("
-")
+      .join("\n")
 
     const prompt = `You are an expert HR and payroll data researcher. Research and return ALL employment and payroll data for ${countryName} (${countryCode}, currency: ${currencyCode}).
 
