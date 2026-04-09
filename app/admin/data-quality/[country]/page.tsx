@@ -209,7 +209,7 @@ export default async function VerifyCountryPage({
               </div>
               <div className="flex justify-between mt-1">
                 <span className="text-slate-400 text-xs">Severance mandatory</span>
-                <span className={`text-xs font-bold ${r.severance_mandatory ? 'text-red-400' : 'text-emerald-400"}`}>{r.severance_mandatory ? 'Yes' : 'No'}</span>
+                <span className={`text-xs font-bold ${r.severance_mandatory ? 'text-red-400' : 'text-emerald-400"}`}>{r.severance_mandatory ? "Yes" : "No"}</span>
               </div>
               {r.probation_period_max_months && (
                 <div className="flex justify-between mt-1">
