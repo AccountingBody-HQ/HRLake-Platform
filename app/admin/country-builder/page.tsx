@@ -117,27 +117,14 @@ export default function CountryBuilderPage() {
   }
 
   async function handleInsert() {
-    if (!popData) return
     setInserting(true); setPopMsg('')
     try {
-      for (const t of CORE_TABLES) {
-        const rows = popData[t.key]
-        if (!rows || rows.length === 0) continue
-        const { error: e } = await sb.schema('hrlake').from(t.key).insert(rows)
-        if (e) throw new Error(`Insert failed for ${t.key}: ${e.message}`)
-      }
-      if (popData.sources) {
-        const code = popForm.iso2.toUpperCase()
-        const sourceRows = Object.entries(popData.sources).map(([cat, s]: [string, any]) => ({
-          country_code: code,
-          data_category: cat,
-          authority_name: s.authority_name,
-          source_url: s.source_url,
-          language: 'en',
-        }))
-        const { error: se } = await sb.schema('hrlake').from('official_sources').upsert(sourceRows, { onConflict: 'country_code,data_category' })
-        if (se) throw new Error(`Sources insert failed: ${se.message}`)
-      }
+      const res = await fetch('/api/insert-country-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: popData, countryCode: popForm.iso2.toUpperCase() }),
+      })
+      const json = await res.json()
       setInsertDone(true)
       await loadData()
     } catch (e: any) {
