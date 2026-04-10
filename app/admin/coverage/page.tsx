@@ -18,10 +18,15 @@ const ALL_TABLES = [
 ]
 
 async function getCoverageData() {
+  const timeout = new Promise<any[]>(res => setTimeout(() => res([]), 10000))
+  return Promise.race([fetchCoverageData(), timeout])
+}
+
+async function fetchCoverageData() {
   try {
     const sb = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
     const { data: countries } = await sb
@@ -39,10 +44,11 @@ async function getCoverageData() {
     const presenceMap = Object.fromEntries(tableFetches.map(t => [t.key, t.codes]))
 
     return (countries ?? []).map((c: any) => {
-      const filled = ALL_TABLES.filter(t => presenceMap[t.key]?.has(c.iso2)).length
+      const tableCoverage = ALL_TABLES.map(t => presenceMap[t.key]?.has(c.iso2) ?? false)
+      const filled = tableCoverage.filter(Boolean).length
       const pct    = Math.round((filled / ALL_TABLES.length) * 100)
       const status = filled === ALL_TABLES.length ? 'full' : filled > 0 ? 'partial' : 'none'
-      return { ...c, filled, pct, status }
+      return { ...c, filled, pct, status, tableCoverage }
     })
   } catch (e) {
     console.error('getCoverageData error:', e)
@@ -174,13 +180,13 @@ export default async function CoverageMapPage() {
                         </div>
                       </td>
                       {ALL_TABLES.map((t, idx) => {
-                        const has = c.filled > idx
+                        const has = c.tableCoverage?.[idx] ?? false
                         return (
                           <td key={t.key} className="px-2 py-3.5 text-center">
-                            <div className={`w-5 h-5 rounded-md flex items-center justify-center mx-auto`}
-                              style={{ background: c.pct === 100 ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.1)' }}>
+                            <div className="w-5 h-5 rounded-md flex items-center justify-center mx-auto"
+                              style={{ background: has ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.1)' }}>
                               <div className="w-1.5 h-1.5 rounded-full"
-                                style={{ background: c.pct === 100 ? '#10b981' : '#f59e0b' }} />
+                                style={{ background: has ? '#10b981' : '#374151' }} />
                             </div>
                           </td>
                         )
