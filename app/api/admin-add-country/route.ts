@@ -45,7 +45,9 @@ export async function PATCH(req: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
-  const { error } = await supabase.from('countries').update({ is_active }).eq('iso2', iso2.toUpperCase())
+  const updateData: any = { is_active }
+  if (is_active) updateData.hrlake_coverage_level = 'partial'
+  const { error } = await supabase.from('countries').update(updateData).eq('iso2', iso2.toUpperCase())
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
