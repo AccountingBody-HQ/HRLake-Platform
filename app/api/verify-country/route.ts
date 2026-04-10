@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server'
 
+export const runtime = 'nodejs'
+export const maxDuration = 120
+
 export async function POST(req: Request) {
   try {
     const { prompt } = await req.json()
-
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -24,8 +26,15 @@ export async function POST(req: Request) {
     console.log('Anthropic status:', response.status)
     console.log('Stop reason:', data.stop_reason)
 
+    // Surface API-level errors (auth failures, rate limits, etc.)
+    if (!response.ok || data.type === 'error') {
+      const msg = data?.error?.message ?? JSON.stringify(data).slice(0, 300)
+      console.error('Anthropic API error:', msg)
+      return NextResponse.json({ error: 'Anthropic API error: ' + msg }, { status: 500 })
+    }
+
     if (!data.content || !Array.isArray(data.content)) {
-      console.error('Bad response:', JSON.stringify(data).slice(0, 500))
+      console.error('Bad response shape:', JSON.stringify(data).slice(0, 500))
       return NextResponse.json({ error: 'No content returned from Claude' }, { status: 500 })
     }
 
@@ -35,8 +44,8 @@ export async function POST(req: Request) {
     console.log('Text preview:', text.slice(0, 400))
 
     if (!text) {
-      console.error('No text block:', JSON.stringify(data.content).slice(0, 1000))
-      return NextResponse.json({ error: 'Claude returned no text. Try again.' }, { status: 500 })
+      console.error('No text block in content:', JSON.stringify(data.content).slice(0, 1000))
+      return NextResponse.json({ error: 'Claude returned no text. Stop reason: ' + data.stop_reason }, { status: 500 })
     }
 
     const start = text.indexOf('{')
@@ -58,7 +67,6 @@ export async function POST(req: Request) {
       console.error('JSON preview:', jsonStr.slice(0, 500))
       return NextResponse.json({ error: 'JSON parse failed: ' + parseErr.message }, { status: 500 })
     }
-
   } catch (e: any) {
     console.error('verify-country error:', e)
     return NextResponse.json({ error: e.message }, { status: 500 })
