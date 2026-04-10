@@ -21,8 +21,8 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="bg-slate-950 flex items-center justify-center" style={{minHeight: "70vh", paddingTop: "60px", paddingBottom: "60px"}}>
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 w-full max-w-sm">
+    <div className="flex items-center justify-center" style={{ minHeight: "70vh", paddingTop: "60px", paddingBottom: "60px", background: "#080d1a" }}>
+      <div className="rounded-2xl p-8 w-full max-w-sm" style={{ background: "#0d1424", border: "1px solid #1a2238" }}>
         <h1 className="text-white font-bold text-xl mb-6">Admin Access</h1>
         <input
           type="password"
@@ -30,7 +30,7 @@ export default function AdminLoginPage() {
           onChange={e => setPassword(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleLogin()}
           placeholder="Enter admin password"
-          className="w-full px-4 py-3 bg-slate-800 border border-slate-700 text-white rounded-xl outline-none focus:border-blue-500 mb-3"
+          className="w-full px-4 py-3 text-white rounded-xl outline-none mb-3" style={{ background: "#111827", border: "1px solid #1f2937" }}
         />
         {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
         <button
