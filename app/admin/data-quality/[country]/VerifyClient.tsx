@@ -343,16 +343,16 @@ export default function VerifyClient({
           <div className="flex flex-wrap gap-2 mb-5">
             <button
               onClick={() => setActiveTable('all')}
-              className={`text-xs font-bold px-3 py-1.5 rounded-full border transition-all ${activeTable === 'all' ? 'bg-blue-600 border-blue-500 text-white' : 'hover:text-white' }` } style={{ borderColor: '#1a2238' }}>
-            >
+              className={`text-xs font-bold px-3 py-1.5 rounded-full border transition-all ${activeTable === 'all' ? 'bg-blue-600 border-blue-500 text-white' : 'hover:text-white'}`}
+              style={{ borderColor: '#1a2238' }}>
               All ({totalFindings})
             </button>
             {ALL_TABLES.filter(t => countByTable[t]).map(t => (
               <button
                 key={t}
                 onClick={() => setActiveTable(t)}
-                className={`text-xs font-bold px-3 py-1.5 rounded-full border transition-all ${activeTable === t ? 'bg-blue-600 border-blue-500 text-white' : 'hover:text-white' }` } style={{ borderColor: '#1a2238' }}>
-              >
+                className={`text-xs font-bold px-3 py-1.5 rounded-full border transition-all ${activeTable === t ? 'bg-blue-600 border-blue-500 text-white' : 'hover:text-white'}`}
+                style={{ borderColor: '#1a2238' }}>
                 {TABLE_LABELS[t]} ({countByTable[t]})
               </button>
             ))}
