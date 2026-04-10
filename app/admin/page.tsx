@@ -191,7 +191,7 @@ export default async function AdminCommandCentre() {
               View all <ArrowRight size={11} />
             </Link>
           </div>
-          <div className="divide-y" style={{ divideColor: '#1a2238' }}>
+          <div className="divide-y" >
             {d.needsAttention.length === 0 ? (
               <div className="px-6 py-8 text-center">
                 <CheckCircle size={24} className="mx-auto mb-2" style={{ color: '#10b981' }} />
@@ -243,7 +243,7 @@ export default async function AdminCommandCentre() {
             <Clock size={14} style={{ color: '#10b981' }} />
             <h2 className="text-white font-bold text-sm">Recently Verified</h2>
           </div>
-          <div className="divide-y" style={{ divideColor: '#1a2238' }}>
+          <div className="divide-y" >
             {d.recentlyVerified.length === 0 ? (
               <div className="px-5 py-6 text-center">
                 <p className="text-xs" style={{ color: '#334155' }}>No verified countries yet</p>
@@ -275,7 +275,7 @@ export default async function AdminCommandCentre() {
         <div className="px-6 py-4 border-b" style={{ borderColor: '#1a2238' }}>
           <h2 className="text-white font-bold text-sm">Quick Actions</h2>
         </div>
-        <div className="grid grid-cols-4 divide-x" style={{ divideColor: '#1a2238' }}>
+        <div className="grid grid-cols-4 divide-x" >
           {QUICK_ACTIONS.map(action => (
             <Link key={action.label} href={action.href}
               className="px-6 py-5 flex flex-col gap-3 transition-all group"
