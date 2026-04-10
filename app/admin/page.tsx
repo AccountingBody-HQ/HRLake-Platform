@@ -15,10 +15,16 @@ const ALL_TABLES = [
 ]
 
 async function getDashboardData() {
+  const timeout = new Promise<null>(res => setTimeout(() => res(null), 10000))
+  const result  = fetchDashboardData()
+  return Promise.race([result, timeout])
+}
+
+async function fetchDashboardData() {
   try {
     const sb = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
     const { data: countries } = await sb
@@ -191,7 +197,7 @@ export default async function AdminCommandCentre() {
               View all <ArrowRight size={11} />
             </Link>
           </div>
-          <div className="divide-y" >
+          <div className="divide-y" style={{ borderColor: '#1a2238' }}>
             {d.needsAttention.length === 0 ? (
               <div className="px-6 py-8 text-center">
                 <CheckCircle size={24} className="mx-auto mb-2" style={{ color: '#10b981' }} />
@@ -243,7 +249,7 @@ export default async function AdminCommandCentre() {
             <Clock size={14} style={{ color: '#10b981' }} />
             <h2 className="text-white font-bold text-sm">Recently Verified</h2>
           </div>
-          <div className="divide-y" >
+          <div className="divide-y" style={{ borderColor: '#1a2238' }}>
             {d.recentlyVerified.length === 0 ? (
               <div className="px-5 py-6 text-center">
                 <p className="text-xs" style={{ color: '#334155' }}>No verified countries yet</p>
@@ -278,9 +284,8 @@ export default async function AdminCommandCentre() {
         <div className="grid grid-cols-4 divide-x" >
           {QUICK_ACTIONS.map(action => (
             <Link key={action.label} href={action.href}
-              className="px-6 py-5 flex flex-col gap-3 transition-all group"
-              style={{ background: 'transparent' }}
-              onMouseEnter={undefined}>
+              className="px-6 py-5 flex flex-col gap-3 transition-all group hover:bg-white/[0.02] cursor-pointer"
+              style={{ background: 'transparent' }}>
               <div className="w-9 h-9 rounded-xl flex items-center justify-center transition-all"
                 style={{ background: `${action.color}15` }}>
                 <action.icon size={17} style={{ color: action.color }} />
