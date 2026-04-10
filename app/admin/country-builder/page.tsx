@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
 import {
   Layers, RefreshCw, Plus, ExternalLink, AlertCircle, Loader2,
@@ -9,6 +10,7 @@ import {
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 const TABS = ['Countries', 'Source Registry', 'Add Country', 'AI Populate'] as const
 type Tab = typeof TABS[number]
@@ -36,7 +38,11 @@ const S = {
 }
 
 export default function CountryBuilderPage() {
-  const [tab, setTab]               = useState<Tab>('Countries')
+  const searchParams = useSearchParams()
+  const [tab, setTab]               = useState<Tab>(() => {
+    const t = searchParams.get('tab')
+    return (TABS.includes(t as Tab) ? t : 'Countries') as Tab
+  })
   const [countries, setCountries]   = useState<Country[]>([])
   const [counts, setCounts]         = useState<Counts>({})
   const [sources, setSources]       = useState<Source[]>([])
@@ -46,7 +52,7 @@ export default function CountryBuilderPage() {
   const [saving, setSaving]         = useState(false)
   const [saved, setSaved]           = useState(false)
   const [newC, setNewC]             = useState({ iso2: '', iso3: '', name: '', currency_code: '', flag_emoji: '', region: '' })
-  const [popForm, setPopForm]       = useState({ iso2: '', name: '', currency_code: '' })
+  const [popForm, setPopForm]       = useState({ iso2: searchParams.get('iso2') ?? '', name: '', currency_code: '' })
   const [popStatus, setPopStatus]   = useState<'idle'|'loading'|'done'|'error'>('idle')
   const [popData, setPopData]       = useState<any>(null)
   const [popMsg, setPopMsg]         = useState('')
@@ -56,8 +62,6 @@ export default function CountryBuilderPage() {
   const [deleteTarget, setDeleteTarget] = useState<{ iso2: string; name: string } | null>(null)
   const [deleting, setDeleting]         = useState(false)
 
-  const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
-
   const loadData = useCallback(async () => {
     setLoading(true); setError('')
     try {
@@ -66,14 +70,14 @@ export default function CountryBuilderPage() {
       if (ce) throw ce
       setCountries(cs ?? [])
       const allCounts: Counts = {}
-      for (const t of CORE_TABLES) {
+      await Promise.all(CORE_TABLES.map(async t => {
         const { data: rows } = await sb.schema('hrlake').from(t.key).select('country_code')
         for (const row of (rows ?? []) as any[]) {
           const cc = row.country_code
           if (!allCounts[cc]) allCounts[cc] = {}
           allCounts[cc][t.key] = (allCounts[cc][t.key] ?? 0) + 1
         }
-      }
+      }))
       setCounts(allCounts)
     } catch (e: any) { setError(e.message ?? 'Load failed') }
     finally { setLoading(false) }
@@ -144,6 +148,8 @@ export default function CountryBuilderPage() {
   async function handlePopulate() {
     setPopStatus('loading'); setPopMsg(''); setPopData(null); setInsertDone(false)
     try {
+      const controller = new AbortController()
+      const tid = setTimeout(() => controller.abort(), 130000)
       const res = await fetch('/api/populate-country', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -152,7 +158,9 @@ export default function CountryBuilderPage() {
           countryName: popForm.name,
           currencyCode: popForm.currency_code.toUpperCase(),
         }),
+        signal: controller.signal,
       })
+      clearTimeout(tid)
       const json = await res.json()
       if (!res.ok || !json.success) throw new Error(json.error ?? 'AI populate failed')
       setPopData(json.data)
