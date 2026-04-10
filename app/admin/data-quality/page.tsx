@@ -18,10 +18,15 @@ const ALL_TABLES = [
 ]
 
 async function getDataQualitySummary() {
+  const timeout = new Promise<any[]>(res => setTimeout(() => res([]), 10000))
+  return Promise.race([fetchDataQualitySummary(), timeout])
+}
+
+async function fetchDataQualitySummary() {
   try {
     const sb = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
     const { data: countries } = await sb
@@ -164,8 +169,7 @@ export default async function DataQualityPage() {
                 {countries.map((c: any, i: number) => (
                   <tr key={c.iso2}
                     style={{ borderBottom: i < countries.length - 1 ? '1px solid #111827' : 'none' }}
-                    className="group transition-colors"
-                    onMouseEnter={undefined}>
+                    className="group transition-colors">
                     <td className="px-6 py-3.5">
                       <div className="flex items-center gap-3">
                         <img src={`https://flagcdn.com/20x15/${c.iso2.toLowerCase()}.png`}
