@@ -212,7 +212,7 @@ export default function VerifyClient({
         body: JSON.stringify({
           countryCode,
           action: 'update_value',
-          finding: { table: finding.table, raw_value: finding.raw_value, record_id: finding.record_id },
+          finding: { table: finding.table, field: finding.field, raw_value: finding.raw_value, record_id: finding.record_id },
         }),
       })
       const data = await res.json()

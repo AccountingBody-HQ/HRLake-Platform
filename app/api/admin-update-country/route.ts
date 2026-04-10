@@ -66,12 +66,18 @@ export async function POST(req: Request) {
       if (!record_id) return NextResponse.json({ error: 'No record_id provided' }, { status: 400 })
       if (!table) return NextResponse.json({ error: 'No table provided' }, { status: 400 })
 
-      // raw_value is always an object: { field: value, ... }
-      if (typeof raw_value !== 'object' || raw_value === null || Array.isArray(raw_value)) {
-        return NextResponse.json({ error: 'raw_value must be an object' }, { status: 400 })
+      // raw_value should be an object — but if AI returns a scalar, wrap it using field name
+      let valueObj: Record<string, unknown>
+      if (typeof raw_value === 'object' && raw_value !== null && !Array.isArray(raw_value)) {
+        valueObj = raw_value as Record<string, unknown>
+      } else if (finding.field && typeof finding.field === 'string' && !finding.field.includes(',')) {
+        console.log('raw_value was scalar — auto-wrapping as { ' + finding.field + ': ' + raw_value + ' }')
+        valueObj = { [finding.field]: raw_value }
+      } else {
+        return NextResponse.json({ error: 'raw_value must be an object, got: ' + typeof raw_value }, { status: 400 })
       }
 
-      const payload = castPayload(raw_value as Record<string, unknown>)
+      const payload = castPayload(valueObj)
       console.log('Updating hrlake.' + table + ' record ' + record_id + ' with', payload)
 
       const { error } = await supabase
