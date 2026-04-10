@@ -138,7 +138,7 @@ Respond ONLY with raw JSON (no markdown, start with {, end with }):
     {
       "table": "tax_brackets|social_security|employment_rules|statutory_leave|public_holidays|filing_calendar|payroll_compliance|working_hours|termination_rules|pension_schemes",
       "record_id": "exact uuid from above",
-      "field": "exact database column name",
+      "field": "exact_single_column_name",
       "current_value": "human readable current value",
       "found_value": "human readable value from official source",
       "raw_value": 12.5,
@@ -202,6 +202,11 @@ export default function VerifyClient({
   async function approve(index: number, finding: Finding) {
     if (finding.status === 'match') {
       setDecisions(prev => ({ ...prev, [index]: 'approved' }))
+      return
+    }
+    // Guard: multi-field findings cannot be auto-updated — re-run verification to get per-field results
+    if (finding.field.includes(',')) {
+      setError('This finding covers multiple fields (' + finding.field + '). Re-run verification — the prompt now returns one finding per field.')
       return
     }
     setDecisions(prev => ({ ...prev, [index]: 'saving' }))
