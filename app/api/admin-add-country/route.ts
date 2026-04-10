@@ -51,3 +51,28 @@ export async function PATCH(req: NextRequest) {
   }
   return NextResponse.json({ success: true })
 }
+
+export async function DELETE(req: NextRequest) {
+  const body = await req.json()
+  const { iso2 } = body
+  if (!iso2) {
+    return NextResponse.json({ error: 'iso2 is required' }, { status: 400 })
+  }
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+  // Delete all hrlake table data first
+  const hrlakeTables = ['tax_brackets','social_security','employment_rules','statutory_leave','public_holidays','filing_calendar','payroll_compliance','working_hours','termination_rules','pension_schemes']
+  for (const table of hrlakeTables) {
+    await supabase.schema('hrlake').from(table).delete().eq('country_code', iso2.toUpperCase())
+  }
+  // Delete official sources
+  await supabase.schema('hrlake').from('official_sources').delete().eq('country_code', iso2.toUpperCase())
+  // Delete the country row
+  const { error } = await supabase.from('countries').delete().eq('iso2', iso2.toUpperCase())
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+  return NextResponse.json({ success: true })
+}

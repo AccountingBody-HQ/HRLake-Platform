@@ -107,6 +107,19 @@ export default function CountryBuilderPage() {
       await loadData()
     } catch (e: any) { setError(e.message ?? 'Update failed') }
   }
+  async function handleDelete(iso2: string) {
+    if (!window.confirm('DELETE ' + iso2 + '? This will remove the country and ALL its data permanently. This cannot be undone.')) return
+    try {
+      const res = await fetch('/api/admin-add-country', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ iso2 })
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? 'Delete failed')
+      await loadData()
+    } catch (e: any) { setError(e.message ?? 'Delete failed') }
+  }
   async function handlePopulate() {
     setPopStatus('loading'); setPopMsg(''); setPopData(null); setInsertDone(false)
     try {
@@ -292,6 +305,12 @@ export default function CountryBuilderPage() {
                               onClick={() => handleActivate(c.iso2, false)}
                               className="ml-2 text-xs font-bold px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/40 transition-colors"
                             >Deactivate</button>
+                          )}
+                          {!c.is_active && (
+                            <button
+                              onClick={() => handleDelete(c.iso2)}
+                              className="ml-2 text-xs font-bold px-2 py-0.5 rounded bg-red-900/40 text-red-400 border border-red-700/50 hover:bg-red-900/70 transition-colors"
+                            >Delete</button>
                           )}
                         </td>
                       </tr>
