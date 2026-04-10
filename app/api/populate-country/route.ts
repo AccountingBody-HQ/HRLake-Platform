@@ -11,6 +11,15 @@ export async function POST(req: NextRequest) {
     if (!countryCode || !countryName) {
       return NextResponse.json({ error: "Missing countryCode or countryName" }, { status: 400 })
     }
+    if (typeof countryCode !== 'string' || !/^[A-Za-z]{2,3}$/.test(countryCode)) {
+      return NextResponse.json({ error: "Invalid countryCode format" }, { status: 400 })
+    }
+    if (currencyCode && (typeof currencyCode !== 'string' || !/^[A-Za-z]{3}$/.test(currencyCode))) {
+      return NextResponse.json({ error: "Invalid currencyCode format" }, { status: 400 })
+    }
+    if (typeof countryName !== 'string' || countryName.length > 100) {
+      return NextResponse.json({ error: "Invalid countryName" }, { status: 400 })
+    }
 
     const prompt = `You are the world's most accurate HR, payroll and employment law data specialist. Your task is to return a complete, precise JSON dataset for ${countryName} (${countryCode}, currency: ${currencyCode}).
 
