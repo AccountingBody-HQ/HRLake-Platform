@@ -84,14 +84,14 @@ export default function AnnualUpdateClient({ countries }: { countries: Country[]
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white mb-1">Annual Data Update</h1>
-        <p className="text-slate-400 text-sm">Review and re-verify country data on an annual cycle. Countries not verified in the last 11 months are flagged as overdue.</p>
+        <p className="text-sm" style={{ color: '#64748b' }}>Review and re-verify country data on an annual cycle. Countries not verified in the last 11 months are flagged as overdue.</p>
       </div>
 
       {/* Stats row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         <div className="rounded-2xl p-4 text-center" style={{ background: '#0d1424', border: '1px solid #1a2238' }}>
           <p className="text-2xl font-black text-white">{countries.length}</p>
-          <p className="text-xs font-bold text-slate-400 mt-1">Active Countries</p>
+          <p className="text-xs font-bold mt-1" style={{ color: '#64748b' }}>Active Countries</p>
         </div>
         <div className="rounded-2xl p-4 text-center" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
           <p className="text-2xl font-black text-red-400">{overdue.length}</p>
@@ -111,8 +111,8 @@ export default function AnnualUpdateClient({ countries }: { countries: Country[]
       <div className="rounded-2xl p-5 mb-6 flex flex-wrap items-center justify-between gap-4" style={{ background: '#0d1424', border: '1px solid #1a2238' }}>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <Calendar size={15} className="text-slate-400" />
-            <span className="text-sm font-semibold text-slate-300">Tax Year:</span>
+            <Calendar size={15} style={{ color: '#64748b' }} />
+            <span className="text-sm font-semibold" style={{ color: '#94a3b8' }}>Tax Year:</span>
             <select
               value={selectedYear}
               onChange={e => setSelectedYear(Number(e.target.value))}
@@ -203,7 +203,7 @@ export default function AnnualUpdateClient({ countries }: { countries: Country[]
                     </span>
                   </td>
                   <td className="px-5 py-3">
-                    <p className="text-sm text-slate-300">{formatDate(country.last_data_update)}</p>
+                    <p className="text-sm" style={{ color: '#94a3b8' }}>{formatDate(country.last_data_update)}</p>
                   </td>
                   <td className="px-5 py-3">
                     {cs?.status === 'running' && <span className="flex items-center gap-1.5 text-xs text-blue-400 font-semibold"><Loader2 size={12} className="animate-spin" /> Updating...</span>}
@@ -234,13 +234,13 @@ export default function AnnualUpdateClient({ countries }: { countries: Country[]
         </table>
         {visible.length === 0 && (
           <div className="px-5 py-12 text-center">
-            <Globe size={24} className="text-slate-600 mx-auto mb-3" />
-            <p className="text-slate-400 text-sm">No countries in this filter.</p>
+            <Globe size={24} style={{ color: '#1e293b' }} className="mx-auto mb-3" />
+            <p className="text-sm" style={{ color: '#64748b' }}>No countries in this filter.</p>
           </div>
         )}
       </div>
 
-      <p className="text-xs text-slate-600 mt-4">Marking a country as verified sets last_data_update to today and hrlake_coverage_level to full. Run AI Verification on individual countries in Data Quality for deeper checks.</p>
+      <p className="text-xs mt-4" style={{ color: '#1e293b' }}>Marking a country as verified sets last_data_update to today and hrlake_coverage_level to full. Run AI Verification on individual countries in Data Quality for deeper checks.</p>
     </div>
   )
 }

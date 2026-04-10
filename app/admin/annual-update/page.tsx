@@ -1,10 +1,10 @@
-import { createSupabaseServerClient } from '@/lib/supabase'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 import AnnualUpdateClient from './AnnualUpdateClient'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AnnualUpdatePage() {
-  const supabase = await createSupabaseServerClient()
+  const supabase = createSupabaseAdminClient()
 
   const { data: countries } = await supabase
     .from('countries')
