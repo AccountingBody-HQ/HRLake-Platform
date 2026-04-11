@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getFlag } from '@/lib/flag'
 import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import { createClient } from '@supabase/supabase-js'
 import EORCostEstimator from '@/components/EORCostEstimator'
@@ -63,7 +64,7 @@ async function getEORCountries() {
   return (countries ?? []).map(c => ({
     country_code: c.iso2,
     countryName: c.name,
-    flagEmoji: c.flag_emoji ?? '',
+    flagEmoji: getFlag(c.iso2),
     risk_level: guideMap[c.iso2]?.risk_level ?? null,
     hire_speed: guideMap[c.iso2]?.hire_speed ?? null,
     recommendation_title: guideMap[c.iso2]?.recommendation_title ?? null,
