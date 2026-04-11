@@ -317,7 +317,7 @@ export default async function PayrollCalculatorPage({ params, searchParams }: Pa
                   },
                   {
                     q: `Is this calculator free to use?`,
-                    a: 'The core payroll calculator is completely free — no account required. Pro features such as saving calculations to your dashboard and accessing multi-country comparison tools require a Pro subscription.',
+                    a: 'The core payroll calculator is completely free — no account required. Sign in to save calculations to your dashboard for future reference.',
                   },
                 ].map((item, i) => (
                   <div key={i} className="border-b border-slate-100 pb-8 last:border-0 last:pb-0">
