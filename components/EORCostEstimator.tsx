@@ -125,7 +125,7 @@ export default function EORCostEstimator({ defaultCountryCode = "GB" }: { defaul
                   const info = Array.isArray(c.countries) ? c.countries[0] : c.countries
                   return (
                     <option key={c.country_code} value={c.country_code}>
-                      {getFlag(selectedCode)} {info?.name}
+                      {getFlag(c.country_code)} {info?.name}
                     </option>
                   )
                 })}
