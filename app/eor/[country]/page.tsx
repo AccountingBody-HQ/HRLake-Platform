@@ -81,7 +81,7 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
 
   if (!countryData) notFound()
 
-  // Prepare guide data with fallbacks
+  // Prepare guide data with fallbacks for consistent rendering
   const eorPros: string[] = guide?.eor_pros ?? [
     'Hire legally without incorporating a local company',
     'Fast time to hire — days rather than months',
@@ -168,9 +168,9 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
         </section>
 
         {/* ══════ KEY FACTS ══════ */}
-        {guide && keyFacts.length > 0 && (
-          <section className="bg-slate-50 border-b border-slate-200">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+        <section className="bg-slate-50 border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+            {guide && keyFacts.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
                 {keyFacts.map((f: { label: string; value: string }) => (
                   <div key={f.label} className="bg-white border border-slate-200 rounded-xl p-4">
@@ -179,9 +179,16 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
                   </div>
                 ))}
               </div>
-            </div>
-          </section>
-        )}
+            ) : (
+              <div className="text-center py-8">
+                <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-4 py-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  <span className="text-amber-700 text-sm font-semibold">Key facts will be available when the detailed guide is published</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
 
         {/* ══════ RECOMMENDATION OR EOR EXPLAINER ══════ */}
         <section className="bg-white border-b border-slate-200">
@@ -212,10 +219,14 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
                 ) : (
                   <>
                     <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">What is an EOR?</p>
-                    <h2 className="font-serif text-2xl font-bold text-slate-900 mb-4">Hire in {countryData.name} without a local entity</h2>
-                    <p className="text-slate-500 leading-relaxed mb-4">An Employer of Record (EOR) is a third-party organisation that legally employs workers on your behalf in {countryData.name}. The EOR handles all local compliance — contracts, payroll, social security, tax filings, and HR obligations — while you retain full day-to-day management of the employee.</p>
-                    <p className="text-slate-500 leading-relaxed mb-6">This means you can hire talent in {countryData.name} within days, without the cost and complexity of setting up a local legal entity.</p>
-                    <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
+                    <div className="bg-blue-600 rounded-2xl p-8 text-white mb-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <Building2 size={22} />
+                        <h2 className="font-serif text-2xl font-bold">Hire in {countryData.name} without a local entity</h2>
+                      </div>
+                      <p className="text-blue-100 leading-relaxed">An Employer of Record (EOR) is a third-party organisation that legally employs workers on your behalf in {countryData.name}. The EOR handles all local compliance — contracts, payroll, social security, tax filings, and HR obligations — while you retain full day-to-day management of the employee.</p>
+                    </div>
+                    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
                       <p className="text-amber-700 text-xs font-bold uppercase tracking-widest mb-2">Guide in preparation</p>
                       <p className="text-amber-800 text-sm leading-relaxed">Our detailed {countryData.name} EOR guide — including provider fees, compliance risks, hire speed, and our recommendation — is being prepared and will be published shortly.</p>
                     </div>
@@ -284,16 +295,16 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
         </section>
 
         {/* ══════ COMPLIANCE RISKS ══════ */}
-        {guide && risks.length > 0 && (
-          <section className="bg-slate-50 border-b border-slate-200">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-              <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">Compliance Risks</p>
-              <h2 className="font-serif text-3xl font-bold text-slate-900 tracking-tight mb-2">
-                Key EOR compliance risks in {countryData.name}.
-              </h2>
-              <p className="text-slate-500 mb-10 max-w-2xl">
-                Discuss each of these with your chosen provider before signing.
-              </p>
+        <section className="bg-slate-50 border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+            <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">Compliance Risks</p>
+            <h2 className="font-serif text-3xl font-bold text-slate-900 tracking-tight mb-2">
+              Key EOR compliance risks in {countryData.name}.
+            </h2>
+            <p className="text-slate-500 mb-10 max-w-2xl">
+              {guide ? 'Discuss each of these with your chosen provider before signing.' : 'Detailed compliance risks will be available when our guide is published.'}
+            </p>
+            {guide && risks.length > 0 ? (
               <div className="grid sm:grid-cols-2 gap-5">
                 {risks.map((r: { risk: string; detail: string; severity: string }) => (
                   <div key={r.risk} className={`border-l-4 rounded-r-2xl p-6 ${severityColour[r.severity]}`}>
@@ -307,9 +318,16 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
                   </div>
                 ))}
               </div>
-            </div>
-          </section>
-        )}
+            ) : (
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-4 py-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  <span className="text-amber-700 text-sm font-semibold">Compliance risk analysis coming soon</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
 
         {/* ══════ COST ESTIMATOR ══════ */}
         <section className="bg-white border-b border-slate-200">
@@ -341,66 +359,6 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
           </section>
         )}
 
-        {/* ══════ EOR EXPLANATION (for coming-soon only) ══════ */}
-        {!guide && (
-          <section className="bg-slate-50 border-b border-slate-200">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-              <div className="grid lg:grid-cols-3 gap-10">
-                <div className="lg:col-span-2">
-                  <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-6">Why use an EOR in {countryData.name}?</p>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {[
-                      { title: "No entity required", body: "Hire legally without incorporating a local company." },
-                      { title: "Fast time to hire", body: "Get employees onboarded in days rather than months." },
-                      { title: "Full compliance", body: "All local tax, payroll, and HR obligations handled." },
-                      { title: "Reduced risk", body: "Employment liability sits with the EOR, not your business." },
-                    ].map(item => (
-                      <div key={item.title} className="flex gap-3 bg-white border border-slate-200 rounded-xl p-6">
-                        <CheckCircle size={16} className="text-teal-500 shrink-0 mt-0.5" />
-                        <div>
-                          <p className="font-semibold text-slate-900 text-sm mb-1">{item.title}</p>
-                          <p className="text-slate-500 text-xs leading-relaxed">{item.body}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-5">
-                  <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">More for {countryData.name}</p>
-                    <ul className="space-y-1">
-                      {[
-                        { label: "Country Overview", href: `/countries/${country}/` },
-                        { label: "Payroll Calculator", href: `/countries/${country}/payroll-calculator/` },
-                        { label: "Tax Guide", href: `/countries/${country}/tax-guide/` },
-                        { label: "Employment Law", href: `/countries/${country}/employmentlaw/` },
-                        { label: "Hiring Guide", href: `/countries/${country}/hiring-guide/` },
-                        { label: "Leave & Benefits", href: `/countries/${country}/leave-benefits/` },
-                      ].map(link => (
-                        <li key={link.href}>
-                          <Link href={link.href} className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors group">
-                            {link.label}
-                            <ArrowRight size={13} className="text-slate-300 group-hover:text-blue-400 transition-colors" />
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="rounded-2xl p-6 overflow-hidden relative" style={{ backgroundColor: "#0d1f3c" }}>
-                    <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 80% 20%, rgba(20,184,166,0.15) 0%, transparent 60%)" }} />
-                    <div className="relative">
-                      <p className="text-teal-300 text-xs font-bold uppercase tracking-widest mb-3">EOR Hub</p>
-                      <h3 className="font-serif text-lg font-bold text-white mb-2 leading-snug">Browse all EOR country guides.</h3>
-                      <p className="text-slate-400 text-sm leading-relaxed mb-5">Detailed EOR guides, provider fees, compliance risks and recommendations for all active countries.</p>
-                      <Link href="/eor/" className="block rounded-xl bg-teal-600 hover:bg-teal-500 px-4 py-3 text-center text-sm font-bold text-white transition-colors">View all EOR guides</Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* ══════ FOOTER CTA ══════ */}
         <section className="bg-slate-50 border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
@@ -425,7 +383,7 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
               </div>
             </div>
           </div>
-        </section>
+        )}
 
       </main>
     </>
