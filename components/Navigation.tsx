@@ -58,7 +58,19 @@ function MobileSection({ label, links, onClose }: {
 
 export default function Navigation({ countryCount = 23 }: { countryCount?: number }) {
   const pathname = usePathname()
-  const isActive = (href: string) => { const p = pathname.replace(/\/$/, ''); const h = href.replace(/\/$/, ''); return p === h || p.startsWith(h + '/') }
+  const strip = (h: string) => h.replace(/\/$/, '')
+  const matchesAny = (paths: string[]) => paths.some(h => {
+    const p = strip(pathname); const s = strip(h)
+    return p === s || p.startsWith(s + '/')
+  })
+  const navGroups: Record<string, string[]> = {
+    '/countries/': ['/countries/'],
+    '/eor/': ['/eor/'],
+    '/hr-compliance/': ['/hr-compliance/'],
+    '/payroll-tools/': ['/payroll-tools/', '/compare/', '/ai-assistant/'],
+    '/insights/': ['/insights/'],
+  }
+  const isActive = (href: string) => matchesAny(navGroups[href] || [href])
   const navLink = (href: string) => `px-3 py-1.5 text-sm font-medium rounded-lg transition-all ${isActive(href) ? 'text-white bg-white/10' : 'text-slate-400 hover:text-white hover:bg-white/5'}`
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
