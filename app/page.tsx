@@ -175,7 +175,7 @@ export default async function HomePage() {
                 <div className="flex flex-wrap items-center gap-2">
                 {['EOR Providers', 'Global Law Firms', 'HR Directors', 'Finance Teams', 'Payroll Consultants'].map(label => (
                   <span key={label}
-                    className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-slate-300 bg-white/10 border border-white/15 rounded-full px-2.5 py-1">
+                    className="inline-flex items-center justify-center gap-1.5 text-xs font-medium text-slate-300 bg-white/10 border border-white/15 rounded-full px-3 py-1 w-36">
                     <span className="w-1 h-1 rounded-full bg-blue-400/70 shrink-0" />
                     {label}
                   </span>
@@ -218,7 +218,7 @@ export default async function HomePage() {
                 <div className="flex flex-wrap items-center gap-2">
                 {REGIONS.filter(r => r.count > 0).map(r => (
                   <Link key={r.slug} href={`/countries/?region=${r.slug}`}
-                    className="shrink-0 text-xs font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full px-3 py-1.5 transition-all">
+                    className="inline-flex items-center justify-center text-xs font-medium text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full px-3 py-1.5 transition-all w-36">
                     {r.name} <span className="text-slate-500 ml-1">{r.count}</span>
                   </Link>
                 ))}
