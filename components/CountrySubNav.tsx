@@ -17,7 +17,7 @@ const tabs = [
   { label: 'Hiring',         path: '/hiring-guide' },
   { label: 'HR Compliance',  path: '/hr-compliance' },
   { label: 'Leave',          path: '/leave-benefits' },
-  { label: 'Compliance',     path: '/compliance-calendar' },
+  { label: 'Compliance Calendar', path: '/compliance-calendar' },
   { label: 'EOR Guide',      path: '/eor' },
   { label: 'Insights',       path: '/insights' },
 ]
