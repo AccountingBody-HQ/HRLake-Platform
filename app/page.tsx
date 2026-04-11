@@ -172,10 +172,10 @@ export default async function HomePage() {
               {/* Trust strip */}
               <div className="mb-10">
                 <span className="text-slate-500 text-xs font-semibold uppercase tracking-widest block mb-3">Trusted by</span>
-                <div className="flex sm:flex-wrap items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+                <div className="flex flex-wrap items-center gap-2">
                 {['EOR Providers', 'Global Law Firms', 'HR Directors', 'Finance Teams', 'Payroll Consultants'].map(label => (
                   <span key={label}
-                    className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-slate-300 bg-white/10 border border-white/15 rounded-full px-3 py-1">
+                    className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-slate-300 bg-white/10 border border-white/15 rounded-full px-2.5 py-1">
                     <span className="w-1 h-1 rounded-full bg-blue-400/70 shrink-0" />
                     {label}
                   </span>
