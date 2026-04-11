@@ -111,7 +111,7 @@ export default async function HomePage() {
   const insights = await getInsightArticles({ limit: 3 })
   const countries = await getAllCountries()
   const regionCounts = countries.reduce((acc: Record<string, number>, c: any) => {
-    const region = REGION_MAP[(c.code ?? '').toLowerCase()]
+    const region = REGION_MAP[(c.iso2 ?? '').toLowerCase()]
     if (region) acc[region] = (acc[region] || 0) + 1
     return acc
   }, {})
