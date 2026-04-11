@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { getFlag } from '@/lib/flag'
 import { notFound } from 'next/navigation'
 import { getCountryByCode } from '@/lib/supabase-queries'
 import { ArrowRight, BookOpen, Layers, ChevronRight, Newspaper } from 'lucide-react'
@@ -66,7 +67,7 @@ export default async function CountryInsightsPage(
               <Link href="/countries" className="hover:text-slate-300 transition-colors">Countries</Link>
               <ChevronRight size={13} className="text-slate-700" />
               <Link href={`/countries/${code.toLowerCase()}/`} className="hover:text-slate-300 transition-colors">
-                {country.flag_emoji} {country.name}
+                {getFlag(country.iso2)} {country.name}
               </Link>
               <ChevronRight size={13} className="text-slate-700" />
               <span className="text-slate-400">Insights</span>
@@ -78,7 +79,7 @@ export default async function CountryInsightsPage(
                   <span className="text-blue-300 text-xs font-semibold tracking-wide">Intelligence · {country.name}</span>
                 </div>
                 <h1 className="font-serif text-3xl lg:text-5xl font-bold text-white leading-tight mb-4" style={{ letterSpacing: '-0.025em' }}>
-                  {country.flag_emoji} Insights for<br /><span className="text-blue-400">{country.name}</span>
+                  {getFlag(country.iso2)} Insights for<br /><span className="text-blue-400">{country.name}</span>
                 </h1>
                 <p className="text-slate-400 text-lg leading-relaxed">
                   Expert analysis on HR, payroll, EOR, and employment law in {country.name} — updated as published.

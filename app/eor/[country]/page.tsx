@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getFlag } from '@/lib/flag'
 import { PortableText } from '@portabletext/react'
 import { getCountryArticle } from '@/lib/sanity'
 import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
@@ -97,7 +98,7 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
               <span className="text-slate-400">{countryData.name}</span>
             </nav>
             <div className="flex items-center gap-4 mb-6">
-              <span className="text-5xl">{countryData.flag_emoji}</span>
+              <span className="text-5xl">{getFlag(countryData.iso2)}</span>
               <div>
                 <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white tracking-tight">{countryData.name}</h1>
                 <p className="text-slate-400 mt-1">Employer of Record Guide</p>
@@ -225,7 +226,7 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
           <div className="flex items-start gap-8">
             <div>
               <div className="flex items-center gap-4 mb-6">
-                <span className="text-5xl">{countryData.flag_emoji}</span>
+                <span className="text-5xl">{getFlag(countryData.iso2)}</span>
                 <div>
                   <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white tracking-tight">{countryData.name}</h1>
                   <p className="text-slate-400 mt-1">Employer of Record Guide</p>

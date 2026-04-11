@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { getFlag } from '@/lib/flag'
 import { createSupabaseServerClient } from '@/lib/supabase'
 import { ChevronRight, BookOpen, ArrowRight } from 'lucide-react'
 import { PortableText } from '@portabletext/react'
@@ -115,7 +116,7 @@ export default async function TaxGuidePage({ params }: PageProps) {
             <Link href="/countries" className="hover:text-slate-300 transition-colors">Countries</Link>
             <ChevronRight size={13} className="text-slate-700" />
             <Link href={`/countries/${code.toLowerCase()}/`} className="hover:text-slate-300 transition-colors">
-              {country.flag_emoji} {country.name}
+              {getFlag(country.iso2)} {country.name}
             </Link>
             <ChevronRight size={13} className="text-slate-700" />
             <span className="text-slate-400">Tax Guide</span>
@@ -133,7 +134,7 @@ export default async function TaxGuidePage({ params }: PageProps) {
                 className="font-serif text-3xl lg:text-5xl font-bold text-white leading-tight mb-4"
                 style={{ letterSpacing: '-0.025em' }}
               >
-                {country.flag_emoji} {country.name}<br />
+                {getFlag(country.iso2)} {country.name}<br />
                 <span className="text-blue-400">Tax Guide</span>
               </h1>
               <p className="text-slate-400 text-lg leading-relaxed">

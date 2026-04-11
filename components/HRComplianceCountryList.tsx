@@ -1,3 +1,4 @@
+import { getFlag } from '@/lib/flag'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
@@ -75,7 +76,7 @@ export default async function HRComplianceCountryList({ topic, topicLabel }: Pro
                     href={`/countries/${country.iso2.toLowerCase()}/employmentlaw/`}
                     className="group flex items-center gap-3 bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md rounded-xl p-4 transition-all duration-200"
                   >
-                    <span className="text-xl leading-none shrink-0">{country.flag_emoji}</span>
+                    <span className="text-xl leading-none shrink-0">{getFlag(country.iso2)}</span>
                     <span className="font-semibold text-slate-800 group-hover:text-blue-700 transition-colors text-sm leading-tight flex-1">
                       {country.name}
                     </span>

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { getFlag } from '@/lib/flag'
 import { createSupabaseServerClient } from '@/lib/supabase'
 import { getEmploymentRules, getPayrollCompliance, getSocialSecurity } from '@/lib/supabase-queries'
 import { ChevronRight, DollarSign, ArrowRight } from 'lucide-react'
@@ -113,7 +114,7 @@ export default async function PayrollGuidePage({ params }: PageProps) {
             <Link href="/countries" className="hover:text-slate-300 transition-colors">Countries</Link>
             <ChevronRight size={13} className="text-slate-700" />
             <Link href={`/countries/${code.toLowerCase()}/`} className="hover:text-slate-300 transition-colors">
-              {country.flag_emoji} {country.name}
+              {getFlag(country.iso2)} {country.name}
             </Link>
             <ChevronRight size={13} className="text-slate-700" />
             <span className="text-slate-400">Payroll Guide</span>
@@ -125,7 +126,7 @@ export default async function PayrollGuidePage({ params }: PageProps) {
                 <span className="text-blue-300 text-xs font-semibold tracking-wide">Employer Payroll Guide · {country.name}</span>
               </div>
               <h1 className="font-serif text-3xl lg:text-5xl font-bold text-white leading-tight mb-4" style={{ letterSpacing: '-0.025em' }}>
-                {country.flag_emoji} Payroll in<br /><span className="text-blue-400">{country.name}</span>
+                {getFlag(country.iso2)} Payroll in<br /><span className="text-blue-400">{country.name}</span>
               </h1>
               <p className="text-slate-400 text-lg leading-relaxed">
                 Everything employers need to run compliant payroll in {country.name} — contributions, deductions, payslip rules, and filing obligations.

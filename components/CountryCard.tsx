@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getFlag } from '@/lib/flag'
 import { ChevronRight, Calculator, BookOpen, Scale } from 'lucide-react'
 
 type CoverageLevel = 'full' | 'partial' | 'basic' | 'none'

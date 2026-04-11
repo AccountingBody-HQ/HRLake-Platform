@@ -1,3 +1,4 @@
+import { getFlag } from '@/lib/flag'
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
@@ -124,7 +125,7 @@ export default function EORCostEstimator({ defaultCountryCode = "GB" }: { defaul
                   const info = Array.isArray(c.countries) ? c.countries[0] : c.countries
                   return (
                     <option key={c.country_code} value={c.country_code}>
-                      {info?.flag_emoji} {info?.name}
+                      {info ? getFlag(info.iso2 ?? '') : ''} {info?.name}
                     </option>
                   )
                 })}

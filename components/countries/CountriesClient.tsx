@@ -1,3 +1,4 @@
+import { getFlag } from '@/lib/flag'
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
@@ -189,7 +190,7 @@ export default function CountriesClient({ countries }: CountriesClientProps) {
               key={country.iso2}
               iso2={country.iso2}
               name={country.name}
-              flag_emoji={country.flag_emoji}
+              flag_emoji={getFlag(country.iso2)}
               currency={country.currency_code}
               region={country.region}
               hrlake_coverage_level={country.hrlake_coverage_level}
