@@ -1,5 +1,5 @@
-import { getFlag } from '@/lib/flag'
 'use client'
+import { getFlag } from '@/lib/flag'
 
 import { useState, useMemo, useEffect } from 'react'
 import { Calculator, ChevronDown, Users, AlertCircle, ArrowRight } from 'lucide-react'
