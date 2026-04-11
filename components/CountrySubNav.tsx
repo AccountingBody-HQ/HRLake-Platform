@@ -11,8 +11,8 @@ interface Props {
 const tabs = [
   { label: 'Overview',       path: '' },
   { label: 'Calculator',     path: '/payroll-calculator' },
-  { label: 'Tax',            path: '/tax-guide' },
-  { label: 'Payroll',        path: '/payroll-guide' },
+  { label: 'Tax Guide',      path: '/tax-guide' },
+  { label: 'Payroll Guide',  path: '/payroll-guide' },
   { label: 'Employment Law', path: '/employmentlaw' },
   { label: 'Hiring',         path: '/hiring-guide' },
   { label: 'HR Compliance',  path: '/hr-compliance' },
