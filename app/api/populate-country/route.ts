@@ -82,6 +82,23 @@ RETURN THIS EXACT JSON STRUCTURE:
     // MUST include at minimum 1 record for the main mandatory scheme
     // Fields: scheme_name (string), employer_rate (number), employee_rate (number), is_mandatory (boolean)
   ],
+  "health_insurance": [
+    // ALL health insurance schemes in ${countryName} relevant to employers
+    // MUST include the primary public health scheme AND any mandatory private schemes
+    // Include optional private schemes if commonly provided by employers
+    // Fields:
+    //   scheme_name (string): official name e.g. "Medicare", "NHS", "GKV"
+    //   scheme_type (string): MUST be one of exactly: public | private_mandatory | private_optional
+    //   employer_rate_percentage (number or null): employer contribution as % of salary - null if flat or not applicable
+    //   employee_rate_percentage (number or null): employee contribution as % of salary - null if flat or not applicable
+    //   employer_flat_amount (number or null): fixed employer amount per period - null if percentage based
+    //   employee_flat_amount (number or null): fixed employee amount per period - null if percentage based
+    //   applies_above_employees (integer or null): minimum company size threshold - null if no threshold
+    //   is_mandatory (boolean): true if legally required
+    //   opt_out_conditions (string or null): conditions under which opting out is permitted - null if no opt-out
+    //   government_scheme_url (string): official government or authority URL
+    //   notes (string): clear explanation including rates, conditions, and coverage details
+  ],
   "mandatory_benefits": [
     // ALL mandatory employer benefits in ${countryName}
     // MUST include at minimum: the primary social security / national insurance contribution, main pension scheme, and any mandatory insurance
@@ -165,7 +182,7 @@ Return the JSON now. Start immediately with {`
     }
 
     // Validate all required keys are present and non-empty
-    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits"]
+    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance"]
     const empty = required.filter(k => !parsed[k] || parsed[k].length === 0)
     if (empty.length > 0) {
       return NextResponse.json({ error: "AI returned empty arrays for: " + empty.join(", "), raw: textContent.slice(0, 800) }, { status: 500 })
