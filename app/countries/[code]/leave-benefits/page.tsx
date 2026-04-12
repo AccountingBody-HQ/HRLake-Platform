@@ -58,7 +58,7 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
   const [sanityArticle, employmentRules, statutoryLeaveRows, publicHolidays] = await Promise.all([
     getCountryArticle(upperCode, 'leave-and-benefits'),
     getEmploymentRules(upperCode),
-    supabase.from('statutory_leave').select('*').eq('country_code', upperCode),
+    supabase.schema('hrlake').from('statutory_leave').select('*').eq('country_code', upperCode),
     supabase.schema('hrlake').from('public_holidays').select('*').eq('country_code', upperCode).eq('year', 2025).order('holiday_date', { ascending: true }),
   ])
 
@@ -162,9 +162,9 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
                         {statutoryLeave.map((l: any, i: number) => (
                           <tr key={i} className="hover:bg-slate-50 transition-colors">
                             <td className="px-6 py-4 text-sm font-medium text-slate-900 capitalize">{l.leave_type?.replace(/_/g, " ") ?? "—"}</td>
-                            <td className="px-6 py-4 text-sm text-slate-600">{l.days ? `${l.days} days` : l.weeks ? `${l.weeks} weeks` : "—"}</td>
+                            <td className="px-6 py-4 text-sm text-slate-600">{l.minimum_days ? `${l.minimum_days} days` : "—"}</td>
                             <td className="px-6 py-4 text-sm text-slate-600">{l.is_paid === true ? "Yes" : l.is_paid === false ? "No" : "—"}</td>
-                            <td className="px-6 py-4 text-sm text-slate-500">{l.notes ?? "—"}</td>
+                            <td className="px-6 py-4 text-sm text-slate-500">{l.payment_rate ? `${Math.round(l.payment_rate * 100)}% pay` : "—"}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -187,8 +187,8 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
                       <tbody className="divide-y divide-slate-100">
                         {holidays.map((h: any, i: number) => (
                           <tr key={i} className="hover:bg-slate-50 transition-colors">
-                            <td className="px-6 py-4 text-sm font-medium text-slate-900">{h.name ?? "—"}</td>
-                            <td className="px-6 py-4 text-sm text-slate-600">{h.date ? new Date(h.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</td>
+                            <td className="px-6 py-4 text-sm font-medium text-slate-900">{h.holiday_name ?? "—"}</td>
+                            <td className="px-6 py-4 text-sm text-slate-600">{h.holiday_date ? new Date(h.holiday_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</td>
                           </tr>
                         ))}
                       </tbody>
