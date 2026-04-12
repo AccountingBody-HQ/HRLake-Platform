@@ -96,9 +96,9 @@ function getSSRate(ss: SSRow[], type: string): number {
 
 export default function CompareClient({ countries }: Props) {
   const [codeA, setCodeA] = useState('GB')
-  const [codeB, setCodeB] = useState('US')
+  const [codeB, setCodeB] = useState('DE')
   const [salaryA, setSalaryA] = useState('60000')
-  const [salaryB, setSalaryB] = useState('60000')
+  const [salaryB, setSalaryB] = useState('70000')
   const [dataA, setDataA] = useState<CountryData | null>(null)
   const [dataB, setDataB] = useState<CountryData | null>(null)
   const [loading, setLoading] = useState(false)
@@ -107,6 +107,13 @@ export default function CompareClient({ countries }: Props) {
   const [ratesLoaded, setRatesLoaded] = useState(false)
   const [showConverted, setShowConverted] = useState(false)
   const [convertTo, setConvertTo] = useState('USD')
+
+  // Auto-run comparison on first load so users arrive to something useful
+  useEffect(() => {
+    if (countries.length > 0) {
+      handleCompare()
+    }
+  }, [countries])
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
