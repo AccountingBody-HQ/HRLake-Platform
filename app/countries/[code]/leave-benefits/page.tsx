@@ -55,15 +55,17 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
 
   if (!country) notFound()
 
-  const [sanityArticle, employmentRules, statutoryLeaveRows, publicHolidays] = await Promise.all([
+  const [sanityArticle, employmentRules, statutoryLeaveRows, publicHolidays, mandatoryBenefitsRows] = await Promise.all([
     getCountryArticle(upperCode, 'leave-and-benefits'),
     getEmploymentRules(upperCode),
     supabase.schema('hrlake').from('statutory_leave').select('*').eq('country_code', upperCode),
     supabase.schema('hrlake').from('public_holidays').select('*').eq('country_code', upperCode).eq('year', 2025).order('holiday_date', { ascending: true }),
+    supabase.schema('hrlake').from('mandatory_benefits').select('*').eq('country_code', upperCode).eq('is_current', true).order('benefit_name', { ascending: true }),
   ])
 
   const statutoryLeave = statutoryLeaveRows.data ?? []
   const holidays = publicHolidays.data ?? []
+  const mandatoryBenefits = mandatoryBenefitsRows.data ?? []
 
   const leaveFacts = employmentRules ? [
     { label: 'Annual Leave', value: employmentRules.annual_leave_days ? `${employmentRules.annual_leave_days} days` : '—' },
@@ -197,6 +199,72 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
                 </div>
               )}
 
+
+              {mandatoryBenefits.length > 0 && (
+                <div>
+                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-2">Mandatory Employer Benefits — {country.name}</h2>
+                  <p className="text-sm text-slate-500 mb-6">Legally required employer contributions and benefits under {country.name} law.</p>
+                  <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-slate-100 bg-slate-50 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                          <th className="px-6 py-3">Benefit</th>
+                          <th className="px-6 py-3">Type</th>
+                          <th className="px-6 py-3">Employer Cost</th>
+                          <th className="px-6 py-3">Frequency</th>
+                          <th className="px-6 py-3">Tax Treatment</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {mandatoryBenefits.map((b: any, i: number) => {
+                          const cost = b.employer_cost_percentage
+                            ? `${b.employer_cost_percentage}%`
+                            : b.employer_cost_amount
+                            ? `${country.currency_code} ${b.employer_cost_amount}`
+                            : 'Varies'
+                          const typeLabel: Record<string, string> = {
+                            cash: 'Cash',
+                            voucher: 'Voucher',
+                            in_kind: 'In Kind',
+                            leave: 'Leave',
+                          }
+                          const taxLabel: Record<string, string> = {
+                            tax_exempt: 'Exempt',
+                            taxable: 'Taxable',
+                            partially_exempt: 'Partial',
+                          }
+                          return (
+                            <tr key={i} className="hover:bg-slate-50 transition-colors">
+                              <td className="px-6 py-4">
+                                <p className="text-sm font-medium text-slate-900">{b.benefit_name ?? '—'}</p>
+                                {b.notes && <p className="text-xs text-slate-400 mt-0.5 line-clamp-2">{b.notes}</p>}
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">
+                                  {typeLabel[b.benefit_type] ?? b.benefit_type ?? '—'}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 text-sm font-semibold text-slate-900">{cost}</td>
+                              <td className="px-6 py-4 text-sm text-slate-600 capitalize">{b.frequency ?? '—'}</td>
+                              <td className="px-6 py-4">
+                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                                  b.tax_treatment === 'tax_exempt'
+                                    ? 'bg-green-50 text-green-700'
+                                    : b.tax_treatment === 'taxable'
+                                    ? 'bg-amber-50 text-amber-700'
+                                    : 'bg-slate-100 text-slate-600'
+                                }`}>
+                                  {taxLabel[b.tax_treatment] ?? b.tax_treatment ?? '—'}
+                                </span>
+                              </td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
 
               {sanityArticle?.body && (
                 <div className="prose max-w-none">
