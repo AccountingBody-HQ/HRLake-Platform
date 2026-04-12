@@ -620,7 +620,7 @@ export default async function CountryPage(
                 <p className="text-slate-400 text-xs mt-0.5">Government authorities for {country.name} employment and tax</p>
               </div>
               <div className="px-6 py-5 space-y-3">
-                {country.official_source_url ? (
+                {country.official_source_url && (
                   <a
                     href={country.official_source_url}
                     target="_blank"
@@ -640,10 +640,6 @@ export default async function CountryPage(
                     </div>
                     <ExternalLink size={14} className="text-slate-400 group-hover:text-blue-500 shrink-0" />
                   </a>
-                ) : (
-                  <p className="text-sm text-slate-400 py-4 text-center">
-                    Official source links will be added when full data is verified.
-                  </p>
                 )}
               </div>
             </div>

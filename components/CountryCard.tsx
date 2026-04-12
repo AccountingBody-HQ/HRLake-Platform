@@ -12,6 +12,8 @@ interface CountryCardProps {
   region: string | null
   hrlake_coverage_level: CoverageLevel | null
   payroll_complexity_score?: number | null
+  topTaxRate?: number | null
+  employerRate?: number | null
 }
 
 const COVERAGE_CONFIG: Record<CoverageLevel, { label: string; className: string }> = {
@@ -24,6 +26,7 @@ const DEFAULT_COVERAGE = { label: 'Coming Soon', className: 'bg-slate-100 text-s
 
 export default function CountryCard({
   iso2, name, flag_emoji, currency, region, hrlake_coverage_level,
+  topTaxRate, employerRate,
 }: CountryCardProps) {
   const code = iso2.toLowerCase()
   const coverage = hrlake_coverage_level

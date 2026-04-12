@@ -146,5 +146,32 @@ export async function getRelatedCountries(iso2: string, region: string) {
     .neq('iso2', iso2.toUpperCase())
     .limit(4)
   if (error) { console.error('getRelatedCountries error:', error.message); return [] }
-  return data ?? []
+  const countries = data ?? []
+  if (countries.length === 0) return []
+  const codes = countries.map((c: any) => c.iso2)
+  const [{ data: ssData }, { data: taxData }] = await Promise.all([
+    supabase.schema('hrlake').from('social_security')
+      .select('country_code, employer_rate')
+      .in('country_code', codes)
+      .eq('is_current', true)
+      .gt('employer_rate', 0),
+    supabase.schema('hrlake').from('tax_brackets')
+      .select('country_code, rate')
+      .in('country_code', codes)
+      .eq('is_current', true)
+      .order('rate', { ascending: false }),
+  ])
+  const ssMap: Record<string, number> = {}
+  for (const row of ssData ?? []) {
+    ssMap[row.country_code] = (ssMap[row.country_code] ?? 0) + row.employer_rate
+  }
+  const taxMap: Record<string, number> = {}
+  for (const row of taxData ?? []) {
+    if (!(row.country_code in taxMap)) taxMap[row.country_code] = row.rate
+  }
+  return countries.map((c: any) => ({
+    ...c,
+    employerRate: ssMap[c.iso2] ?? null,
+    topTaxRate: taxMap[c.iso2] ?? null,
+  }))
 }
