@@ -104,10 +104,9 @@ export default async function HRCompliancePage({ params }: PageProps) {
   ]
 
   const workingHoursFacts = workingHours ? [
-    { label: 'Max Weekly Hours', value: workingHours.max_weekly_hours ? `${workingHours.max_weekly_hours} hrs` : '—' },
-    { label: 'Standard Hours', value: workingHours.standard_weekly_hours ? `${workingHours.standard_weekly_hours} hrs` : '—' },
-    { label: 'Overtime Threshold', value: workingHours.overtime_threshold_hours ? `${workingHours.overtime_threshold_hours} hrs` : '—' },
-    { label: 'Rest Break Required', value: workingHours.rest_break_minutes ? `${workingHours.rest_break_minutes} mins` : '—' },
+    { label: 'Standard Weekly Hours', value: workingHours.standard_hours_per_week ? `${workingHours.standard_hours_per_week} hrs` : '—' },
+    { label: 'Max Weekly Hours', value: workingHours.maximum_hours_per_week ? `${workingHours.maximum_hours_per_week} hrs` : '—' },
+    { label: 'Overtime Rate', value: workingHours.overtime_rate_multiplier ? `${workingHours.overtime_rate_multiplier}× standard rate` : '—' },
   ] : []
 
   return (
