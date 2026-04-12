@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 }
 
 const ALL_FEATURES = [
-  { category: "Country Data", items: ["Income tax brackets and rates for 20 countries", "Employer and employee social security rates", "Employment law summaries", "Statutory leave and benefits data", "Public holiday calendars", "Payroll compliance obligations"] },
+  { category: "Country Data", items: ["Income tax brackets and rates for all active countries", "Employer and employee social security rates", "Employment law summaries", "Statutory leave and benefits data", "Public holiday calendars", "Payroll compliance obligations"] },
   { category: "Calculators & Tools", items: ["Full gross-to-net payroll calculator", "PDF export of any calculation", "Country comparison tool", "EOR cost estimator", "Currency converter", "Save and revisit calculations (free account)"] },
   { category: "EOR Intelligence", items: ["EOR vs direct employment analysis", "Risk level and maturity ratings", "Provider fee range estimates", "Compliance risk grids", "Hiring speed guidance", "Full recommendation per country"] },
   { category: "Guides & Compliance", items: ["Tax guides with structured data", "Hiring guides with step-by-step process", "HR compliance guides", "Leave and benefits guides", "Compliance calendars", "Payroll guides"] },

@@ -2,7 +2,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
-import { User, Calculator, Crown, ArrowRight, BookmarkCheck, TrendingUp, Shield } from 'lucide-react'
+import { User, Calculator, ArrowRight, BookmarkCheck, TrendingUp, Shield } from 'lucide-react'
 
 export const metadata = {
   title: 'Dashboard | HRLake',
@@ -93,31 +93,11 @@ export default async function DashboardPage() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
 
-        {/* Upgrade CTA — only for free users */}
-        {!isPro && (
-          <div className="mb-10 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Crown size={18} className="text-blue-200" />
-                <span className="text-blue-200 text-xs font-bold uppercase tracking-widest">Upgrade to Pro</span>
-              </div>
-              <h2 className="text-xl font-bold text-white mb-1">Unlock the full platform</h2>
-              <p className="text-blue-200 text-sm leading-relaxed max-w-md">
-                Save calculations, export PDFs, access the AI assistant, termination rules, contractor classifications, and rate-change alerts.
-              </p>
-            </div>
-            <Link href="/pricing/"
-              className="shrink-0 inline-flex items-center gap-2 bg-white text-blue-700 font-bold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors text-sm">
-              View Pro plans <ArrowRight size={15} />
-            </Link>
-          </div>
-        )}
-
         {/* Stats row */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
           {[
             { icon: BookmarkCheck, label: 'Saved Calculations', value: savedCalculations.length.toString(), sub: 'in your account' },
-            { icon: Calculator,    label: 'Countries Available', value: '20',   sub: 'live — more being added' },
+            { icon: Calculator,    label: 'Countries Available', value: '23+',  sub: 'live — more being added' },
             { icon: TrendingUp,    label: 'Data Points',         value: '10,000+', sub: 'per country record' },
             { icon: Shield,        label: 'Your Plan',           value: isPro ? 'Pro' : 'Free', sub: isPro ? 'Full access' : 'Core access' },
           ].map(s => (

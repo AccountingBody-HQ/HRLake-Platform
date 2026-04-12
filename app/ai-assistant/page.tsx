@@ -6,11 +6,11 @@ import AiChatClient from "./AiChatClient";
 
 export const metadata: Metadata = {
   title: 'AI Payroll & HR Assistant — Ask Anything | HRLake',
-  description: 'Get instant answers on global payroll, tax rates, employment law, and EOR costs. Powered by live verified data for 20+ countries.',
+  description: 'Get instant answers on global payroll, tax rates, employment law, and EOR costs. Powered by live verified data across all active countries.',
   alternates: { canonical: 'https://hrlake.com/ai-assistant/' },
   openGraph: {
     title: 'AI Payroll & HR Assistant — Ask Anything | HRLake',
-    description: 'Get instant answers on global payroll, tax rates, employment law, and EOR costs. Powered by live verified data for 20+ countries.',
+    description: 'Get instant answers on global payroll, tax rates, employment law, and EOR costs. Powered by live verified data across all active countries.',
     url: 'https://hrlake.com/ai-assistant/',
     siteName: 'HRLake',
     type: 'website',
