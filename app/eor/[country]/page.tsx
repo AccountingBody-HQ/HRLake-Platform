@@ -142,9 +142,9 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
             </nav>
             <div className="flex flex-wrap items-start justify-between gap-6">
               <div className="max-w-2xl">
-                <div className="inline-flex items-center gap-2 bg-teal-600/10 border border-teal-500/20 rounded-full px-4 py-1.5 mb-5">
-                  <Building2 size={12} className="text-teal-400" />
-                  <span className="text-teal-300 text-xs font-semibold tracking-wide">
+                <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-5">
+                  <Building2 size={12} className="text-blue-400" />
+                  <span className="text-blue-300 text-xs font-semibold tracking-wide">
                     Employer of Record Guide · {countryData.name}
                   </span>
                 </div>
@@ -153,7 +153,7 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
                   style={{ letterSpacing: '-0.025em' }}
                 >
                   {getFlag(countryData.iso2)} EOR Guide —<br />
-                  <span className="text-teal-400">{countryData.name}</span>
+                  <span className="text-blue-400">{countryData.name}</span>
                 </h1>
                 <p className="text-slate-400 text-lg leading-relaxed">
                   Everything you need to know about using an Employer of Record in {countryData.name} — provider fees, compliance risks, hire speed, and EOR vs direct employment.
@@ -186,7 +186,7 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
               </div>
               <Link
                 href={`/countries/${country.toLowerCase()}/`}
-                className="shrink-0 flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-teal-400/40 text-slate-300 hover:text-white rounded-xl px-5 py-3 text-sm font-medium transition-all"
+                className="shrink-0 flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/40 text-slate-300 hover:text-white rounded-xl px-5 py-3 text-sm font-medium transition-all"
               >
                 ← {countryData.name} Overview
               </Link>
