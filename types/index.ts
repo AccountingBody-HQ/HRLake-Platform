@@ -54,6 +54,7 @@ export interface EmploymentRules {
   probation_period_days: number | null
   overtime_rate: number | null        // e.g. 1.5 = time and a half
   payroll_frequency: string | null    // e.g. "Monthly"
+  minimum_wage_unit: string | null    // e.g. "GBP_per_hour", "EUR_per_month"
   created_at: string
 }
 
