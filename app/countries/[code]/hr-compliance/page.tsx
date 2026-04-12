@@ -64,11 +64,14 @@ export default async function HRCompliancePage({ params }: PageProps) {
     .limit(1)
     .then(r => ({ data: r.data?.[0] ?? null }))
 
-  const [sanityArticle, employmentRules, compliance] = await Promise.all([
+  const [sanityArticle, employmentRules, compliance, healthInsuranceRows] = await Promise.all([
     getCountryArticle(upperCode, 'hr-compliance-guide'),
     getEmploymentRules(upperCode),
     getPayrollCompliance(upperCode),
+    supabase.schema('hrlake').from('health_insurance').select('*').eq('country_code', upperCode).eq('is_current', true).order('is_mandatory', { ascending: false }),
   ])
+
+  const healthInsurance = healthInsuranceRows.data ?? []
 
   const complianceAreas = [
     {
@@ -216,6 +219,75 @@ export default async function HRCompliancePage({ params }: PageProps) {
                 </div>
               )}
 
+
+              {healthInsurance.length > 0 && (
+                <div>
+                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-2">Health Insurance Schemes — {country.name}</h2>
+                  <p className="text-sm text-slate-500 mb-6">Public and private health insurance schemes applicable to employers and employees in {country.name}.</p>
+                  <div className="space-y-4">
+                    {healthInsurance.map((h: any, i: number) => {
+                      const typeColour: Record<string, string> = {
+                        public: 'bg-blue-50 text-blue-700',
+                        private_mandatory: 'bg-red-50 text-red-700',
+                        private_optional: 'bg-slate-100 text-slate-600',
+                      }
+                      const typeLabel: Record<string, string> = {
+                        public: 'Public',
+                        private_mandatory: 'Private — Mandatory',
+                        private_optional: 'Private — Optional',
+                      }
+                      const empCost = h.employer_rate_percentage
+                        ? `${h.employer_rate_percentage}% of salary`
+                        : h.employer_flat_amount
+                        ? `${country.currency_code} ${h.employer_flat_amount}`
+                        : 'Varies / See notes'
+                      const eeCost = h.employee_rate_percentage
+                        ? `${h.employee_rate_percentage}% of salary`
+                        : h.employee_flat_amount
+                        ? `${country.currency_code} ${h.employee_flat_amount}`
+                        : 'Varies / See notes'
+                      return (
+                        <div key={i} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                          <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
+                            <div className="flex items-center gap-3">
+                              <h3 className="font-semibold text-slate-900">{h.scheme_name}</h3>
+                              <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${typeColour[h.scheme_type] ?? 'bg-slate-100 text-slate-600'}`}>
+                                {typeLabel[h.scheme_type] ?? h.scheme_type}
+                              </span>
+                              {h.is_mandatory && (
+                                <span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">Mandatory</span>
+                              )}
+                            </div>
+                            {h.government_scheme_url && (
+                              <a href={h.government_scheme_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline shrink-0">Official source ↗</a>
+                            )}
+                          </div>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-3">
+                            <div>
+                              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Employer Cost</p>
+                              <p className="text-sm font-semibold text-slate-900">{empCost}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Employee Cost</p>
+                              <p className="text-sm font-semibold text-slate-900">{eeCost}</p>
+                            </div>
+                            {h.applies_above_employees && (
+                              <div>
+                                <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Applies Above</p>
+                                <p className="text-sm font-semibold text-slate-900">{h.applies_above_employees}+ employees</p>
+                              </div>
+                            )}
+                          </div>
+                          {h.notes && <p className="text-sm text-slate-500 leading-relaxed">{h.notes}</p>}
+                          {h.opt_out_conditions && (
+                            <p className="text-xs text-slate-400 mt-2 italic">Opt-out: {h.opt_out_conditions}</p>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
 
               {sanityArticle?.body && (
                 <div className="prose max-w-none">
