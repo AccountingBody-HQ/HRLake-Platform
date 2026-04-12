@@ -151,30 +151,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* COVERAGE */}
-      <section className="bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
-          <div className="mb-14">
-            <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">Coverage Roadmap</p>
-            <h2 className="font-serif text-4xl font-bold text-slate-900 tracking-tight leading-tight">Growing toward complete<br />global coverage.</h2>
-          </div>
-          <div className="space-y-5">
-            {COVERAGE.map(c => (
-              <div key={c.tier} className="bg-white border border-slate-200 rounded-2xl p-7 flex flex-col sm:flex-row sm:items-center gap-6">
-                <div className="shrink-0">
-                  <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">{c.tier}</div>
-                  <div className="font-bold text-slate-900 text-lg">{c.label}</div>
-                </div>
-                <div className="flex-1 text-slate-500 text-sm leading-relaxed">{c.desc}</div>
-                <div className="shrink-0 flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${c.color}`} />
-                  <span className="text-sm font-semibold text-slate-600">{c.status}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ACCURACY DISCLAIMER */}
       <section className="bg-white border-b border-slate-200">
