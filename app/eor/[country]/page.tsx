@@ -5,6 +5,7 @@ import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structure
 import { notFound } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
 import { ArrowRight, ArrowLeft, CheckCircle, XCircle, AlertCircle, Building2, ChevronRight } from 'lucide-react'
+import { getFlag } from '@/lib/flag'
 import EORCostEstimator from '@/components/EORCostEstimator'
 import CountrySubNav from '@/components/CountrySubNav'
 
@@ -122,31 +123,42 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
 
         {/* ══════ HERO ══════ */}
         <section className="relative bg-slate-950 overflow-hidden">
-          <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)'}} />
-          <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-16">
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse at 60% 0%, rgba(30,111,255,0.15) 0%, transparent 60%), radial-gradient(ellipse at 0% 100%, rgba(14,30,80,0.4) 0%, transparent 50%)',
+            }}
+          />
+          <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-14">
             <nav className="flex items-center gap-2 text-sm text-slate-500 mb-8">
               <Link href="/countries" className="hover:text-slate-300 transition-colors">Countries</Link>
               <ChevronRight size={13} className="text-slate-700" />
-              <Link href="/eor/" className="hover:text-slate-300 transition-colors">EOR</Link>
+              <Link href={`/countries/${country.toLowerCase()}/`} className="hover:text-slate-300 transition-colors">
+                {getFlag(countryData.iso2)} {countryData.name}
+              </Link>
               <ChevronRight size={13} className="text-slate-700" />
-              <span className="text-slate-400">{countryData.name}</span>
+              <span className="text-slate-400">EOR Guide</span>
             </nav>
-            <div className="flex items-start gap-8">
-              <div>
-                <div className="flex items-center gap-4 mb-6">
-                  <img
-                    src={`https://flagcdn.com/40x30/${countryData.iso2.toLowerCase()}.png`}
-                    alt={countryData.name}
-                    width={40}
-                    height={30}
-                    className="rounded-sm shadow-sm"
-                  />
-                  <div>
-                    <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white tracking-tight">{countryData.name}</h1>
-                    <p className="text-slate-400 mt-1">Employer of Record Guide</p>
-                  </div>
+            <div className="flex flex-wrap items-start justify-between gap-6">
+              <div className="max-w-2xl">
+                <div className="inline-flex items-center gap-2 bg-teal-600/10 border border-teal-500/20 rounded-full px-4 py-1.5 mb-5">
+                  <Building2 size={12} className="text-teal-400" />
+                  <span className="text-teal-300 text-xs font-semibold tracking-wide">
+                    Employer of Record Guide · {countryData.name}
+                  </span>
                 </div>
-                <div className="flex flex-wrap gap-3">
+                <h1
+                  className="font-serif text-3xl lg:text-5xl font-bold text-white leading-tight mb-4"
+                  style={{ letterSpacing: '-0.025em' }}
+                >
+                  {getFlag(countryData.iso2)} EOR Guide —<br />
+                  <span className="text-teal-400">{countryData.name}</span>
+                </h1>
+                <p className="text-slate-400 text-lg leading-relaxed">
+                  Everything you need to know about using an Employer of Record in {countryData.name} — provider fees, compliance risks, hire speed, and EOR vs direct employment.
+                </p>
+                <div className="flex flex-wrap gap-3 mt-6">
                   {guide ? (
                     <>
                       <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border ${riskColour[guide.risk_level]}`}>
@@ -172,6 +184,12 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
                   )}
                 </div>
               </div>
+              <Link
+                href={`/countries/${country.toLowerCase()}/`}
+                className="shrink-0 flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-teal-400/40 text-slate-300 hover:text-white rounded-xl px-5 py-3 text-sm font-medium transition-all"
+              >
+                ← {countryData.name} Overview
+              </Link>
             </div>
           </div>
         </section>
@@ -189,11 +207,13 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
-                <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-4 py-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                  <span className="text-amber-700 text-sm font-semibold">Key facts will be available when the detailed guide is published</span>
-                </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="bg-white border border-slate-200 rounded-xl p-4">
+                    <div className="h-2.5 bg-slate-100 rounded mb-3 w-2/3" />
+                    <div className="h-4 bg-slate-100 rounded w-full" />
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -400,11 +420,11 @@ export default async function EORCountryPage({ params }: { params: Promise<{ cou
                 <p className="text-slate-500 text-sm">Income tax brackets, social security rates, employment law, and payroll calculator.</p>
               </div>
               <div className="flex gap-3 shrink-0 flex-wrap">
-                <Link href={`/countries/${country}/`}
+                <Link href={`/countries/${countryData.iso2.toLowerCase()}/`}
                   className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-3 rounded-xl transition-colors text-sm">
                   {countryData.name} country page <ArrowRight size={14} />
                 </Link>
-                <Link href={`/countries/${country}/payroll-calculator/`}
+                <Link href={`/countries/${countryData.iso2.toLowerCase()}/payroll-calculator/`}
                   className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-blue-200 hover:text-blue-600 text-slate-700 font-semibold px-5 py-3 rounded-xl transition-colors text-sm">
                   Payroll Calculator <ArrowRight size={14} />
                 </Link>
