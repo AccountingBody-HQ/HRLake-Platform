@@ -93,6 +93,18 @@ export default async function TaxGuidePage({ params }: PageProps) {
     .eq('tax_year', 2025)
     .order('credit_type', { ascending: true })
   const taxCredits = rawCredits ?? []
+
+  const { data: rawRegional } = await supabase
+    .schema('hrlake')
+    .from('regional_tax_rates')
+    .select('region_code, region_name, tax_type, rate, applies_above, applies_below, currency_code, notes, source_url')
+    .eq('country_code', upperCode)
+    .eq('is_current', true)
+    .eq('tier', 'free')
+    .eq('tax_year', 2025)
+    .order('tax_type', { ascending: true })
+    .order('rate', { ascending: false })
+  const regionalRates = rawRegional ?? []
   const taxYear = new Date().getFullYear()
 
   const sanityArticle = await getCountryArticle(upperCode, 'tax-guide')
@@ -293,6 +305,58 @@ export default async function TaxGuidePage({ params }: PageProps) {
                               )}
                             </td>
                             <td className="px-6 py-4 text-xs text-slate-500 leading-relaxed max-w-xs">{c.notes ?? '—'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Regional Tax Rates */}
+              {regionalRates.length > 0 && (
+                <div>
+                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-2">
+                    Regional &amp; State Tax Rates
+                  </h2>
+                  <p className="text-sm text-slate-500 mb-6">
+                    Sub-national taxes that apply in addition to national rates — state, provincial, cantonal, or municipal.
+                  </p>
+                  <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-slate-100 bg-slate-50 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                          <th className="px-6 py-3">Region</th>
+                          <th className="px-6 py-3">Tax Type</th>
+                          <th className="px-6 py-3">Rate</th>
+                          <th className="px-6 py-3">Threshold</th>
+                          <th className="px-6 py-3">Notes</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {regionalRates.map((r: any, i: number) => (
+                          <tr key={i} className="hover:bg-slate-50 transition-colors">
+                            <td className="px-6 py-4">
+                              <p className="text-sm font-semibold text-slate-900">{r.region_name}</p>
+                              <p className="text-xs text-slate-400">{r.region_code}</p>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-500 capitalize">
+                              {r.tax_type?.replace(/_/g, ' ') ?? '—'}
+                            </td>
+                            <td className="px-6 py-4 text-sm font-bold text-amber-600 whitespace-nowrap">
+                              {r.rate === 0 ? 'None' : `${r.rate}%`}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-500 whitespace-nowrap">
+                              {r.applies_above != null
+                                ? `Above ${r.currency_code ?? ''} ${Number(r.applies_above).toLocaleString('en-GB')}`.trim()
+                                : '—'}
+                            </td>
+                            <td className="px-6 py-4 text-xs text-slate-500 leading-relaxed max-w-xs">
+                              {r.notes ?? '—'}
+                              {r.source_url && (
+                                <a href={r.source_url} target="_blank" rel="noopener noreferrer" className="block mt-1 text-blue-500 hover:underline">Official source ↗</a>
+                              )}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
