@@ -274,8 +274,8 @@ export default function VerifyClient(props: Props) {
       } catch (e: any) {
         setGroupResults(p => ({ ...p, [group.key]: { status: 'error', findings: [], error: e.message } }))
       }
-      // 8s pause between groups — prevents Anthropic TPM rate limit
-      await new Promise(r => setTimeout(r, 8000))
+      // 65s pause between groups — Anthropic TPM rate limit window is 60s
+      await new Promise(r => setTimeout(r, 65000))
     }
     setCurrentGroupKey(null); setIsRunning(false)
   }
