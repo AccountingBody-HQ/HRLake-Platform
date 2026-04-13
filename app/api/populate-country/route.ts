@@ -202,6 +202,27 @@ RETURN THIS EXACT JSON STRUCTURE:
     //   notes (string): brief explanation including rate details and any conditions
     //   source_url (string): official government or authority URL
   ],
+  "government_benefit_payments": [
+    // ALL statutory government or employer-funded benefit payment schemes in ${countryName}
+    // MUST include at minimum: sick pay, maternity leave pay, and unemployment benefit where they exist
+    // If a benefit does not exist (e.g. no unemployment insurance), still include a record with notes explaining
+    // Fields:
+    //   benefit_type (string): MUST be one of: maternity | paternity | sick | parental | adoption | unemployment
+    //   paid_by (string): MUST be one of: employer | government | split
+    //   employer_rate_percentage (number or null): employer contribution as % of salary - null if not applicable
+    //   government_rate_percentage (number or null): government benefit as % of prior salary - null if flat rate or N/A
+    //   government_cap_weekly (number or null): weekly cap on government benefit in local currency - null if no cap
+    //   currency_code (string or null): currency for the cap amount
+    //   reclaim_mechanism (boolean): true if employer can reclaim payments from government
+    //   reclaim_percentage (number or null): percentage employer can reclaim - null if no reclaim
+    //   waiting_days (integer or null): days before benefit starts - null if immediate
+    //   maximum_duration_weeks (integer or null): maximum weeks benefit is payable - null if unlimited
+    //   qualifying_period_weeks (integer or null): weeks of prior employment/contributions required - null if none
+    //   tax_year (integer): use 2025
+    //   tier (string): MUST be exactly "free"
+    //   notes (string): comprehensive explanation of how the benefit works, rates, employer obligations, and key conditions
+    //   source_url (string): official government or social security authority URL
+  ],
   "salary_benchmarks": [
     // Salary benchmarks for key job families in ${countryName}
     // MUST include at minimum: software_engineering, finance_accounting, human_resources, sales_marketing
@@ -340,7 +361,7 @@ Return the JSON now. Start immediately with {`
     }
 
     // Validate all required keys are present and non-empty
-    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules","expense_rules","contractor_rules","work_permits","entity_setup","tax_credits","regional_tax_rates","salary_benchmarks"]
+    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules","expense_rules","contractor_rules","work_permits","entity_setup","tax_credits","regional_tax_rates","salary_benchmarks","government_benefit_payments"]
     const empty = required.filter(k => !parsed[k] || parsed[k].length === 0)
     if (empty.length > 0) {
       return NextResponse.json({ error: "AI returned empty arrays for: " + empty.join(", "), raw: textContent.slice(0, 800) }, { status: 500 })
