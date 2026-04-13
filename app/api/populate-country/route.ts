@@ -213,7 +213,7 @@ RETURN THIS EXACT JSON STRUCTURE:
     //   setup_timeline_days_max (integer or null): maximum days to incorporate
     //   setup_cost_usd_approx (number or null): approximate total setup cost in USD including fees
     //   local_director_required (boolean): true if a local resident director is legally required
-    //   loc`l/shareholder_required (boolean): true if a local shareholder is legally required
+    //   local_shareholder_required (boolean): true if a local shareholder is legally required
     //   registered_address_required (boolean): true if a local registered address is required
     //   corporate_tax_rate (number or null): applicable corporate income tax rate as a percentage e.g. 25 for 25%
     //   withholding_tax_rate (number or null): standard dividend withholding tax rate as a percentage
