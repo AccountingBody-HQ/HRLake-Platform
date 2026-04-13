@@ -355,9 +355,6 @@ export default async function HRCompliancePage({ params }: PageProps) {
                 </div>
               )}
 
-              {/* DEBUG — remove after fix */}
-              <div className="text-xs text-red-500 p-2">remoteWork: {JSON.stringify(remoteWork)}</div>
-
               {remoteWork && (
                 <div>
                   <h2 className="font-serif text-2xl font-bold text-slate-900 mb-2">Remote Work Rules — {country.name}</h2>
