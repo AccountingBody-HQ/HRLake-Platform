@@ -10,7 +10,13 @@ const HRLAKE_TABLES = [
   "tax_brackets", "social_security", "employment_rules", "statutory_leave",
   "public_holidays", "filing_calendar", "payroll_compliance", "working_hours",
   "termination_rules", "pension_schemes",
+  "mandatory_benefits", "health_insurance", "record_retention",
+  "expense_rules", "work_permits", "tax_credits",
+  "regional_tax_rates", "salary_benchmarks", "government_benefit_payments",
+  "entity_setup",
 ]
+// Premium tables where AI returns a single object — wrap in array before insert
+const PREMIUM_OBJECT_TABLES = new Set(["payslip_requirements", "remote_work_rules", "contractor_rules"])
 
 const LEAVE_TYPE_MAP: Record<string, string> = {
   annual_leave: "annual", annual: "annual",
@@ -43,6 +49,16 @@ function applyDefaults(table: string, row: any, countryCode: string) {
   if (table === "filing_calendar") return { ...base, frequency: FREQUENCY_MAP[row.frequency] ?? row.frequency.toLowerCase() }
   if (table === "payroll_compliance") return { compliance_type: "payroll", ...base }
   if (table === "public_holidays") return { year: 2025, tier: "free", is_mandatory: true, ...row, country_code: countryCode.toUpperCase() }
+  if (table === "salary_benchmarks") {
+    const r = { ...base, benchmark_year: 2025 }
+    delete (r as any).tax_year
+    return r
+  }
+  if (table === "entity_setup") {
+    const r = { ...base }
+    delete (r as any).tax_year
+    return r
+  }
   return base
 }
 
@@ -63,6 +79,18 @@ export async function POST(req: NextRequest) {
       const { error } = await sb.schema("hrlake").from(table).insert(rowsWithDefaults)
       if (error) errors.push(table + ": " + error.message)
     }
+    // Premium object tables — AI returns a single object, wrap in array before insert
+    for (const table of PREMIUM_OBJECT_TABLES) {
+      const raw = data[table]
+      if (!raw) continue
+      const rows = Array.isArray(raw) ? raw : [raw]
+      const { error: delError } = await sb.schema("hrlake").from(table).delete().eq("country_code", countryCode.toUpperCase())
+      if (delError) errors.push(table + " (delete): " + delError.message)
+      const rowsWithDefaults = rows.map((r: any) => applyDefaults(table, r, countryCode))
+      const { error } = await sb.schema("hrlake").from(table).insert(rowsWithDefaults)
+      if (error) errors.push(table + ": " + error.message)
+    }
+
     if (data.sources) {
       const sourceRows = Object.entries(data.sources).map(([cat, s]: [string, any]) => ({
         country_code: countryCode.toUpperCase(),

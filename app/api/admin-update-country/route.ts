@@ -13,11 +13,32 @@ const NUMERIC_FIELDS = new Set([
   'overtime_rate_multiplier',
   'notice_period_min_days', 'probation_period_max_months',
   'tax_year', 'year',
+  // Premium table numeric fields
+  'employer_rate_percentage', 'employee_rate_percentage',
+  'employer_flat_amount', 'employee_flat_amount', 'applies_above_employees',
+  'amount', 'rate_percentage', 'income_threshold',
+  'benchmark_year', 'percentile_25', 'percentile_50', 'percentile_75',
+  'government_rate_percentage', 'government_cap_weekly',
+  'reclaim_percentage', 'waiting_days', 'maximum_duration_weeks', 'qualifying_period_weeks',
+  'setup_timeline_days_min', 'setup_timeline_days_max', 'setup_cost_usd_approx',
+  'minimum_capital_local', 'minimum_capital_usd',
+  'corporate_tax_rate', 'withholding_tax_rate', 'vat_rate', 'vat_registration_threshold',
+  'retention_years', 'delivery_deadline_days', 'retention_period_years',
+  'pe_risk_threshold_days', 'tax_liability_threshold_days', 'work_permit_required_after_days',
+  'digital_nomad_visa_duration_months',
+  'processing_days_min', 'processing_days_max', 'cost_local_currency', 'validity_months',
+  'mileage_rate_per_km', 'exempt_amount',
 ])
 
 const BOOLEAN_FIELDS = new Set([
   'is_paid', 'is_mandatory', 'is_current', 'severance_mandatory',
   'opt_out_allowed',
+  // Premium table boolean fields
+  'reclaim_mechanism', 'secure_destruction_required', 'digital_records_accepted',
+  'employee_right_to_copy', 'digital_signature_valid',
+  'renewable', 'requires_employer_sponsor', 'quota_system',
+  'local_director_required', 'local_shareholder_required', 'registered_address_required',
+  'receipts_required', 'digital_nomad_visa_available',
 ])
 
 // Cast every value in the update object to its correct DB type
@@ -68,6 +89,11 @@ export async function POST(req: Request) {
         'tax_brackets','social_security','employment_rules','statutory_leave',
         'public_holidays','filing_calendar','payroll_compliance',
         'working_hours','termination_rules','pension_schemes',
+        'mandatory_benefits','health_insurance','payslip_requirements',
+        'record_retention','remote_work_rules','expense_rules',
+        'contractor_rules','work_permits','entity_setup',
+        'tax_credits','regional_tax_rates','salary_benchmarks',
+        'government_benefit_payments',
       ])
       if (!ALLOWED_TABLES.has(table)) {
         return NextResponse.json({ error: 'Invalid table: ' + table }, { status: 400 })
