@@ -82,6 +82,21 @@ RETURN THIS EXACT JSON STRUCTURE:
     // MUST include at minimum 1 record for the main mandatory scheme
     // Fields: scheme_name (string), employer_rate (number), employee_rate (number), is_mandatory (boolean)
   ],
+  "expense_rules": [
+    // ALL key employer expense reimbursement rules for ${countryName}
+    // MUST include at minimum: mileage/vehicle, meal allowance, and home office
+    // Include professional development if a specific tax exemption exists
+    // Fields:
+    //   expense_type (string): clear name e.g. "Mileage / Motor vehicle allowance", "Meal allowance", "Home office allowance"
+    //   tax_treatment (string): MUST be one of exactly: fully_exempt | partially_exempt | fully_taxable
+    //   exempt_amount (number or null): the exempt threshold amount - null if no fixed amount
+    //   exempt_currency (string or null): currency code for the exempt amount - null if no fixed amount
+    //   mileage_rate_per_km (number or null): official tax-free rate per km - null if not applicable
+    //   receipts_required (boolean): true if receipts must be provided to claim the exemption
+    //   reporting_requirements (string): description of documentation and reporting obligations
+    //   notes (string): comprehensive explanation including exact rates, thresholds, and key conditions
+    //   source_url (string): official government or authority URL
+  ],
   "remote_work_rules": {
     // EXACTLY ONE object with remote work and digital nomad rules for ${countryName}
     // Fields:
@@ -224,7 +239,7 @@ Return the JSON now. Start immediately with {`
     }
 
     // Validate all required keys are present and non-empty
-    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules"]
+    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules","expense_rules"]
     const empty = required.filter(k => !parsed[k] || parsed[k].length === 0)
     if (empty.length > 0) {
       return NextResponse.json({ error: "AI returned empty arrays for: " + empty.join(", "), raw: textContent.slice(0, 800) }, { status: 500 })
