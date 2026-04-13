@@ -202,6 +202,21 @@ RETURN THIS EXACT JSON STRUCTURE:
     //   notes (string): brief explanation including rate details and any conditions
     //   source_url (string): official government or authority URL
   ],
+  "salary_benchmarks": [
+    // Salary benchmarks for key job families in ${countryName}
+    // MUST include at minimum: software_engineering, finance_accounting, human_resources, sales_marketing
+    // For each job family include junior, mid, and senior levels
+    // Fields:
+    //   job_family (string): MUST be one of: software_engineering | finance_accounting | human_resources | sales_marketing
+    //   job_level (string): MUST be one of: junior | mid | senior | director | c_suite
+    //   percentile_25 (number): 25th percentile annual salary in local currency
+    //   percentile_50 (number): median annual salary in local currency
+    //   percentile_75 (number): 75th percentile annual salary in local currency
+    //   currency_code (string): local currency code e.g. "GBP", "USD", "EUR"
+    //   benchmark_year (integer): use 2025
+    //   tier (string): MUST be exactly "free"
+    //   source (string): official or reputable salary data source name
+  ],
   "regional_tax_rates": [
     // Regional, state, provincial, cantonal, or municipal tax rates for ${countryName}
     // Only include if ${countryName} has meaningful sub-national tax variation relevant to employers
@@ -325,7 +340,7 @@ Return the JSON now. Start immediately with {`
     }
 
     // Validate all required keys are present and non-empty
-    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules","expense_rules","contractor_rules","work_permits","entity_setup","tax_credits","regional_tax_rates"]
+    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules","expense_rules","contractor_rules","work_permits","entity_setup","tax_credits","regional_tax_rates","salary_benchmarks"]
     const empty = required.filter(k => !parsed[k] || parsed[k].length === 0)
     if (empty.length > 0) {
       return NextResponse.json({ error: "AI returned empty arrays for: " + empty.join(", "), raw: textContent.slice(0, 800) }, { status: 500 })
