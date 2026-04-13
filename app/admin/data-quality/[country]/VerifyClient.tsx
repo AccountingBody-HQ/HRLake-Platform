@@ -329,7 +329,7 @@ export default function VerifyClient(props: Props) {
                 </div>
                 <p className="text-xs" style={{ color: '#334155' }}>
                   {result?.status === 'done'    ? `${result.findings.length} findings`
-                  : result?.status === 'error'  ? 'Error — retry'
+                  : result?.status === 'error'  ? (result.error?.slice(0, 55) ?? 'Error — retry')
                   : result?.status === 'running'? 'Verifying...'
                   : `${group.tables.length} tables`}
                 </p>
