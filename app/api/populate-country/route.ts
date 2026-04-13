@@ -82,6 +82,21 @@ RETURN THIS EXACT JSON STRUCTURE:
     // MUST include at minimum 1 record for the main mandatory scheme
     // Fields: scheme_name (string), employer_rate (number), employee_rate (number), is_mandatory (boolean)
   ],
+  "record_retention": [
+    // ALL mandatory record retention requirements for employers in ${countryName}
+    // MUST include at minimum: payroll records, employment contracts, and tax records
+    // Include health/safety records and any country-specific records (e.g. right to work, I-9)
+    // Fields:
+    //   record_type (string): clear name e.g. "Payroll records", "Employment contracts"
+    //   retention_years (integer): number of years records must be kept
+    //   retention_basis (string): MUST be one of exactly: from_date_of_document | from_end_of_tax_year | from_termination
+    //   secure_destruction_required (boolean): true if records must be securely destroyed after retention period
+    //   digital_records_accepted (boolean): true if electronic records are legally valid
+    //   regulator (string): name of the authority that enforces this requirement
+    //   penalty_for_non_compliance (string): description of penalties for non-compliance
+    //   official_url (string): official government or authority URL
+    //   notes (string): clear explanation of the retention requirement and any notable conditions
+  ],
   "payslip_requirements": {
     // EXACTLY ONE object (not an array) with payslip rules for ${countryName}
     // Fields:
@@ -195,7 +210,7 @@ Return the JSON now. Start immediately with {`
     }
 
     // Validate all required keys are present and non-empty
-    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements"]
+    const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention"]
     const empty = required.filter(k => !parsed[k] || parsed[k].length === 0)
     if (empty.length > 0) {
       return NextResponse.json({ error: "AI returned empty arrays for: " + empty.join(", "), raw: textContent.slice(0, 800) }, { status: 500 })
