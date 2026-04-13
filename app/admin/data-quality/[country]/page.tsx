@@ -49,6 +49,19 @@ async function fetchCountryData(iso2: string) {
     supabase.schema('hrlake').from('termination_rules').select('*').eq('country_code', code),
     supabase.schema('hrlake').from('pension_schemes').select('*').eq('country_code', code),
     Promise.resolve(supabase.schema('hrlake').from('official_sources').select('*').eq('country_code', code)).catch(() => ({ data: [] })),
+    supabase.schema('hrlake').from('mandatory_benefits').select('*').eq('country_code', code).eq('is_current', true),
+    supabase.schema('hrlake').from('health_insurance').select('*').eq('country_code', code).eq('is_current', true),
+    supabase.schema('hrlake').from('payslip_requirements').select('*').eq('country_code', code).eq('is_current', true),
+    supabase.schema('hrlake').from('record_retention').select('*').eq('country_code', code).eq('is_current', true),
+    supabase.schema('hrlake').from('remote_work_rules').select('*').eq('country_code', code).eq('is_current', true),
+    supabase.schema('hrlake').from('expense_rules').select('*').eq('country_code', code).eq('is_current', true),
+    supabase.schema('hrlake').from('contractor_rules').select('*').eq('country_code', code).eq('is_current', true),
+    supabase.schema('hrlake').from('work_permits').select('*').eq('country_code', code).eq('is_current', true),
+    supabase.schema('hrlake').from('entity_setup').select('*').eq('country_code', code).eq('is_current', true),
+    supabase.schema('hrlake').from('tax_credits').select('*').eq('country_code', code).eq('is_current', true).eq('tax_year', 2025),
+    supabase.schema('hrlake').from('regional_tax_rates').select('*').eq('country_code', code).eq('is_current', true).eq('tax_year', 2025),
+    supabase.schema('hrlake').from('salary_benchmarks').select('*').eq('country_code', code).eq('is_current', true).eq('benchmark_year', 2025),
+    supabase.schema('hrlake').from('government_benefit_payments').select('*').eq('country_code', code).eq('is_current', true).eq('tax_year', 2025),
   ])
 
   return {
@@ -64,6 +77,19 @@ async function fetchCountryData(iso2: string) {
     termination: termination ?? [],
     pension: pension ?? [],
     sources: sources ?? [],
+    mandatoryBenefits: (sources as any)?.mandatoryBenefits ?? [],
+    healthInsurance: (sources as any)?.healthInsurance ?? [],
+    payslipRequirements: (sources as any)?.payslipRequirements ?? [],
+    recordRetention: (sources as any)?.recordRetention ?? [],
+    remoteWorkRules: (sources as any)?.remoteWorkRules ?? [],
+    expenseRules: (sources as any)?.expenseRules ?? [],
+    contractorRules: (sources as any)?.contractorRules ?? [],
+    workPermits: (sources as any)?.workPermits ?? [],
+    entitySetup: (sources as any)?.entitySetup ?? [],
+    taxCredits: (sources as any)?.taxCredits ?? [],
+    regionalTaxRates: (sources as any)?.regionalTaxRates ?? [],
+    salaryBenchmarks: (sources as any)?.salaryBenchmarks ?? [],
+    govBenefits: (sources as any)?.govBenefits ?? [],
   }
 }
 
@@ -76,7 +102,14 @@ export default async function VerifyCountryPage({
   const data = await getCountryData(code)
   if (!data) notFound()
 
-  const { country, brackets, ss, rules, leave, holidays, filing, compliance, hours, termination, pension, sources } = data
+  const {
+    country, brackets, ss, rules, leave, holidays, filing,
+    compliance, hours, termination, pension, sources,
+    mandatoryBenefits, healthInsurance, payslipRequirements,
+    recordRetention, remoteWorkRules, expenseRules,
+    contractorRules, workPermits, entitySetup,
+    taxCredits, regionalTaxRates, salaryBenchmarks, govBenefits,
+  } = data
 
   const sourceMap = Object.fromEntries(sources.map((s: any) => [s.data_category, s]))
 
@@ -121,6 +154,19 @@ export default async function VerifyCountryPage({
         hours={hours}
         termination={termination}
         pension={pension}
+        mandatoryBenefits={mandatoryBenefits}
+        healthInsurance={healthInsurance}
+        payslipRequirements={payslipRequirements}
+        recordRetention={recordRetention}
+        remoteWorkRules={remoteWorkRules}
+        expenseRules={expenseRules}
+        contractorRules={contractorRules}
+        workPermits={workPermits}
+        entitySetup={entitySetup}
+        taxCredits={taxCredits}
+        regionalTaxRates={regionalTaxRates}
+        salaryBenchmarks={salaryBenchmarks}
+        govBenefits={govBenefits}
         sourceMap={sourceMap}
         currencyCode={country.currency_code}
       />
