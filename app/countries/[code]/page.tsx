@@ -122,12 +122,14 @@ export default async function CountryPage(
   // Fetch tax brackets for most recent year + related countries
   const latestYear = taxYears[0] ?? null
   const supabase = await createSupabaseServerClient()
-  const [taxBrackets, relatedCountries, healthInsuranceRows] = await Promise.all([
+  const [taxBrackets, relatedCountries, healthInsuranceRows, salaryRows] = await Promise.all([
     getTaxBrackets(iso2, latestYear ?? undefined),
     getRelatedCountries(iso2, country.region ?? ''),
     supabase.schema('hrlake').from('health_insurance').select('*').eq('country_code', iso2).eq('is_current', true).order('is_mandatory', { ascending: false }),
+    supabase.schema('hrlake').from('salary_benchmarks').select('job_family,job_level,percentile_25,percentile_50,percentile_75,currency_code').eq('country_code', iso2).eq('is_current', true).eq('tier', 'free').eq('benchmark_year', 2025).order('job_family').order('job_level'),
   ])
   const healthInsurance = healthInsuranceRows.data ?? []
+  const salaryBenchmarks = salaryRows.data ?? []
 
   // Social security split
   const employeeSS = socialSecurity.filter(r =>
@@ -731,6 +733,60 @@ export default async function CountryPage(
               minimumWage={employmentRules?.minimum_wage ?? null}
               payrollFrequency={employmentRules?.payroll_frequency ?? null}
             />
+
+            {/* ══════ SALARY BENCHMARKS ══════ */}
+            {salaryBenchmarks.length > 0 && (() => {
+              const families = ['software_engineering','finance_accounting','human_resources','sales_marketing']
+              const levels = ['junior','mid','senior']
+              const labelMap: Record<string,string> = {
+                software_engineering: 'Software Eng.',
+                finance_accounting: 'Finance',
+                human_resources: 'HR',
+                sales_marketing: 'Sales & Mktg',
+              }
+              const cur = salaryBenchmarks[0]?.currency_code ?? country.currency_code ?? ''
+              const fmt50 = (jf: string, jl: string) => {
+                const row = salaryBenchmarks.find((r: any) => r.job_family === jf && r.job_level === jl)
+                if (!row) return '—'
+                const n = Number(row.percentile_50)
+                if (n >= 1000000) return `${cur} ${(n/1000000).toFixed(1)}M`
+                if (n >= 1000) return `${cur} ${Math.round(n/1000)}K`
+                return `${cur} ${n.toLocaleString()}`
+              }
+              return (
+                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+                  <div className="px-5 py-4 border-b border-slate-100">
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Salary Benchmarks 2025</p>
+                    <p className="text-xs text-slate-400 mt-0.5">Median annual salary by role — {cur}</p>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs">
+                      <thead>
+                        <tr className="bg-slate-50 border-b border-slate-100">
+                          <th className="text-left px-4 py-2.5 font-bold text-slate-400 uppercase tracking-wider">Role</th>
+                          {levels.map(l => (
+                            <th key={l} className="text-right px-3 py-2.5 font-bold text-slate-400 uppercase tracking-wider capitalize">{l}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-50">
+                        {families.map(jf => (
+                          <tr key={jf} className="hover:bg-slate-50 transition-colors">
+                            <td className="px-4 py-3 font-semibold text-slate-700 whitespace-nowrap">{labelMap[jf]}</td>
+                            {levels.map(jl => (
+                              <td key={jl} className="px-3 py-3 text-right font-mono text-slate-600 whitespace-nowrap">{fmt50(jf, jl)}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="px-5 py-3 border-t border-slate-100">
+                    <p className="text-xs text-slate-400">Median (P50) · Source: official statistics & market surveys</p>
+                  </div>
+                </div>
+              )
+            })()}
 
             {/* ══════ AI WIDGET ══════ */}
             <AiCountryWidget
