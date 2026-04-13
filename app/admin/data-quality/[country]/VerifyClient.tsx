@@ -248,8 +248,14 @@ export default function VerifyClient(props: Props) {
   // ── Run verification ───────────────────────────────────────────────────────────
   async function runVerification() {
     if (selectedGroups.size === 0) return
-    setIsRunning(true); setGroupResults({}); setDecisions({})
+    setIsRunning(true); setDecisions({})
     setAllSaved(false); setGlobalError(''); setActiveFilter('all')
+    // Only clear groups being re-run — preserve completed groups
+    setGroupResults(prev => {
+      const next = { ...prev }
+      groupsToRun.forEach(g => { delete next[g.key] })
+      return next
+    })
     for (const group of groupsToRun) {
       setCurrentGroupKey(group.key)
       setGroupResults(p => ({ ...p, [group.key]: { status: 'running', findings: [] } }))
@@ -508,7 +514,7 @@ export default function VerifyClient(props: Props) {
           </div>
 
           {/* Mark Verified */}
-          {allDecided && !allSaved && allGroupsDone && (
+          {!allSaved && hasResults && (
             <button onClick={markVerified} disabled={saving}
               className="w-full flex items-center justify-center gap-2 text-white font-bold py-3.5 rounded-xl transition-colors disabled:opacity-60"
               style={{ background: '#10b981' }}>
