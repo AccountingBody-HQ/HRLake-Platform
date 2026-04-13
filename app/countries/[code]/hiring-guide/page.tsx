@@ -65,13 +65,15 @@ export default async function HiringGuidePage({ params }: PageProps) {
 
   if (!country) notFound()
 
-  const [sanityArticle, employmentRules, compliance, contractorRow] = await Promise.all([
+  const [sanityArticle, employmentRules, compliance, contractorRow, workPermitsRows] = await Promise.all([
     getCountryArticle(upperCode, 'hiring-guide'),
     getEmploymentRules(upperCode),
     getPayrollCompliance(upperCode),
     supabase.schema('hrlake').from('contractor_rules').select('*').eq('country_code', upperCode).eq('is_current', true).limit(1).then(r => ({ data: r.data?.[0] ?? null })),
+    supabase.schema('hrlake').from('work_permits').select('*').eq('country_code', upperCode).eq('is_current', true).order('processing_days_min', { ascending: true }),
   ])
   const contractorRules = contractorRow.data
+  const workPermits = workPermitsRows.data ?? []
 
   const hiringSteps = [
     {
@@ -315,6 +317,68 @@ export default async function HiringGuidePage({ params }: PageProps) {
                         <a href={contractorRules.official_url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">Official source ↗</a>
                       </div>
                     )}
+                  </div>
+                </div>
+              )}
+
+              {/* Work permits */}
+              {workPermits.length > 0 && (
+                <div>
+                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-2">Work Permits — {country.name}</h2>
+                  <p className="text-sm text-slate-500 mb-6">Main visa and work permit routes for hiring foreign nationals in {country.name}.</p>
+                  <div className="space-y-4">
+                    {workPermits.map((p: any, i: number) => (
+                      <div key={i} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
+                          <h3 className="font-semibold text-slate-900">{p.permit_type}</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {p.requires_employer_sponsor && (
+                              <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">Employer Sponsored</span>
+                            )}
+                            {p.quota_system && (
+                              <span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">Quota System</span>
+                            )}
+                            {p.renewable && (
+                              <span className="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Renewable</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Processing</p>
+                            <p className="text-sm font-semibold text-slate-900">
+                              {p.processing_days_min && p.processing_days_max
+                                ? `${p.processing_days_min}–${p.processing_days_max} days`
+                                : p.processing_days_min
+                                ? `${p.processing_days_min}+ days`
+                                : '—'}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Validity</p>
+                            <p className="text-sm font-semibold text-slate-900">
+                              {p.validity_months ? `${p.validity_months} months` : 'Permanent'}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Cost</p>
+                            <p className="text-sm font-semibold text-slate-900">
+                              {p.cost_local_currency
+                                ? `${p.currency_code ?? ''} ${p.cost_local_currency.toLocaleString()}`.trim()
+                                : 'Varies'}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-0.5">Sponsor Needed</p>
+                            <p className="text-sm font-semibold text-slate-900">{p.requires_employer_sponsor ? 'Yes' : 'No'}</p>
+                          </div>
+                        </div>
+                        {p.notes && <p className="text-sm text-slate-500 leading-relaxed">{p.notes}</p>}
+                        {p.official_url && (
+                          <a href={p.official_url} target="_blank" rel="noopener noreferrer" className="inline-block mt-3 text-xs text-blue-600 hover:underline">Official source ↗</a>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
