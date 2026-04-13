@@ -55,17 +55,19 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
 
   if (!country) notFound()
 
-  const [sanityArticle, employmentRules, statutoryLeaveRows, publicHolidays, mandatoryBenefitsRows] = await Promise.all([
+  const [sanityArticle, employmentRules, statutoryLeaveRows, publicHolidays, mandatoryBenefitsRows, govBenefitRows] = await Promise.all([
     getCountryArticle(upperCode, 'leave-and-benefits'),
     getEmploymentRules(upperCode),
     supabase.schema('hrlake').from('statutory_leave').select('*').eq('country_code', upperCode),
     supabase.schema('hrlake').from('public_holidays').select('*').eq('country_code', upperCode).eq('year', 2025).order('holiday_date', { ascending: true }),
     supabase.schema('hrlake').from('mandatory_benefits').select('*').eq('country_code', upperCode).eq('is_current', true).order('benefit_name', { ascending: true }),
+    supabase.schema('hrlake').from('government_benefit_payments').select('*').eq('country_code', upperCode).eq('is_current', true).eq('tax_year', 2025).order('benefit_type', { ascending: true }),
   ])
 
   const statutoryLeave = statutoryLeaveRows.data ?? []
   const holidays = publicHolidays.data ?? []
   const mandatoryBenefits = mandatoryBenefitsRows.data ?? []
+  const govBenefits = govBenefitRows.data ?? []
 
   const leaveFacts = employmentRules ? [
     { label: 'Annual Leave', value: employmentRules.annual_leave_days ? `${employmentRules.annual_leave_days} days` : '—' },
@@ -262,6 +264,76 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
                         })}
                       </tbody>
                     </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Government Benefit Payments */}
+              {govBenefits.length > 0 && (
+                <div>
+                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-2">Government &amp; Statutory Benefit Payments</h2>
+                  <p className="text-sm text-slate-500 mb-6">How statutory benefits are funded and paid in {country.name} — sick pay, maternity, paternity, and unemployment.</p>
+                  <div className="space-y-4">
+                    {govBenefits.map((b: any, i: number) => {
+                      const paidByColour: Record<string, string> = {
+                        employer: 'bg-blue-50 text-blue-700 border-blue-200',
+                        government: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                        split: 'bg-amber-50 text-amber-700 border-amber-200',
+                      }
+                      const paidByLabel: Record<string, string> = {
+                        employer: 'Employer pays',
+                        government: 'Government pays',
+                        split: 'Split',
+                      }
+                      return (
+                        <div key={i} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                          <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
+                            <div>
+                              <p className="text-sm font-bold text-slate-900 capitalize mb-1">{b.benefit_type?.replace(/_/g, ' ')} Benefit</p>
+                              <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${paidByColour[b.paid_by] ?? 'bg-slate-100 text-slate-600 border-slate-200'}`}>
+                                {paidByLabel[b.paid_by] ?? b.paid_by}
+                              </span>
+                            </div>
+                            <div className="flex flex-wrap gap-4 text-right">
+                              {b.government_rate_percentage != null && (
+                                <div>
+                                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Benefit rate</p>
+                                  <p className="text-sm font-bold text-slate-900">{b.government_rate_percentage}% of salary</p>
+                                </div>
+                              )}
+                              {b.government_cap_weekly != null && (
+                                <div>
+                                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Weekly cap</p>
+                                  <p className="text-sm font-bold text-slate-900">{b.currency_code} {Number(b.government_cap_weekly).toLocaleString('en-GB')}</p>
+                                </div>
+                              )}
+                              {b.maximum_duration_weeks != null && (
+                                <div>
+                                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Max duration</p>
+                                  <p className="text-sm font-bold text-slate-900">{b.maximum_duration_weeks} weeks</p>
+                                </div>
+                              )}
+                              {b.waiting_days != null && b.waiting_days > 0 && (
+                                <div>
+                                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Waiting days</p>
+                                  <p className="text-sm font-bold text-slate-900">{b.waiting_days} days</p>
+                                </div>
+                              )}
+                              {b.reclaim_mechanism && b.reclaim_percentage != null && (
+                                <div>
+                                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Employer reclaim</p>
+                                  <p className="text-sm font-bold text-emerald-700">{b.reclaim_percentage}%</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          {b.notes && <p className="text-sm text-slate-500 leading-relaxed">{b.notes}</p>}
+                          {b.source_url && (
+                            <a href={b.source_url} target="_blank" rel="noopener noreferrer" className="inline-block mt-3 text-xs text-blue-600 hover:underline">Official source ↗</a>
+                          )}
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               )}
