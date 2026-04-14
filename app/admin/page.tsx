@@ -128,7 +128,7 @@ export default async function AdminCommandCentre() {
     {
       label: 'DB Records',
       value: d.totalRecords.toLocaleString(),
-      sub: 'across 10 hrlake tables',
+      sub: 'across 23 hrlake tables',
       color: '#a78bfa',
       bg: 'rgba(167,139,250,0.08)',
       border: 'rgba(167,139,250,0.2)',
@@ -212,7 +212,7 @@ export default async function AdminCommandCentre() {
                       alt={c.name} width={20} height={15} className="rounded-sm shrink-0" />
                     <div>
                       <p className="text-white text-sm font-semibold">{c.name}</p>
-                      <p className="text-xs" style={{ color: '#334155' }}>{c.iso2} · {c.filled}/10 tables</p>
+                      <p className="text-xs" style={{ color: '#334155' }}>{c.iso2} · {c.filled}/23 tables</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
