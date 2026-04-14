@@ -349,8 +349,7 @@ export default function CountryBuilderPage() {
                 </thead>
                 <tbody>
                   {countries.map((c, i) => {
-                    const { filled, pct } = getScore(c.iso2)
-                    const cc = counts[c.iso2] ?? {}
+                    const { filled, coreCount, premiumCount, pct } = getScore(c.iso2)
                     const scoreColor = pct === 100 ? '#10b981' : pct >= 70 ? '#f59e0b' : '#ef4444'
                     return (
                       <tr key={c.iso2} style={{ borderBottom: i < countries.length - 1 ? '1px solid #111827' : 'none' }}>
