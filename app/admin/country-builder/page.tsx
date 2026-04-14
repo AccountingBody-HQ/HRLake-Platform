@@ -91,7 +91,7 @@ export default function CountryBuilderPage() {
       if (ce) throw ce
       setCountries(cs ?? [])
       const allCounts: Counts = {}
-      await Promise.all(CORE_TABLES.map(async t => {
+      await Promise.all(ALL_TABLES.map(async t => {
         const { data: rows } = await sb.schema('hrlake').from(t.key).select('country_code')
         for (const row of (rows ?? []) as any[]) {
           const cc = row.country_code
@@ -305,7 +305,7 @@ export default function CountryBuilderPage() {
           { label: 'Active Countries', value: active.length,      color: '#3b82f6', bg: 'rgba(59,130,246,0.08)',   border: 'rgba(59,130,246,0.2)'   },
           { label: 'Fully Loaded',     value: full,               color: '#10b981', bg: 'rgba(16,185,129,0.08)',   border: 'rgba(16,185,129,0.2)'   },
           { label: 'Inactive',         value: inactive.length,    color: '#475569', bg: 'rgba(71,85,105,0.08)',    border: 'rgba(71,85,105,0.2)'    },
-          { label: 'Data Tables',      value: CORE_TABLES.length, color: '#f59e0b', bg: 'rgba(245,158,11,0.08)',   border: 'rgba(245,158,11,0.2)'   },
+          { label: 'Data Tables',      value: TOTAL_COUNT,        color: '#f59e0b', bg: 'rgba(245,158,11,0.08)',   border: 'rgba(245,158,11,0.2)'   },
         ].map(s => (
           <div key={s.label} className="rounded-2xl p-5 border"
             style={{ background: s.bg, borderColor: s.border }}>
@@ -362,10 +362,9 @@ export default function CountryBuilderPage() {
                 <thead>
                   <tr style={{ borderBottom: '1px solid #1a2238' }}>
                     <th className="text-left px-6 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Country</th>
-                    {CORE_TABLES.map(t => (
-                      <th key={t.key} title={t.label} className="text-center px-2 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>{t.short}</th>
-                    ))}
-                    <th className="text-center px-4 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Score</th>
+                    <th className="text-left px-4 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#475569' }}>Core 10</th>
+                    <th className="text-left px-4 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#a78bfa' }}>Premium 13</th>
+                    <th className="text-center px-4 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Total/23</th>
                     <th className="text-center px-4 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Status</th>
                     <th className="px-4 py-3" />
                   </tr>
@@ -734,7 +733,7 @@ export default function CountryBuilderPage() {
                   </button>
                 </div>
               </div>
-              {CORE_TABLES.map(t => {
+              {ALL_TABLES.map(t => {
                 const rows   = popData[t.key] ?? []
                 const src    = popData.sources?.[t.key]
                 const isOpen = expanded[t.key]
