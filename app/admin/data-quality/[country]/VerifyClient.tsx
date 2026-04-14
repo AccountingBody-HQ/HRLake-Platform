@@ -120,9 +120,19 @@ function buildGroupPrompt(
   countryCode: string,
   p: Props,
 ): string {
+  const getDomain = (url: string): string => {
+    try {
+      const u = new URL(url.startsWith('http') ? url : 'https://' + url)
+      return u.hostname.replace(/^www\./, '')
+    } catch { return url }
+  }
   const src = (cat: string) => {
     const s = p.sourceMap[cat]
-    return s ? `OFFICIAL SOURCE: ${s.source_url} (${s.authority_name})` : 'Search official government website'
+    if (s?.source_url) {
+      const domain = getDomain(s.source_url)
+      return `AUTHORITATIVE DOMAIN: ${domain} (${s.authority_name}) — search this entire website for current ${new Date().getFullYear()} figures`
+    }
+    return `Search the official government website for ${countryName} for current ${new Date().getFullYear()} figures`
   }
   const FIELD_CONSTRAINTS: Record<string, string> = {
     record_retention: 'CONSTRAINT: retention_basis must be exactly one of: from_date_of_document | from_end_of_tax_year | from_termination — no other values are valid',
@@ -131,14 +141,22 @@ function buildGroupPrompt(
     `=== ${(TABLE_LABELS[t] ?? t).toUpperCase()} ===\n${src(t)}\n${fmtRows(getTableData(t, p), TABLE_FIELDS[t] ?? [])}${FIELD_CONSTRAINTS[t] ? '\n' + FIELD_CONSTRAINTS[t] : ''}`
   ).join('\n\n')
   const tableEnum = group.tables.join('|')
-  return `You are a payroll data verification expert. Verify the following ${group.label} data for ${countryName} (${countryCode}) for tax year 2025.
+  const currentYear = new Date().getFullYear()
+  return `You are a payroll data verification expert. Verify the following ${group.label} data for ${countryName} (${countryCode}).
 
-INSTRUCTIONS:
-1. Search EACH official source URL provided — minimum 1 search per section.
-2. Verify EVERY SINGLE RECORD listed. Do not skip any record.
-3. Return ONE JSON object with a "findings" array. No markdown, no code blocks.
-4. Every record_id listed MUST appear in findings.
-5. raw_value = exact numeric or string value only. No % or units.
+CRITICAL SEARCH RULES — FOLLOW THESE EXACTLY:
+1. Use web_search for EVERY table section — minimum one search per section. Never skip a search.
+2. Search the AUTHORITATIVE DOMAIN provided for each section — search the whole website not just one page.
+3. You are looking for ${currentYear} figures. If not yet published, use the most recent official figures and note the year in your findings.
+4. NEVER rely on training data alone — every figure must be confirmed with a live web search.
+5. Search using terms like "${countryName} [topic] ${currentYear} official" to find current government pages.
+6. If an authoritative domain has moved, search for the official government body by name to find its new location.
+7. Always use primary government sources — never third-party summaries, news articles or commentary sites.
+8. For public holidays: find the official ${currentYear} holiday calendar specifically — not ${currentYear - 1}.
+9. Verify EVERY SINGLE RECORD listed. Do not skip any record under any circumstances.
+10. Return ONE JSON object with a findings array. No markdown, no code blocks.
+11. Every record_id listed MUST appear in findings — missing a record is a critical failure.
+12. raw_value = exact numeric or string value only. No % or units.
 
 ${sections}
 
