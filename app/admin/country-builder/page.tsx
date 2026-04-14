@@ -637,7 +637,7 @@ export default function CountryBuilderPage() {
               <h2 className="text-white font-bold text-sm">AI Population Engine</h2>
             </div>
             <p className="text-xs mb-6" style={{ color: '#334155' }}>
-              Enter a country and Claude will research all 10 data tables. Review the data, then insert directly into Supabase.
+              Enter a country and Claude will research all 23 data tables. Review the data, then insert directly into Supabase.
             </p>
             <div className="grid grid-cols-3 gap-4 mb-6">
               {[
@@ -667,7 +667,7 @@ export default function CountryBuilderPage() {
                 className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-40"
                 style={{ background: '#2563eb', color: '#ffffff' }}>
                 {popStatus === 'loading'
-                  ? <><Loader2 size={14} className="animate-spin" /> Researching \u2014 up to 60s\u2026</>
+                  ? <><Loader2 size={14} className="animate-spin" /> Researching — up to 60s…</>
                   : <><Sparkles size={14} /> AI Populate</>}
               </button>
               {popStatus === 'done' && !insertDone && (
@@ -683,8 +683,8 @@ export default function CountryBuilderPage() {
 
             {popStatus === 'loading' && (
               <div className="mt-5 rounded-xl p-4" style={{ background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.15)' }}>
-                <p className="text-sm font-semibold" style={{ color: '#3b82f6' }}>Claude is researching {popForm.name} from official government sources\u2026</p>
-                <p className="text-xs mt-1" style={{ color: '#334155' }}>Searching all 10 data categories. This takes 30\u201360 seconds.</p>
+                <p className="text-sm font-semibold" style={{ color: '#3b82f6' }}>Claude is researching {popForm.name} from official government sources…</p>
+                <p className="text-xs mt-1" style={{ color: '#334155' }}>Searching all 23 data categories. This takes 30–60 seconds.</p>
               </div>
             )}
             {popStatus === 'error' && (
