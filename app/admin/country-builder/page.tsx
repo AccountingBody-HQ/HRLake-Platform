@@ -12,7 +12,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-const TABS = ['Countries', 'Source Registry', 'Add Country', 'AI Populate'] as const
+const TABS = ['Countries', 'Source Registry', 'Add Country', 'AI Populate', 'EOR Guides'] as const
 type Tab = typeof TABS[number]
 
 const CORE_TABLES = [
@@ -82,6 +82,14 @@ export default function CountryBuilderPage() {
   const [expanded, setExpanded]     = useState<Record<string,boolean>>({})
   const [deleteTarget, setDeleteTarget] = useState<{ iso2: string; name: string } | null>(null)
   const [deleting, setDeleting]         = useState(false)
+  const [eorCountry, setEorCountry]     = useState<{ iso2: string; name: string; currency_code: string } | null>(null)
+  const [eorStatus, setEorStatus]       = useState<'idle'|'loading'|'done'|'error'>('idle')
+  const [eorData, setEorData]           = useState<any>(null)
+  const [eorMsg, setEorMsg]             = useState('')
+  const [eorSaving, setEorSaving]       = useState(false)
+  const [eorSaved, setEorSaved]         = useState(false)
+  const [eorGuides, setEorGuides]       = useState<any[]>([])
+  const [eorGuidesLoaded, setEorGuidesLoaded] = useState(false)
 
   const loadData = useCallback(async () => {
     setLoading(true); setError('')
@@ -215,6 +223,69 @@ export default function CountryBuilderPage() {
       setPopMsg(e.message ?? 'Insert failed')
     } finally {
       setInserting(false)
+    }
+  }
+
+  async function loadEorGuides() {
+    try {
+      const { data } = await sb.schema('hrlake').from('eor_guides')
+        .select('country_code,risk_level,eor_maturity,hire_speed,recommendation_title,updated_at')
+        .eq('is_current', true).order('country_code')
+      setEorGuides(data ?? [])
+      setEorGuidesLoaded(true)
+    } catch {}
+  }
+
+  async function handleEorGenerate() {
+    if (!eorCountry) return
+    setEorStatus('loading'); setEorMsg(''); setEorData(null); setEorSaved(false)
+    try {
+      const controller = new AbortController()
+      const tid = setTimeout(() => controller.abort(), 60000)
+      const res = await fetch('/api/admin-eor-guide', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'generate',
+          countryCode: eorCountry.iso2,
+          countryName: eorCountry.name,
+          currencyCode: eorCountry.currency_code,
+        }),
+        signal: controller.signal,
+      })
+      clearTimeout(tid)
+      const json = await res.json()
+      if (!res.ok || !json.ok) throw new Error(json.error ?? 'Generation failed')
+      setEorData(json.guide)
+      setEorStatus('done')
+    } catch (e: any) {
+      setEorMsg(e.message ?? 'Error')
+      setEorStatus('error')
+    }
+  }
+
+  async function handleEorSave() {
+    if (!eorCountry || !eorData) return
+    setEorSaving(true); setEorMsg('')
+    try {
+      const res = await fetch('/api/admin-eor-guide', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'save',
+          countryCode: eorCountry.iso2,
+          guideData: eorData,
+        }),
+      })
+      const json = await res.json()
+      if (!res.ok || !json.ok) throw new Error(json.error ?? 'Save failed')
+      setEorSaved(true)
+      setEorGuidesLoaded(false)
+      await loadEorGuides()
+    } catch (e: any) {
+      setEorMsg(e.message ?? 'Save failed')
+    } finally {
+      setEorSaving(false)
     }
   }
 
@@ -814,6 +885,185 @@ export default function CountryBuilderPage() {
           )}
         </div>
       )}
+
+      {/* ── EOR GUIDES TAB ── */}
+      {tab === 'EOR Guides' && (() => {
+        if (!eorGuidesLoaded) { loadEorGuides() }
+        return (
+          <div className="space-y-6">
+
+            {/* Existing guides summary */}
+            <div className="rounded-2xl border overflow-hidden" style={{ background: '#0d1424', border: '1px solid #1a2238' }}>
+              <div className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: '#1a2238' }}>
+                <div>
+                  <p className="text-white font-bold text-sm">EOR Guides in Database</p>
+                  <p className="text-xs mt-0.5" style={{ color: '#475569' }}>
+                    {eorGuides.length} of {countries.filter(c => c.is_active).length} active countries have EOR guides
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  {countries.filter(c => c.is_active).filter(c => !eorGuides.find(g => g.country_code === c.iso2)).map(c => (
+                    <span key={c.iso2} className="text-xs font-bold px-2 py-1 rounded-lg"
+                      style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}>
+                      {c.iso2} missing
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid #1a2238' }}>
+                      {['Country','Risk','Maturity','Hire Speed','Recommendation'].map(h => (
+                        <th key={h} className="px-4 py-3 text-left font-bold uppercase tracking-wider" style={{ color: '#334155' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {eorGuides.map((g, i) => (
+                      <tr key={g.country_code} style={{ borderBottom: i < eorGuides.length - 1 ? '1px solid #0d1117' : 'none' }}>
+                        <td className="px-4 py-3 font-bold text-white">{g.country_code}</td>
+                        <td className="px-4 py-3">
+                          <span className="px-2 py-0.5 rounded-full text-xs font-bold"
+                            style={{
+                              background: g.risk_level === 'Low' ? 'rgba(16,185,129,0.1)' : g.risk_level === 'High' ? 'rgba(239,68,68,0.1)' : 'rgba(245,158,11,0.1)',
+                              color: g.risk_level === 'Low' ? '#10b981' : g.risk_level === 'High' ? '#ef4444' : '#f59e0b',
+                            }}>{g.risk_level}</span>
+                        </td>
+                        <td className="px-4 py-3" style={{ color: '#94a3b8' }}>{g.eor_maturity}</td>
+                        <td className="px-4 py-3" style={{ color: '#94a3b8' }}>{g.hire_speed}</td>
+                        <td className="px-4 py-3" style={{ color: '#94a3b8', maxWidth: 320 }}>{g.recommendation_title}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Generate new / overwrite guide */}
+            <div className="rounded-2xl border p-6" style={{ background: '#0d1424', border: '1px solid #1a2238' }}>
+              <p className="text-white font-bold text-sm mb-1">Generate EOR Guide</p>
+              <p className="text-xs mb-5" style={{ color: '#475569' }}>
+                Select a country and generate a complete EOR guide using AI. If a guide already exists it will be overwritten.
+              </p>
+
+              <div className="flex gap-3 items-end">
+                <div className="flex-1">
+                  <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#334155' }}>Country</label>
+                  <select
+                    value={eorCountry?.iso2 ?? ''}
+                    onChange={e => {
+                      const c = countries.find(c => c.iso2 === e.target.value)
+                      setEorCountry(c ? { iso2: c.iso2, name: c.name, currency_code: c.currency_code } : null)
+                      setEorStatus('idle'); setEorData(null); setEorSaved(false); setEorMsg('')
+                    }}
+                    className="w-full rounded-xl px-4 py-3 text-white text-sm focus:outline-none"
+                    style={{ background: '#111827', border: '1px solid #1f2937' }}>
+                    <option value="">Select a country…</option>
+                    {countries.filter(c => c.is_active).map(c => (
+                      <option key={c.iso2} value={c.iso2}>
+                        {c.name} ({c.iso2}){eorGuides.find(g => g.country_code === c.iso2) ? ' — has guide' : ' — no guide'}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  onClick={handleEorGenerate}
+                  disabled={!eorCountry || eorStatus === 'loading'}
+                  className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all disabled:opacity-40"
+                  style={{ background: '#2563eb', color: '#ffffff' }}>
+                  {eorStatus === 'loading'
+                    ? <><Loader2 size={14} className="animate-spin" /> Generating…</>
+                    : <><Sparkles size={14} /> Generate EOR Guide</>}
+                </button>
+              </div>
+
+              {eorStatus === 'loading' && (
+                <div className="mt-4 rounded-xl p-4 flex items-center gap-3"
+                  style={{ background: 'rgba(37,99,235,0.08)', border: '1px solid rgba(37,99,235,0.2)' }}>
+                  <Loader2 size={14} className="animate-spin" style={{ color: '#2563eb' }} />
+                  <p className="text-sm" style={{ color: '#93c5fd' }}>
+                    AI is researching {eorCountry?.name} EOR landscape from official sources…
+                  </p>
+                </div>
+              )}
+
+              {eorMsg && (
+                <div className="mt-4 rounded-xl p-4 flex items-center gap-3"
+                  style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+                  <AlertCircle size={14} style={{ color: '#ef4444' }} />
+                  <p className="text-sm" style={{ color: '#ef4444' }}>{eorMsg}</p>
+                </div>
+              )}
+
+              {eorStatus === 'done' && eorData && (
+                <div className="mt-5 space-y-4">
+                  <div className="rounded-xl p-4 border" style={{ background: '#111827', borderColor: '#1a2238' }}>
+                    <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#334155' }}>Generated Guide Preview</p>
+                    <div className="grid grid-cols-3 gap-3 mb-4">
+                      {[
+                        { label: 'Risk Level', value: eorData.risk_level, color: eorData.risk_level === 'Low' ? '#10b981' : eorData.risk_level === 'High' ? '#ef4444' : '#f59e0b' },
+                        { label: 'EOR Maturity', value: eorData.eor_maturity, color: '#94a3b8' },
+                        { label: 'Hire Speed', value: eorData.hire_speed, color: '#94a3b8' },
+                        { label: 'Fee Range', value: `${eorData.provider_fee_low}–${eorData.provider_fee_high}%`, color: '#94a3b8' },
+                        { label: 'Employer SS', value: eorData.ss_employer_display, color: '#94a3b8' },
+                        { label: 'Income Tax', value: eorData.income_tax_range, color: '#94a3b8' },
+                      ].map(s => (
+                        <div key={s.label} className="rounded-lg p-3" style={{ background: '#0d1424', border: '1px solid #1a2238' }}>
+                          <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#334155' }}>{s.label}</p>
+                          <p className="text-sm font-bold" style={{ color: s.color }}>{s.value}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: '#334155' }}>Recommendation</p>
+                    <p className="text-sm font-bold text-white mb-1">{eorData.recommendation_title}</p>
+                    <p className="text-xs" style={{ color: '#64748b' }}>{eorData.recommendation_detail}</p>
+                    <div className="mt-3 grid grid-cols-2 gap-3">
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#334155' }}>EOR Pros ({eorData.eor_pros?.length})</p>
+                        {eorData.eor_pros?.map((p: string, i: number) => (
+                          <p key={i} className="text-xs mb-1" style={{ color: '#94a3b8' }}>• {p}</p>
+                        ))}
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#334155' }}>Compliance Risks ({eorData.compliance_risks?.length})</p>
+                        {eorData.compliance_risks?.map((r: any, i: number) => (
+                          <p key={i} className="text-xs mb-1" style={{ color: r.severity === 'High' ? '#ef4444' : r.severity === 'Medium' ? '#f59e0b' : '#94a3b8' }}>
+                            • [{r.severity}] {r.risk}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {eorSaved ? (
+                    <div className="rounded-xl p-4 flex items-center gap-3"
+                      style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
+                      <CheckCircle size={14} style={{ color: '#10b981' }} />
+                      <p className="text-sm font-bold" style={{ color: '#10b981' }}>
+                        EOR guide for {eorCountry?.name} saved — live site updated immediately
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex justify-end">
+                      <button
+                        onClick={handleEorSave}
+                        disabled={eorSaving}
+                        className="flex items-center gap-2 px-8 py-3 rounded-xl text-sm font-bold transition-all disabled:opacity-40"
+                        style={{ background: '#059669', color: '#ffffff' }}>
+                        {eorSaving
+                          ? <><Loader2 size={14} className="animate-spin" /> Saving…</>
+                          : <><Database size={14} /> Save to Supabase</>}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      })()}
+
     </div>
   )
 }
