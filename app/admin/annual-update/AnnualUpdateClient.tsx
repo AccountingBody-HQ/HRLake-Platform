@@ -5,7 +5,6 @@ import { RefreshCw, CheckCircle, XCircle, Loader2, AlertTriangle, Calendar, Glob
 interface Country {
   iso2: string
   name: string
-  flag_emoji: string
   currency_code: string
   hrlake_coverage_level: string | null
   last_data_update: string | null

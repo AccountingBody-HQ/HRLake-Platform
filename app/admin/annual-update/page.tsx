@@ -8,7 +8,7 @@ export default async function AnnualUpdatePage() {
 
   const { data: countries } = await supabase
     .from('countries')
-    .select('iso2, name, flag_emoji, currency_code, hrlake_coverage_level, last_data_update, is_active')
+    .select('iso2, name, currency_code, hrlake_coverage_level, last_data_update, is_active')
     .eq('is_active', true)
     .order('name')
 
