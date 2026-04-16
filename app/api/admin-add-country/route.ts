@@ -56,7 +56,17 @@ export async function PATCH(req: NextRequest) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
   const updateData: any = { is_active }
-  if (is_active) updateData.hrlake_coverage_level = 'partial'
+  if (is_active) {
+    // Only set to partial if currently none — never downgrade from full
+    const { data: current } = await supabase
+      .from('countries')
+      .select('hrlake_coverage_level')
+      .eq('iso2', iso2.toUpperCase())
+      .single()
+    if (!current || current.hrlake_coverage_level === 'none') {
+      updateData.hrlake_coverage_level = 'partial'
+    }
+  }
   const { error } = await supabase.from('countries').update(updateData).eq('iso2', iso2.toUpperCase())
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })

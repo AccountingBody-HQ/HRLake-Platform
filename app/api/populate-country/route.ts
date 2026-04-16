@@ -376,7 +376,10 @@ Return the JSON now. Start immediately with {`
     // Validate all required keys are present and non-empty
     const required = ["tax_brackets","social_security","employment_rules","statutory_leave","public_holidays","filing_calendar","payroll_compliance","working_hours","termination_rules","pension_schemes","mandatory_benefits","health_insurance","payslip_requirements","record_retention","remote_work_rules","expense_rules","contractor_rules","work_permits","entity_setup","tax_credits","regional_tax_rates","salary_benchmarks","government_benefit_payments"]
     const OBJECT_TABLES = new Set(["payslip_requirements", "remote_work_rules", "contractor_rules"])
+    // regional_tax_rates is intentionally empty for countries without sub-national tax variation
+    const OPTIONAL_EMPTY = new Set(["regional_tax_rates"])
     const empty = required.filter(k => {
+      if (OPTIONAL_EMPTY.has(k)) return false
       if (!parsed[k]) return true
       if (OBJECT_TABLES.has(k)) return Object.keys(parsed[k]).length === 0
       return parsed[k].length === 0

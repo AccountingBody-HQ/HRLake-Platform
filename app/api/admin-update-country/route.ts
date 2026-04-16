@@ -11,7 +11,7 @@ const NUMERIC_FIELDS = new Set([
   'standard_hours_per_week', 'maximum_hours_per_week',
   'overtime_threshold_daily', 'overtime_threshold_weekly',
   'overtime_rate_multiplier',
-  'notice_period_min_days', 'probation_period_max_months',
+  'notice_period_min_days', 'probation_period_max_months', 'severance_cap_months',
   'tax_year', 'year',
   // Premium table numeric fields
   'employer_rate_percentage', 'employee_rate_percentage',
