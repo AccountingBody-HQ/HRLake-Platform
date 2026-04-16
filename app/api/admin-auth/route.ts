@@ -20,9 +20,11 @@ export async function POST(req: Request) {
     }
     if (passwordValid(password)) {
       const res = NextResponse.json({ ok: true })
-      res.cookies.set('admin_token', ADMIN_SECRET!, {
+      const derivedToken = createHash('sha256').update(ADMIN_SECRET!).digest('hex')
+      res.cookies.set('admin_token', derivedToken, {
         httpOnly: true,
         secure:   true,
+        sameSite: 'strict',
         maxAge:   60 * 60 * 24 * 7,
         path:     '/',
       })

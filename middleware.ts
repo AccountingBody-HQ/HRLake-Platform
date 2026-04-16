@@ -8,15 +8,15 @@ async function tokenValid(token: string | undefined): Promise<boolean> {
   if (!token) return false
   try {
     const enc = new TextEncoder()
-    const [a, b] = await Promise.all([
-      crypto.subtle.digest('SHA-256', enc.encode(token)),
-      crypto.subtle.digest('SHA-256', enc.encode(ADMIN_SECRET!)),
-    ])
-    const ua = new Uint8Array(a)
-    const ub = new Uint8Array(b)
-    if (ua.length !== ub.length) return false
+    const secretDigest = await crypto.subtle.digest('SHA-256', enc.encode(ADMIN_SECRET!))
+    const expected = Array.from(new Uint8Array(secretDigest))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('')
+    const tokenBytes = enc.encode(token)
+    const expectedBytes = enc.encode(expected)
+    if (tokenBytes.length !== expectedBytes.length) return false
     let diff = 0
-    for (let i = 0; i < ua.length; i++) diff |= ua[i] ^ ub[i]
+    for (let i = 0; i < tokenBytes.length; i++) diff |= tokenBytes[i] ^ expectedBytes[i]
     return diff === 0
   } catch {
     return false
