@@ -94,10 +94,11 @@ export default function CountryBuilderPage() {
   const loadData = useCallback(async () => {
     setLoading(true); setError('')
     try {
-      const { data: cs, error: ce } = await sb.from('countries')
-        .select('iso2,name,currency_code,is_active,last_data_update').order('name')
-      if (ce) throw ce
-      setCountries(cs ?? [])
+      // Use admin route to fetch ALL countries including inactive (bypasses RLS)
+      const res = await fetch('/api/admin-countries')
+      const json = await res.json()
+      if (json.error) throw new Error(json.error)
+      setCountries(json.countries ?? [])
       const allCounts: Counts = {}
       await Promise.all(ALL_TABLES.map(async t => {
         const { data: rows } = await sb.schema('hrlake').from(t.key).select('country_code')
