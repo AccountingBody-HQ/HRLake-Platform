@@ -3,15 +3,5 @@
     "app/api/chat/route.ts": {
       "maxDuration": 60
     }
-  },
-  "ratelimit": [
-    {
-      "name": "Chat API Rate Limit",
-      "matcher": "/api/chat",
-      "limit": {
-        "requests": 10,
-        "window": "60s"
-      }
-    }
-  ]
+  }
 }
