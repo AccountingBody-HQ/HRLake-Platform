@@ -331,7 +331,7 @@ export default function VerifyClient(props: Props) {
             </p>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            {!allSaved && hasResults && (
+            {!allSaved && hasResults && allGroupsDone && (
               <button onClick={markVerified} disabled={saving}
                 className="flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-sm disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{ background: '#10b981' }}>
