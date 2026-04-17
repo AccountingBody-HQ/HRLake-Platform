@@ -97,9 +97,13 @@ export async function DELETE(req: NextRequest) {
     'tax_credits','regional_tax_rates','salary_benchmarks',
     'government_benefit_payments',
   ]
-  await Promise.all(hrlakeTables.map(table =>
+  const deleteResults = await Promise.all(hrlakeTables.map(table =>
     supabase.schema('hrlake').from(table).delete().eq('country_code', iso2.toUpperCase())
   ))
+  const deleteErrors = deleteResults.map((r, i) => r.error ? hrlakeTables[i] + ': ' + r.error.message : null).filter(Boolean)
+  if (deleteErrors.length > 0) {
+    return NextResponse.json({ error: 'Delete failed for: ' + deleteErrors.join(', ') }, { status: 500 })
+  }
   // Delete eor_guides, embeddings (foreign key constraint on countries table)
   await supabase.schema('hrlake').from('eor_guides').delete().eq('country_code', iso2.toUpperCase())
   await supabase.schema('hrlake').from('embeddings').delete().eq('country_code', iso2.toUpperCase())
