@@ -181,23 +181,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (req.headers.get("x-user-id")) {
-      const userId = req.headers.get("x-user-id");
-      const supabaseAdmin = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-      );
-      await supabaseAdmin.from("ai_conversations").insert({
-        user_id: userId,
-        platform: "hrlake",
-        session_id: crypto.randomUUID(),
-        messages: [{ role: "user", content: message }],
-        hrlake_data_accessed: !!countryCode,
-        hrlake_tier_accessed: "free",
-        country_codes_used: countryCode ? [countryCode] : [],
-        token_count: message.split(" ").length,
-      });
-    }
+
 
     return new Response(readable, {
       headers: {
