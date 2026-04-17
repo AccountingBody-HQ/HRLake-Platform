@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createSupabaseAdminClient } from '@/lib/supabase'
 import crypto from 'crypto'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
 
 function verifySignature(payload: string, signature: string, secret: string): boolean {
   const hmac = crypto.createHmac('sha256', secret)
@@ -32,6 +27,8 @@ export async function POST(req: NextRequest) {
     console.error('No user_id in webhook custom_data')
     return NextResponse.json({ error: 'No user_id' }, { status: 400 })
   }
+
+  const supabase = createSupabaseAdminClient()
 
   try {
     if (eventName === 'subscription_created') {
