@@ -265,10 +265,12 @@ export default function VerifyClient(props: Props) {
     }
     setSaving(true)
     try {
-      await fetch('/api/admin-update-country', {
+      const res = await fetch('/api/admin-update-country', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ countryCode, action: 'approve_all' }),
       })
+      const data = await res.json()
+      if (!res.ok || data.error) throw new Error(data.error ?? 'Failed to mark verified')
       setAllSaved(true)
     } catch (e: any) { setGlobalError('Save failed: ' + e.message) }
     finally { setSaving(false) }
