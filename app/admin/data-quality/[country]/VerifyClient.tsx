@@ -63,7 +63,7 @@ const TABLE_LABELS: Record<string, string> = {
 
 const TABLE_FIELDS: Record<string, string[]> = {
   tax_brackets:                ['bracket_name','lower_limit','upper_limit','rate'],
-  social_security:             ['contribution_type','employer_rate','employee_rate','applies_above','applies_below'],
+  social_security:             ['contribution_type','employer_rate','employee_rate','employer_cap_annual','employee_cap_annual','applies_above','applies_below'],
   employment_rules:            ['rule_type','value_text','value_numeric','value_unit'],
   statutory_leave:             ['leave_type','minimum_days','maximum_days','is_paid','payment_rate'],
   public_holidays:             ['holiday_name','holiday_date','is_mandatory'],
