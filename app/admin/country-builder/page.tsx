@@ -81,6 +81,7 @@ export default function CountryBuilderPage() {
   const [insertDone, setInsertDone] = useState(false)
   const [expanded, setExpanded]     = useState<Record<string,boolean>>({})
   const [deleteTarget, setDeleteTarget] = useState<{ iso2: string; name: string } | null>(null)
+  const [deactivateTarget, setDeactivateTarget] = useState<{ iso2: string; name: string } | null>(null)
   const [deleting, setDeleting]         = useState(false)
   const [eorCountry, setEorCountry]     = useState<{ iso2: string; name: string; currency_code: string } | null>(null)
   const [eorStatus, setEorStatus]       = useState<'idle'|'loading'|'done'|'error'>('idle')
@@ -361,6 +362,49 @@ export default function CountryBuilderPage() {
         </div>
       )}
 
+      {/* ── DEACTIVATE CONFIRMATION MODAL ── */}
+      {deactivateTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ background: 'rgba(0,0,0,0.7)' }}>
+          <div className="rounded-2xl border p-8 w-full max-w-md mx-4 shadow-2xl"
+            style={{ background: '#0d1424', borderColor: '#1a2238' }}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background: 'rgba(245,158,11,0.12)' }}>
+                <Power size={20} style={{ color: '#f59e0b' }} />
+              </div>
+              <div>
+                <p className="text-white font-bold text-base">Deactivate country?</p>
+                <p className="text-xs mt-0.5" style={{ color: '#475569' }}>This will immediately remove it from the public site</p>
+              </div>
+            </div>
+            <div className="rounded-xl p-4 mb-6"
+              style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.15)' }}>
+              <p className="text-sm font-bold text-white mb-1">
+                {deactivateTarget.name} ({deactivateTarget.iso2})
+              </p>
+              <p className="text-xs" style={{ color: '#94a3b8' }}>
+                The country will no longer appear on the public website. All data is preserved and the country can be reactivated at any time.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setDeactivateTarget(null)}
+                className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all"
+                style={{ background: 'rgba(255,255,255,0.04)', color: '#64748b', border: '1px solid #1a2238' }}>
+                Cancel
+              </button>
+              <button
+                onClick={async () => { await handleActivate(deactivateTarget.iso2, false); setDeactivateTarget(null) }}
+                className="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2"
+                style={{ background: '#f59e0b', color: '#ffffff' }}>
+                <Power size={14} /> Deactivate {deactivateTarget.iso2}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
@@ -506,7 +550,7 @@ export default function CountryBuilderPage() {
                               </button>
                             )}
                             {c.is_active && (
-                              <button onClick={() => handleActivate(c.iso2, false)}
+                              <button onClick={() => setDeactivateTarget({ iso2: c.iso2, name: c.name })}
                                 className="flex items-center gap-1 text-xs font-bold px-2.5 py-1.5 rounded-lg transition-all"
                                 style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.2)' }}>
                                 <Power size={11} /> Deactivate
