@@ -157,7 +157,7 @@ export default function Navigation({ countryCount = 23 }: { countryCount?: numbe
             <SearchBar variant="nav" />
           </div>
 
-          {/* CTA — signed out — hidden until DNS + Clerk production keys ready */}
+          {/* CTA — signed out — placed on hold, pending future decision */}
 
           {/* USER MENU — signed in */}
           {isSignedIn && (
