@@ -97,7 +97,7 @@ const STANDARDS = [
   { icon: Award,      title: 'Government-sourced',     body: 'Every data point traced to an official tax authority or government publication.' },
   { icon: RefreshCw,  title: 'Updated monthly',        body: 'Employment rates and statutory thresholds reviewed on a rolling monthly cycle.' },
   { icon: Lock,       title: 'Expert verified',        body: 'Data reviewed by qualified HR and employment law professionals before publication.' },
-  { icon: TrendingUp, title: 'Continuously expanding', body: 'Coverage growing continuously toward our target of 57 countries.' },
+  { icon: TrendingUp, title: 'Continuously expanding', body: 'Coverage growing continuously — new countries added regularly from official government sources.' },
 ]
 
 const UPDATE_ITEMS = [
