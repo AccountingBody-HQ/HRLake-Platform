@@ -26,7 +26,6 @@ const footerLinks = {
     { label: 'Insights',            href: '/insights/' },
     { label: 'AI Assistant',        href: '/ai-assistant/' },
     { label: 'Pricing',             href: '/pricing/' },
-    { label: 'Dashboard',           href: '/dashboard/' },
   ],
   'Company': [
     { label: 'About',               href: '/about/' },

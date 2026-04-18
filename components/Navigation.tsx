@@ -157,16 +157,7 @@ export default function Navigation({ countryCount = 23 }: { countryCount?: numbe
             <SearchBar variant="nav" />
           </div>
 
-          {/* CTA — signed out */}
-          {!isSignedIn && (
-            <div className="hidden md:flex items-center gap-2 shrink-0 ml-auto lg:ml-0">
-              <Link href="/sign-in"
-                className="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition-colors"
-              >
-                Sign In
-              </Link>
-            </div>
-          )}
+          {/* CTA — signed out — hidden until DNS + Clerk production keys ready */}
 
           {/* USER MENU — signed in */}
           {isSignedIn && (
@@ -252,14 +243,7 @@ export default function Navigation({ countryCount = 23 }: { countryCount?: numbe
           </nav>
           <div className="px-4 py-3 border-t border-slate-800/80 flex gap-2">
             {!isSignedIn ? (
-              <>
-                <Link href="/sign-in"
-                  className="flex-1 text-center px-4 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-all"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Sign In
-                </Link>
-              </>
+              <></>
             ) : (
               <>
                 <Link href="/dashboard/"
