@@ -24,6 +24,7 @@ import {
   getRelatedCountries,
 } from '@/lib/supabase-queries'
 import CountryCard from '@/components/CountryCard'
+import { getFlag } from '@/lib/flag'
 import MiniCalculator from '@/components/countries/MiniCalculator'
 import AiCountryWidget from '@/components/AiCountryWidget'
 import { auth } from '@clerk/nextjs/server'
@@ -894,7 +895,7 @@ export default async function CountryPage(
                   key={c.iso2}
                   iso2={c.iso2}
                   name={c.name}
-                  flag_emoji={c.flag_emoji}
+                  flag_emoji={getFlag(c.iso2)}
                   currency={c.currency_code}
                   region={c.region}
                   hrlake_coverage_level={c.hrlake_coverage_level}
