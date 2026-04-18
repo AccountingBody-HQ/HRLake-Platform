@@ -126,7 +126,7 @@ export default async function CountryPage(
     getTaxBrackets(iso2, latestYear ?? undefined),
     getRelatedCountries(iso2, country.region ?? ''),
     supabase.schema('hrlake').from('health_insurance').select('*').eq('country_code', iso2).eq('is_current', true).order('is_mandatory', { ascending: false }),
-    supabase.schema('hrlake').from('salary_benchmarks').select('job_family,job_level,percentile_25,percentile_50,percentile_75,currency_code').eq('country_code', iso2).eq('is_current', true).eq('tier', 'free').eq('benchmark_year', 2025).order('job_family').order('job_level'),
+    supabase.schema('hrlake').from('salary_benchmarks').select('job_family,job_level,percentile_25,percentile_50,percentile_75,currency_code').eq('country_code', iso2).eq('is_current', true).eq('tier', 'free').eq('benchmark_year', new Date().getFullYear()).order('job_family').order('job_level'),
   ])
   const healthInsurance = healthInsuranceRows.data ?? []
   const salaryBenchmarks = salaryRows.data ?? []
@@ -756,7 +756,7 @@ export default async function CountryPage(
               return (
                 <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
                   <div className="px-5 py-4 border-b border-slate-100">
-                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Salary Benchmarks 2025</p>
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Salary Benchmarks {new Date().getFullYear()}</p>
                     <p className="text-xs text-slate-400 mt-0.5">Median annual salary by role — {cur}</p>
                   </div>
                   <div className="overflow-x-auto">
