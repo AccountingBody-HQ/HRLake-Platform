@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import {
   Sparkles, CheckCircle, XCircle, AlertCircle, Loader2,
-  ThumbsUp, ThumbsDown, Check,
+  ThumbsUp, ThumbsDown, Check, RefreshCw,
 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -31,63 +31,38 @@ interface Finding {
   source: string; note: string
 }
 
-type GroupStatus = 'idle' | 'running' | 'done' | 'error'
-interface GroupResult { status: GroupStatus; findings: Finding[]; error?: string }
+type TableStatus = 'idle' | 'running' | 'done' | 'error'
+interface TableResult { status: TableStatus; findings: Finding[]; error?: string }
 
-// ─── Groups ───────────────────────────────────────────────────────────────────
+// ─── Tables ───────────────────────────────────────────────────────────────────
 
-const GROUPS = [
-  { key: 'tax',        label: 'Tax & Social Security', color: '#3b82f6', bg: 'rgba(59,130,246,0.1)',   border: 'rgba(59,130,246,0.25)',  tables: ['tax_brackets','social_security','tax_credits','regional_tax_rates'] },
-  { key: 'employment', label: 'Employment & Leave',     color: '#10b981', bg: 'rgba(16,185,129,0.1)',  border: 'rgba(16,185,129,0.25)',  tables: ['employment_rules','statutory_leave','public_holidays','working_hours','termination_rules'] },
-  { key: 'payroll',    label: 'Payroll & Filing',       color: '#f59e0b', bg: 'rgba(245,158,11,0.1)',  border: 'rgba(245,158,11,0.25)',  tables: ['payroll_compliance','filing_calendar','payslip_requirements'] },
-  { key: 'benefits',   label: 'Benefits & Insurance',   color: '#ec4899', bg: 'rgba(236,72,153,0.1)',  border: 'rgba(236,72,153,0.25)',  tables: ['mandatory_benefits','health_insurance','government_benefit_payments'] },
-  { key: 'remote',     label: 'Remote & Contractors',   color: '#a78bfa', bg: 'rgba(167,139,250,0.1)', border: 'rgba(167,139,250,0.25)', tables: ['remote_work_rules','expense_rules','contractor_rules','work_permits'] },
-  { key: 'entity',     label: 'Entity & Pension',       color: '#06b6d4', bg: 'rgba(6,182,212,0.1)',   border: 'rgba(6,182,212,0.25)',   tables: ['entity_setup','pension_schemes'] },
-  { key: 'salary',     label: 'Salary & Records',       color: '#f97316', bg: 'rgba(249,115,22,0.1)',  border: 'rgba(249,115,22,0.25)',  tables: ['salary_benchmarks','record_retention'] },
+const ALL_VERIFY_TABLES = [
+  { key: 'tax_brackets',                label: 'Tax Brackets',           color: '#3b82f6', bg: 'rgba(59,130,246,0.08)'   },
+  { key: 'social_security',             label: 'Social Security',         color: '#3b82f6', bg: 'rgba(59,130,246,0.08)'   },
+  { key: 'tax_credits',                 label: 'Tax Credits',             color: '#3b82f6', bg: 'rgba(59,130,246,0.08)'   },
+  { key: 'regional_tax_rates',          label: 'Regional Tax Rates',      color: '#3b82f6', bg: 'rgba(59,130,246,0.08)'   },
+  { key: 'employment_rules',            label: 'Employment Rules',        color: '#10b981', bg: 'rgba(16,185,129,0.08)'   },
+  { key: 'statutory_leave',             label: 'Statutory Leave',         color: '#10b981', bg: 'rgba(16,185,129,0.08)'   },
+  { key: 'public_holidays',             label: 'Public Holidays',         color: '#10b981', bg: 'rgba(16,185,129,0.08)'   },
+  { key: 'working_hours',               label: 'Working Hours',           color: '#10b981', bg: 'rgba(16,185,129,0.08)'   },
+  { key: 'termination_rules',           label: 'Termination Rules',       color: '#10b981', bg: 'rgba(16,185,129,0.08)'   },
+  { key: 'payroll_compliance',          label: 'Payroll Compliance',      color: '#f59e0b', bg: 'rgba(245,158,11,0.08)'   },
+  { key: 'filing_calendar',             label: 'Filing Calendar',         color: '#f59e0b', bg: 'rgba(245,158,11,0.08)'   },
+  { key: 'payslip_requirements',        label: 'Payslip Requirements',    color: '#f59e0b', bg: 'rgba(245,158,11,0.08)'   },
+  { key: 'mandatory_benefits',          label: 'Mandatory Benefits',      color: '#ec4899', bg: 'rgba(236,72,153,0.08)'   },
+  { key: 'health_insurance',            label: 'Health Insurance',        color: '#ec4899', bg: 'rgba(236,72,153,0.08)'   },
+  { key: 'government_benefit_payments', label: 'Gov. Benefit Payments',   color: '#ec4899', bg: 'rgba(236,72,153,0.08)'   },
+  { key: 'remote_work_rules',           label: 'Remote Work Rules',       color: '#a78bfa', bg: 'rgba(167,139,250,0.08)'  },
+  { key: 'expense_rules',               label: 'Expense Rules',           color: '#a78bfa', bg: 'rgba(167,139,250,0.08)'  },
+  { key: 'contractor_rules',            label: 'Contractor Rules',        color: '#a78bfa', bg: 'rgba(167,139,250,0.08)'  },
+  { key: 'work_permits',                label: 'Work Permits',            color: '#a78bfa', bg: 'rgba(167,139,250,0.08)'  },
+  { key: 'entity_setup',                label: 'Entity Setup',            color: '#06b6d4', bg: 'rgba(6,182,212,0.08)'    },
+  { key: 'pension_schemes',             label: 'Pension Schemes',         color: '#06b6d4', bg: 'rgba(6,182,212,0.08)'    },
+  { key: 'salary_benchmarks',           label: 'Salary Benchmarks',       color: '#f97316', bg: 'rgba(249,115,22,0.08)'   },
+  { key: 'record_retention',            label: 'Record Retention',        color: '#f97316', bg: 'rgba(249,115,22,0.08)'   },
 ]
 
-const TABLE_LABELS: Record<string, string> = {
-  tax_brackets:'Tax Brackets', social_security:'Social Security',
-  employment_rules:'Employment Rules', statutory_leave:'Statutory Leave',
-  public_holidays:'Public Holidays', filing_calendar:'Filing Calendar',
-  payroll_compliance:'Payroll Compliance', working_hours:'Working Hours',
-  termination_rules:'Termination Rules', pension_schemes:'Pension Schemes',
-  mandatory_benefits:'Mandatory Benefits', health_insurance:'Health Insurance',
-  payslip_requirements:'Payslip Requirements', record_retention:'Record Retention',
-  remote_work_rules:'Remote Work Rules', expense_rules:'Expense Rules',
-  contractor_rules:'Contractor Rules', work_permits:'Work Permits',
-  entity_setup:'Entity Setup', tax_credits:'Tax Credits',
-  regional_tax_rates:'Regional Tax Rates', salary_benchmarks:'Salary Benchmarks',
-  government_benefit_payments:'Gov. Benefit Payments',
-}
-
-const TABLE_FIELDS: Record<string, string[]> = {
-  tax_brackets:                ['bracket_name','lower_limit','upper_limit','rate'],
-  social_security:             ['contribution_type','employer_rate','employee_rate','employer_cap_annual','employee_cap_annual','applies_above','applies_below'],
-  employment_rules:            ['rule_type','value_text','value_numeric','value_unit'],
-  statutory_leave:             ['leave_type','minimum_days','maximum_days','is_paid','payment_rate'],
-  public_holidays:             ['holiday_name','holiday_date','is_mandatory'],
-  filing_calendar:             ['filing_type','frequency','due_day','due_month'],
-  payroll_compliance:          ['description','frequency','deadline_description'],
-  working_hours:               ['standard_hours_per_week','maximum_hours_per_week','overtime_rate_multiplier'],
-  termination_rules:           ['notice_period_min_days','severance_mandatory','probation_period_max_months','severance_cap_months'],
-  pension_schemes:             ['scheme_name','employer_rate','employee_rate','is_mandatory'],
-  mandatory_benefits:          ['benefit_name','benefit_type','employer_cost_percentage','frequency'],
-  health_insurance:            ['scheme_name','scheme_type','employer_rate_percentage','is_mandatory'],
-  payslip_requirements:        ['format_requirements','delivery_deadline_days','retention_period_years'],
-  record_retention:            ['record_type','retention_years','retention_basis'],
-  remote_work_rules:           ['pe_risk_threshold_days','tax_liability_threshold_days','digital_nomad_visa_available'],
-  expense_rules:               ['expense_type','tax_treatment','exempt_amount','mileage_rate_per_km'],
-  contractor_rules:            ['classification_test','misclassification_penalty'],
-  work_permits:                ['permit_type','processing_days_min','processing_days_max','validity_months'],
-  entity_setup:                ['entity_type','corporate_tax_rate','withholding_tax_rate','vat_rate'],
-  tax_credits:                 ['credit_name','credit_type','amount','rate_percentage'],
-  regional_tax_rates:          ['region_name','tax_type','rate','applies_above'],
-  salary_benchmarks:           ['job_family','job_level','percentile_50','currency_code'],
-  government_benefit_payments: ['benefit_type','paid_by','government_rate_percentage','maximum_duration_weeks'],
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ─── Helper ───────────────────────────────────────────────────────────────────
 
 function getTableData(tableKey: string, p: Props): any[] {
   const map: Record<string, any[]> = {
@@ -107,138 +82,153 @@ function getTableData(tableKey: string, p: Props): any[] {
   return map[tableKey] ?? []
 }
 
-function fmtRows(rows: any[], fields: string[]): string {
-  if (rows.length === 0) return '  (no records — skip this table)'
-  return rows.map(r =>
-    `  - id:${r.id} | ${fields.map(f => `${f}=${JSON.stringify(r[f] ?? null)}`).join(', ')}`
-  ).join('\n')
-}
-
-function buildGroupPrompt(
-  group: typeof GROUPS[0],
-  countryName: string,
-  countryCode: string,
-  p: Props,
-): string {
-  const getDomain = (url: string): string => {
-    try {
-      const u = new URL(url.startsWith('http') ? url : 'https://' + url)
-      return u.hostname.replace(/^www\./, '')
-    } catch { return url }
-  }
-  const src = (cat: string) => {
-    const s = p.sourceMap[cat]
-    if (s?.source_url) {
-      const domain = getDomain(s.source_url)
-      return `AUTHORITATIVE DOMAIN: ${domain} (${s.authority_name}) — search this entire website for current ${new Date().getFullYear()} figures`
-    }
-    return `Search the official government website for ${countryName} for current ${new Date().getFullYear()} figures`
-  }
-  const FIELD_CONSTRAINTS: Record<string, string> = {
-    record_retention: 'CONSTRAINT: retention_basis must be exactly one of: from_date_of_document | from_end_of_tax_year | from_termination — no other values are valid',
-  }
-  const sections = group.tables.map(t =>
-    `=== ${(TABLE_LABELS[t] ?? t).toUpperCase()} ===\n${src(t)}\n${fmtRows(getTableData(t, p), TABLE_FIELDS[t] ?? [])}${FIELD_CONSTRAINTS[t] ? '\n' + FIELD_CONSTRAINTS[t] : ''}`
-  ).join('\n\n')
-  const tableEnum = group.tables.join('|')
-  const currentYear = new Date().getFullYear()
-  return `You are a payroll data verification expert. Verify the following ${group.label} data for ${countryName} (${countryCode}).
-
-CRITICAL SEARCH RULES — FOLLOW THESE EXACTLY:
-1. Use web_search for EVERY table section — minimum one search per section. Never skip a search.
-2. Search the AUTHORITATIVE DOMAIN provided for each section — search the whole website not just one page.
-3. You are looking for ${currentYear} figures. If not yet published, use the most recent official figures and note the year in your findings.
-4. NEVER rely on training data alone — every figure must be confirmed with a live web search.
-5. Search using terms like "${countryName} [topic] ${currentYear} official" to find current government pages.
-6. If an authoritative domain has moved, search for the official government body by name to find its new location.
-7. Always use primary government sources — never third-party summaries, news articles or commentary sites.
-8. For public holidays: find the official ${currentYear} holiday calendar specifically — not ${currentYear - 1}.
-9. Verify EVERY SINGLE RECORD listed. Do not skip any record under any circumstances.
-10. Return ONE JSON object with a findings array. No markdown, no code blocks.
-11. Every record_id listed MUST appear in findings — missing a record is a critical failure.
-12. raw_value = exact numeric or string value only. No % or units.
-
-${sections}
-
-Respond ONLY with raw JSON:
-{
-  "summary": "What you searched and verified",
-  "findings": [
-    {
-      "table": "${tableEnum}",
-      "record_id": "exact id from above",
-      "field": "exact_column_name",
-      "current_value": "current readable value",
-      "found_value": "value from official source",
-      "raw_value": {"field": value},
-      "status": "match|mismatch|unverified",
-      "source": "official URL",
-      "note": "brief explanation"
-    }
-  ]
-}`
-}
-
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function VerifyClient(props: Props) {
   const { countryCode, countryName } = props
 
-  const [selectedGroups, setSelectedGroups] = useState<Set<string>>(new Set(GROUPS.map(g => g.key)))
+  const [selectedTables, setSelectedTables] = useState<Set<string>>(new Set(ALL_VERIFY_TABLES.map(t => t.key)))
   const [isRunning,       setIsRunning]      = useState(false)
-  const [currentGroupKey, setCurrentGroupKey]= useState<string | null>(null)
-  const [groupResults,    setGroupResults]   = useState<Record<string, GroupResult>>({})
-  const [decisions,       setDecisions]      = useState<Record<number, 'approved'|'rejected'|'saving'|'saved'>>({})
+  const [currentTable,    setCurrentTable]   = useState<string | null>(null)
+  const [tableResults,    setTableResults]   = useState<Record<string, TableResult>>({})
+  const [decisions,       setDecisions]      = useState<Record<string, 'approved'|'rejected'|'saving'|'saved'>>({})
   const [allSaved,        setAllSaved]       = useState(false)
   const [saving,          setSaving]         = useState(false)
-  const [activeFilter,    setActiveFilter]   = useState<string>('all')
   const [statusFilter,    setStatusFilter]   = useState<string>('all')
+  const [tableFilter,     setTableFilter]    = useState<string>('all')
   const [globalError,     setGlobalError]    = useState('')
   const [countdown,       setCountdown]      = useState<number | null>(null)
 
-  // ── Derived ──────────────────────────────────────────────────────────────────
-  const groupsToRun    = GROUPS.filter(g => selectedGroups.has(g.key))
-  const allFindings    = GROUPS.flatMap(g => groupResults[g.key]?.findings ?? [])
-  const hasResults     = allFindings.length > 0
-  const matches        = allFindings.filter(f => f.status === 'match').length
-  const mismatches     = allFindings.filter(f => f.status === 'mismatch').length
-  const unverified     = allFindings.filter(f => f.status === 'unverified').length
-  const totalDecided   = Object.keys(decisions).length
-  const allDecided     = hasResults && totalDecided === allFindings.length
-  const pendingMatches    = allFindings.filter((f, i) => f.status === 'match'      && !decisions[i]).length
-  const pendingUnverified = allFindings.filter((f, i) => f.status === 'unverified' && !decisions[i]).length
-  const allGroupsDone  = groupsToRun.length > 0 && groupsToRun.every(g =>
-    groupResults[g.key]?.status === 'done' || groupResults[g.key]?.status === 'error'
+  // ── Derived ───────────────────────────────────────────────────────────────────
+  const tablesToRun   = ALL_VERIFY_TABLES.filter(t => selectedTables.has(t.key))
+  const allFindings   = ALL_VERIFY_TABLES.flatMap(t => tableResults[t.key]?.findings ?? [])
+  const hasResults    = allFindings.length > 0
+  const matches       = allFindings.filter(f => f.status === 'match').length
+  const mismatches    = allFindings.filter(f => f.status === 'mismatch').length
+  const unverified    = allFindings.filter(f => f.status === 'unverified').length
+  const doneCount     = ALL_VERIFY_TABLES.filter(t => tableResults[t.key]?.status === 'done').length
+  const errorCount    = ALL_VERIFY_TABLES.filter(t => tableResults[t.key]?.status === 'error').length
+  const allTablesDone = tablesToRun.length > 0 && tablesToRun.every(t =>
+    tableResults[t.key]?.status === 'done' || tableResults[t.key]?.status === 'error'
   )
-  const sourcesWithUrls = Object.keys(props.sourceMap).length
-  const countByTable    = allFindings.reduce((acc, f) => { acc[f.table] = (acc[f.table] ?? 0) + 1; return acc }, {} as Record<string,number>)
-  const statusFiltered  = statusFilter === 'all' ? allFindings : allFindings.filter(f => f.status === statusFilter)
-  const visibleFindings = activeFilter === 'all' ? statusFiltered : statusFiltered.filter(f => f.table === activeFilter)
+  const pendingMatches    = allFindings.filter((f, i) => f.status === 'match'      && !decisions[`${i}`]).length
+  const pendingUnverified = allFindings.filter((f, i) => f.status === 'unverified' && !decisions[`${i}`]).length
+  const sourcesWithUrls   = Object.keys(props.sourceMap).length
+  const pct               = tablesToRun.length > 0 ? Math.round((doneCount / tablesToRun.length) * 100) : 0
 
-  // ── Group toggle ──────────────────────────────────────────────────────────────
-  function toggleGroup(key: string) {
-    if (isRunning) return
-    setSelectedGroups(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n })
+  const statusFiltered  = statusFilter === 'all' ? allFindings : allFindings.filter(f => f.status === statusFilter)
+  const visibleFindings = tableFilter  === 'all' ? statusFiltered : statusFiltered.filter(f => f.table === tableFilter)
+
+  // ── Countdown ─────────────────────────────────────────────────────────────────
+  async function waitWithCountdown(ms: number) {
+    const steps = Math.ceil(ms / 1000)
+    for (let i = steps; i > 0; i--) {
+      setCountdown(i)
+      await new Promise(r => setTimeout(r, 1000))
+    }
+    setCountdown(null)
   }
 
-  // ── Batch actions ──────────────────────────────────────────────────────────────
+  // ── Toggle table selection ────────────────────────────────────────────────────
+  function toggleTable(key: string) {
+    if (isRunning) return
+    setSelectedTables(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n })
+  }
+
+  // ── Verify single table ───────────────────────────────────────────────────────
+  async function verifyTable(tableKey: string): Promise<boolean> {
+    const MAX_ATTEMPTS = 3
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      setCurrentTable(tableKey)
+      setTableResults(p => ({
+        ...p,
+        [tableKey]: {
+          status: 'running',
+          findings: [],
+          error: attempt > 1 ? `Attempt ${attempt - 1} failed — retrying…` : undefined,
+        },
+      }))
+      try {
+        const tableData = getTableData(tableKey, props)
+        const source    = props.sourceMap[tableKey]
+        const controller = new AbortController()
+        const tid = setTimeout(() => controller.abort(), 58000)
+        const res = await fetch('/api/verify-table', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tableKey,
+            tableData,
+            sourceUrl:     source?.source_url     ?? null,
+            authorityName: source?.authority_name ?? null,
+            countryCode,
+            countryName,
+          }),
+          signal: controller.signal,
+        })
+        clearTimeout(tid)
+        const data = await res.json()
+        if (!res.ok || !data.success) throw new Error(data.error ?? 'Verification failed')
+        setTableResults(p => ({ ...p, [tableKey]: { status: 'done', findings: data.findings } }))
+        return true
+      } catch (e: any) {
+        if (attempt === MAX_ATTEMPTS) {
+          setTableResults(p => ({ ...p, [tableKey]: { status: 'error', findings: [], error: e.message } }))
+          return false
+        }
+        setTableResults(p => ({ ...p, [tableKey]: { status: 'running', findings: [], error: `Attempt ${attempt} failed — waiting before retry…` } }))
+        await waitWithCountdown(90000)
+      }
+    }
+    return false
+  }
+
+  // ── Run all selected tables ───────────────────────────────────────────────────
+  async function runVerification() {
+    if (selectedTables.size === 0) return
+    setIsRunning(true); setDecisions({})
+    setAllSaved(false); setGlobalError('')
+    setStatusFilter('all'); setTableFilter('all')
+    setCountdown(null)
+    setTableResults(prev => {
+      const next = { ...prev }
+      tablesToRun.forEach(t => { delete next[t.key] })
+      return next
+    })
+    for (let i = 0; i < tablesToRun.length; i++) {
+      await verifyTable(tablesToRun[i].key)
+      const isLast = i === tablesToRun.length - 1
+      if (!isLast) await waitWithCountdown(30000)
+    }
+    setCurrentTable(null); setIsRunning(false)
+  }
+
+  // ── Retry single table ────────────────────────────────────────────────────────
+  async function retryTable(tableKey: string) {
+    if (isRunning) return
+    setIsRunning(true)
+    await verifyTable(tableKey)
+    setCurrentTable(null); setIsRunning(false)
+  }
+
+  // ── Batch approve ─────────────────────────────────────────────────────────────
   function approveAllMatches() {
-    const u: Record<number,'approved'> = {}
-    allFindings.forEach((f, i) => { if (f.status === 'match' && !decisions[i]) u[i] = 'approved' })
+    const u: Record<string,'approved'> = {}
+    allFindings.forEach((f, i) => { if (f.status === 'match' && !decisions[`${i}`]) u[`${i}`] = 'approved' })
     setDecisions(p => ({ ...p, ...u }))
   }
   function approveAllUnverified() {
-    const u: Record<number,'approved'> = {}
-    allFindings.forEach((f, i) => { if (f.status === 'unverified' && !decisions[i]) u[i] = 'approved' })
+    const u: Record<string,'approved'> = {}
+    allFindings.forEach((f, i) => { if (f.status === 'unverified' && !decisions[`${i}`]) u[`${i}`] = 'approved' })
     setDecisions(p => ({ ...p, ...u }))
   }
 
-  // ── Individual approve / reject ────────────────────────────────────────────────
+  // ── Approve / reject individual finding ───────────────────────────────────────
   async function approve(index: number, finding: Finding) {
     if (finding.status !== 'mismatch' || !finding.raw_value || typeof finding.raw_value !== 'object' || Array.isArray(finding.raw_value)) {
-      setDecisions(p => ({ ...p, [index]: 'approved' })); return
+      setDecisions(p => ({ ...p, [`${index}`]: 'approved' })); return
     }
-    setDecisions(p => ({ ...p, [index]: 'saving' }))
+    setDecisions(p => ({ ...p, [`${index}`]: 'saving' }))
     try {
       const res = await fetch('/api/admin-update-country', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -247,21 +237,20 @@ export default function VerifyClient(props: Props) {
       })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
-      setDecisions(p => ({ ...p, [index]: 'saved' }))
+      setDecisions(p => ({ ...p, [`${index}`]: 'saved' }))
     } catch (e: any) {
       setGlobalError('Update failed: ' + e.message)
-      setDecisions(p => { const n = { ...p }; delete n[index]; return n })
+      setDecisions(p => { const n = { ...p }; delete n[`${index}`]; return n })
     }
   }
 
-  function reject(index: number) { setDecisions(p => ({ ...p, [index]: 'rejected' })) }
+  function reject(index: number) { setDecisions(p => ({ ...p, [`${index}`]: 'rejected' })) }
 
-  // ── Mark verified ──────────────────────────────────────────────────────────────
+  // ── Mark verified ─────────────────────────────────────────────────────────────
   async function markVerified() {
-    // Block if any mismatch has not been approved or rejected
-    const unreviewedMismatches = allFindings.filter((f, i) => f.status === 'mismatch' && !decisions[i]).length
+    const unreviewedMismatches = allFindings.filter((f, i) => f.status === 'mismatch' && !decisions[`${i}`]).length
     if (unreviewedMismatches > 0) {
-      setGlobalError(`Cannot mark verified — ${unreviewedMismatches} mismatch${unreviewedMismatches > 1 ? 'es' : ''} still need a decision (approve or reject each one first).`)
+      setGlobalError(`Cannot mark verified — ${unreviewedMismatches} mismatch${unreviewedMismatches > 1 ? 'es' : ''} still need a decision.`)
       return
     }
     setSaving(true)
@@ -277,81 +266,6 @@ export default function VerifyClient(props: Props) {
     finally { setSaving(false) }
   }
 
-  // ── Run verification ───────────────────────────────────────────────────────────
-
-  async function waitWithCountdown(ms: number) {
-    const steps = Math.ceil(ms / 1000)
-    for (let i = steps; i > 0; i--) {
-      setCountdown(i)
-      await new Promise(r => setTimeout(r, 1000))
-    }
-    setCountdown(null)
-  }
-
-  async function runGroup(group: typeof GROUPS[0]): Promise<boolean> {
-    const MAX_ATTEMPTS = 3
-    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-      setCurrentGroupKey(group.key)
-      setGroupResults(p => ({
-        ...p,
-        [group.key]: {
-          status: 'running',
-          findings: [],
-          error: attempt > 1 ? `Attempt ${attempt - 1} failed — retrying…` : undefined,
-        },
-      }))
-      try {
-        const prompt = buildGroupPrompt(group, countryName, countryCode, props)
-        const controller = new AbortController()
-        const tid = setTimeout(() => controller.abort(), 130000)
-        const response = await fetch('/api/verify-country', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt }), signal: controller.signal,
-        })
-        clearTimeout(tid)
-        const data = await response.json()
-        if (data.error) throw new Error(data.error)
-        const text  = data.content?.[0]?.text ?? ''
-        const start = text.indexOf('{')
-        const end   = text.lastIndexOf('}')
-        if (start === -1 || end === -1) throw new Error('No JSON in response')
-        const parsed = JSON.parse(text.slice(start, end + 1))
-        if (!parsed.findings) throw new Error('Missing findings array')
-        setGroupResults(p => ({ ...p, [group.key]: { status: 'done', findings: parsed.findings } }))
-        return true
-      } catch (e: any) {
-        if (attempt === MAX_ATTEMPTS) {
-          setGroupResults(p => ({ ...p, [group.key]: { status: 'error', findings: [], error: e.message } }))
-          return false
-        }
-        setGroupResults(p => ({ ...p, [group.key]: { status: 'running', findings: [], error: `Attempt ${attempt} failed — waiting before retry…` } }))
-        await waitWithCountdown(90000)
-      }
-    }
-    return false
-  }
-
-  async function runVerification() {
-    if (selectedGroups.size === 0) return
-    setIsRunning(true); setDecisions({})
-    setAllSaved(false); setGlobalError(''); setActiveFilter('all'); setStatusFilter('all')
-    setCountdown(null)
-    // Only clear groups being re-run — preserve completed groups
-    setGroupResults(prev => {
-      const next = { ...prev }
-      groupsToRun.forEach(g => { delete next[g.key] })
-      return next
-    })
-    for (const group of groupsToRun) {
-      await runGroup(group)
-      // 90s pause between groups — safely clears Anthropic TPM window
-      // Skip pause after the last group — no next group to protect
-      const isLastGroup = group.key === groupsToRun[groupsToRun.length - 1].key
-      if (!isLastGroup) await waitWithCountdown(90000)
-    }
-    setCurrentGroupKey(null); setIsRunning(false)
-  }
-
   // ─── Render ───────────────────────────────────────────────────────────────────
   return (
     <div className="rounded-2xl overflow-hidden" style={{ background: '#0d1424', border: '1px solid #1a2238' }}>
@@ -360,17 +274,17 @@ export default function VerifyClient(props: Props) {
       <div className="px-6 py-5 border-b" style={{ borderColor: '#1a2238' }}>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-white font-bold">AI Verification — 7 Focused Groups</h2>
+            <h2 className="text-white font-bold">AI Verification — 23 Individual Tables</h2>
             <p className="text-xs mt-0.5" style={{ color: '#475569' }}>
-              {sourcesWithUrls} official source URLs loaded · Each group runs a separate focused AI call for complete coverage
+              {sourcesWithUrls} official source URLs loaded · Each table runs a separate focused AI call with web search
             </p>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            {!allSaved && hasResults && allGroupsDone && (
+            {!allSaved && hasResults && allTablesDone && (
               <button onClick={markVerified} disabled={saving}
-                className="flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl text-sm disabled:opacity-60"
                 style={{ background: '#10b981' }}>
-                {saving ? <><Loader2 size={15} className="animate-spin" /> Saving...</> : <><Check size={15} /> Mark {countryName} Verified</>}
+                {saving ? <><Loader2 size={15} className="animate-spin" /> Saving…</> : <><Check size={15} /> Mark {countryName} Verified</>}
               </button>
             )}
             {allSaved && (
@@ -378,64 +292,86 @@ export default function VerifyClient(props: Props) {
                 ✓ Verified & Saved
               </span>
             )}
-            <button onClick={runVerification} disabled={isRunning || selectedGroups.size === 0}
-              className="flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            <button onClick={runVerification} disabled={isRunning || selectedTables.size === 0}
+              className="flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl text-sm disabled:opacity-50"
               style={{ background: '#2563eb' }}>
-              {isRunning ? <><Loader2 size={15} className="animate-spin" /> Verifying...</> : <><Sparkles size={15} /> Run Verification</>}
+              {isRunning ? <><Loader2 size={15} className="animate-spin" /> Verifying…</> : <><Sparkles size={15} /> Run Verification</>}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Group selector */}
+      {/* Table selector */}
       <div className="px-6 py-4 border-b" style={{ borderColor: '#1a2238' }}>
         <div className="flex items-center justify-between mb-3">
-          <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Select groups to verify</p>
+          <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>
+            Select tables to verify ({selectedTables.size} of {ALL_VERIFY_TABLES.length} selected)
+          </p>
           <div className="flex gap-2">
-            <button onClick={() => !isRunning && setSelectedGroups(new Set(GROUPS.map(g => g.key)))} disabled={isRunning}
+            <button onClick={() => !isRunning && setSelectedTables(new Set(ALL_VERIFY_TABLES.map(t => t.key)))} disabled={isRunning}
               className="text-xs px-2.5 py-1 rounded-lg border disabled:opacity-40"
               style={{ borderColor: '#1a2238', color: '#475569' }}>All</button>
-            <button onClick={() => !isRunning && setSelectedGroups(new Set())} disabled={isRunning}
+            <button onClick={() => !isRunning && setSelectedTables(new Set())} disabled={isRunning}
               className="text-xs px-2.5 py-1 rounded-lg border disabled:opacity-40"
               style={{ borderColor: '#1a2238', color: '#475569' }}>None</button>
           </div>
         </div>
         <div className="grid grid-cols-4 gap-2">
-          {GROUPS.map(group => {
-            const selected = selectedGroups.has(group.key)
-            const result   = groupResults[group.key]
+          {ALL_VERIFY_TABLES.map(t => {
+            const selected = selectedTables.has(t.key)
+            const result   = tableResults[t.key]
+            const isActive = currentTable === t.key
             return (
-              <button key={group.key} onClick={() => toggleGroup(group.key)} disabled={isRunning}
-                className="text-left px-3 py-2.5 rounded-xl border transition-all disabled:cursor-default"
-                style={{ background: selected ? group.bg : 'rgba(255,255,255,0.02)', borderColor: selected ? group.border : '#1a2238' }}>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-bold" style={{ color: selected ? group.color : '#334155' }}>{group.label}</span>
-                  {result?.status === 'running' && <Loader2 size={11} className="animate-spin" style={{ color: group.color }} />}
-                  {result?.status === 'done'    && <CheckCircle size={11} style={{ color: '#10b981' }} />}
-                  {result?.status === 'error'   && <XCircle size={11} style={{ color: '#ef4444' }} />}
-                  {!result && selected          && <div className="w-1.5 h-1.5 rounded-full" style={{ background: group.color }} />}
+              <button key={t.key} onClick={() => toggleTable(t.key)} disabled={isRunning}
+                className="text-left px-3 py-2 rounded-xl border transition-all disabled:cursor-default"
+                style={{
+                  background: selected ? t.bg : 'rgba(255,255,255,0.02)',
+                  borderColor: selected ? t.color + '40' : '#1a2238',
+                }}>
+                <div className="flex items-center justify-between mb-0.5">
+                  <span className="text-xs font-bold truncate" style={{ color: selected ? t.color : '#334155' }}>{t.label}</span>
+                  {isActive                       && <Loader2 size={10} className="animate-spin shrink-0" style={{ color: t.color }} />}
+                  {!isActive && result?.status === 'done'  && <CheckCircle size={10} className="shrink-0" style={{ color: '#10b981' }} />}
+                  {!isActive && result?.status === 'error' && <XCircle size={10} className="shrink-0" style={{ color: '#ef4444' }} />}
+                  {!isActive && !result && selected && <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: t.color }} />}
                 </div>
-                <p className="text-xs" style={{ color: '#334155' }}>
+                <p className="text-xs truncate" style={{ color: '#334155' }}>
                   {result?.status === 'done'    ? `${result.findings.length} findings`
-                  : result?.status === 'error'  ? (result.error?.slice(0, 55) ?? 'Error — retry')
-                  : result?.status === 'running'? 'Verifying...'
-                  : `${group.tables.length} tables`}
+                  : result?.status === 'error'  ? 'Error — retry'
+                  : isActive                    ? 'Verifying…'
+                  : `${getTableData(t.key, props).length} records`}
                 </p>
               </button>
             )
           })}
-          <div />
         </div>
       </div>
 
-      {/* Countdown banner — visible during inter-group and retry waits */}
+      {/* Progress bar — shown once running starts */}
+      {Object.keys(tableResults).length > 0 && (
+        <div className="px-6 py-3 border-b" style={{ borderColor: '#1a2238' }}>
+          <div className="flex items-center justify-between mb-1.5">
+            <p className="text-xs font-bold" style={{ color: '#475569' }}>
+              {doneCount}/{tablesToRun.length} tables verified
+              {errorCount > 0 && <span className="ml-2" style={{ color: '#ef4444' }}>{errorCount} failed</span>}
+            </p>
+            <p className="text-xs font-bold tabular-nums" style={{ color: pct === 100 ? '#10b981' : '#f59e0b' }}>{pct}%</p>
+          </div>
+          <div className="w-full h-1.5 rounded-full" style={{ background: '#1a2238' }}>
+            <div className="h-1.5 rounded-full transition-all duration-500"
+              style={{ width: `${pct}%`, background: errorCount > 0 ? '#f59e0b' : '#10b981' }} />
+          </div>
+        </div>
+      )}
+
+      {/* Countdown banner */}
       {isRunning && countdown !== null && (
         <div className="px-6 py-3 border-b flex items-center gap-3"
           style={{ background: 'rgba(245,158,11,0.08)', borderColor: '#1a2238' }}>
           <Loader2 size={13} className="animate-spin" style={{ color: '#f59e0b' }} />
           <p className="text-sm" style={{ color: '#f59e0b' }}>
             Waiting <span className="font-black tabular-nums">{countdown}s</span>
-            <span className="ml-2 text-xs" style={{ color: '#64748b' }}>— resetting Anthropic rate limit window before next request</span>
+            <span className="ml-2 text-xs" style={{ color: '#64748b' }}>— rate limit pause before next table</span>
           </p>
         </div>
       )}
@@ -454,13 +390,13 @@ export default function VerifyClient(props: Props) {
           {/* Stats */}
           <div className="grid grid-cols-4 gap-4 mb-5">
             {[
-              { label: 'Total Checked', value: allFindings.length, color: '#ffffff',  bg: '#111827',               border: '#1a2238',               filter: 'all'        },
-              { label: 'Confirmed ✓',   value: matches,            color: '#10b981',  bg: 'rgba(16,185,129,0.08)', border: 'rgba(16,185,129,0.2)', filter: 'match'      },
-              { label: 'Issues Found',  value: mismatches,         color: '#ef4444',  bg: 'rgba(239,68,68,0.08)',   border: 'rgba(239,68,68,0.2)',   filter: 'mismatch'   },
-              { label: 'Unverified',    value: unverified,         color: '#f59e0b',  bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)',  filter: 'unverified' },
+              { label: 'Total Checked', value: allFindings.length, color: '#ffffff', bg: '#111827',               border: '#1a2238',               filter: 'all'        },
+              { label: 'Confirmed ✓',   value: matches,            color: '#10b981', bg: 'rgba(16,185,129,0.08)', border: 'rgba(16,185,129,0.2)', filter: 'match'      },
+              { label: 'Issues Found',  value: mismatches,         color: '#ef4444', bg: 'rgba(239,68,68,0.08)',  border: 'rgba(239,68,68,0.2)',  filter: 'mismatch'   },
+              { label: 'Unverified',    value: unverified,         color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)', filter: 'unverified' },
             ].map(s => (
               <button key={s.label} onClick={() => setStatusFilter(s.filter)}
-                className="rounded-xl p-3 text-center border transition-all cursor-pointer hover:opacity-90"
+                className="rounded-xl p-3 text-center border transition-all hover:opacity-90"
                 style={{ background: s.bg, borderColor: statusFilter === s.filter ? s.color : s.border,
                   outline: statusFilter === s.filter ? `2px solid ${s.color}` : 'none', outlineOffset: '2px' }}>
                 <p className="text-2xl font-black" style={{ color: s.color }}>{s.value}</p>
@@ -469,25 +405,21 @@ export default function VerifyClient(props: Props) {
             ))}
           </div>
 
-          {/* Running indicator — hidden during countdown (countdown banner handles that) */}
-          {isRunning && currentGroupKey && countdown === null && (() => {
-            const g = GROUPS.find(x => x.key === currentGroupKey)!
-            const idx = groupsToRun.findIndex(x => x.key === currentGroupKey)
-            const retryMsg = groupResults[currentGroupKey]?.error
-            return (
-              <div className="rounded-xl px-4 py-3 mb-4 flex items-center gap-3 border"
-                style={{ background: 'rgba(37,99,235,0.08)', borderColor: 'rgba(37,99,235,0.2)' }}>
-                <Loader2 size={14} className="animate-spin" style={{ color: '#3b82f6' }} />
-                <div>
-                  <p className="text-sm" style={{ color: '#3b82f6' }}>
-                    Verifying {g.label}
-                    <span className="ml-2 text-xs" style={{ color: '#334155' }}>({idx + 1} of {groupsToRun.length})</span>
-                  </p>
-                  {retryMsg && <p className="text-xs mt-0.5 font-bold" style={{ color: '#f59e0b' }}>{retryMsg}</p>}
-                </div>
+          {/* Failed tables retry list */}
+          {errorCount > 0 && !isRunning && (
+            <div className="rounded-xl p-4 mb-4 border" style={{ background: 'rgba(239,68,68,0.06)', borderColor: 'rgba(239,68,68,0.2)' }}>
+              <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#ef4444' }}>Failed — retry individually</p>
+              <div className="flex flex-wrap gap-2">
+                {ALL_VERIFY_TABLES.filter(t => tableResults[t.key]?.status === 'error').map(t => (
+                  <button key={t.key} onClick={() => retryTable(t.key)}
+                    className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all"
+                    style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', borderColor: 'rgba(239,68,68,0.2)' }}>
+                    <RefreshCw size={10} /> Retry {t.label}
+                  </button>
+                ))}
               </div>
-            )
-          })()}
+            </div>
+          )}
 
           {/* Batch actions */}
           {(pendingMatches > 0 || pendingUnverified > 0) && (
@@ -496,45 +428,48 @@ export default function VerifyClient(props: Props) {
               <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#334155' }}>Bulk</p>
               {pendingMatches > 0 && (
                 <button onClick={approveAllMatches}
-                  className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all"
+                  className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border"
                   style={{ background: 'rgba(16,185,129,0.1)', color: '#10b981', borderColor: 'rgba(16,185,129,0.25)' }}>
                   <CheckCircle size={11} /> Approve all matches ({pendingMatches})
                 </button>
               )}
               {pendingUnverified > 0 && (
                 <button onClick={approveAllUnverified}
-                  className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all"
+                  className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border"
                   style={{ background: 'rgba(245,158,11,0.08)', color: '#f59e0b', borderColor: 'rgba(245,158,11,0.25)' }}>
                   <AlertCircle size={11} /> Acknowledge unverified ({pendingUnverified})
                 </button>
               )}
-              {totalDecided < allFindings.length && (
-                <p className="ml-auto text-xs" style={{ color: '#334155' }}>
-                  {allFindings.length - totalDecided} decisions remaining
-                </p>
-              )}
+              <p className="ml-auto text-xs" style={{ color: '#334155' }}>
+                {allFindings.length - Object.keys(decisions).length} decisions remaining
+              </p>
             </div>
           )}
 
-          {/* Filter pills */}
+          {/* Table filter pills */}
           <div className="flex flex-wrap gap-2 mb-4">
-            {[['all', `All (${allFindings.length})`], ...Object.keys(TABLE_LABELS).filter(t => countByTable[t]).map(t => [t, `${TABLE_LABELS[t]} (${countByTable[t]})`])].map(([key, label]) => (
-              <button key={key} onClick={() => setActiveFilter(key)}
+            <button onClick={() => setTableFilter('all')}
+              className="text-xs font-bold px-3 py-1.5 rounded-full border transition-all"
+              style={{ background: tableFilter === 'all' ? '#2563eb' : 'transparent', borderColor: tableFilter === 'all' ? '#2563eb' : '#1a2238', color: tableFilter === 'all' ? '#ffffff' : '#475569' }}>
+              All ({allFindings.length})
+            </button>
+            {ALL_VERIFY_TABLES.filter(t => tableResults[t.key]?.findings?.length).map(t => (
+              <button key={t.key} onClick={() => setTableFilter(t.key)}
                 className="text-xs font-bold px-3 py-1.5 rounded-full border transition-all"
-                style={{ background: activeFilter === key ? '#2563eb' : 'transparent', borderColor: activeFilter === key ? '#2563eb' : '#1a2238', color: activeFilter === key ? '#ffffff' : '#475569' }}>
-                {label}
+                style={{ background: tableFilter === t.key ? '#2563eb' : 'transparent', borderColor: tableFilter === t.key ? '#2563eb' : '#1a2238', color: tableFilter === t.key ? '#ffffff' : '#475569' }}>
+                {t.label} ({tableResults[t.key]?.findings?.length})
               </button>
             ))}
           </div>
 
-          {/* Findings */}
+          {/* Findings list */}
           <div className="space-y-2 mb-6">
-            {visibleFindings.map(f => {
+            {visibleFindings.map((f, vi) => {
               const idx = allFindings.indexOf(f)
-              const dec = decisions[idx]
+              const dec = decisions[`${idx}`]
               const statusColor = f.status === 'match' ? '#10b981' : f.status === 'mismatch' ? '#ef4444' : '#f59e0b'
               return (
-                <div key={idx} className="border rounded-xl p-4 transition-all"
+                <div key={`${f.table}-${f.record_id}-${f.field}-${vi}`} className="border rounded-xl p-4 transition-all"
                   style={{
                     background: dec === 'saved' || dec === 'approved' ? 'rgba(16,185,129,0.04)' : dec === 'rejected' ? 'rgba(255,255,255,0.01)' : f.status === 'match' ? 'rgba(16,185,129,0.04)' : f.status === 'mismatch' ? 'rgba(239,68,68,0.04)' : 'rgba(245,158,11,0.04)',
                     borderColor: dec === 'saved' || dec === 'approved' ? 'rgba(16,185,129,0.3)' : dec === 'rejected' ? '#1f2937' : f.status === 'match' ? 'rgba(16,185,129,0.2)' : f.status === 'mismatch' ? 'rgba(239,68,68,0.2)' : 'rgba(245,158,11,0.2)',
@@ -543,15 +478,15 @@ export default function VerifyClient(props: Props) {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3 flex-1">
                       {dec === 'saved' || dec === 'approved' ? <Check size={15} style={{ color: '#10b981' }} className="shrink-0 mt-0.5" />
-                        : dec === 'rejected'  ? <XCircle size={15} style={{ color: '#475569' }} className="shrink-0 mt-0.5" />
-                        : dec === 'saving'    ? <Loader2 size={15} style={{ color: '#3b82f6' }} className="shrink-0 mt-0.5 animate-spin" />
-                        : f.status === 'match'? <CheckCircle size={15} style={{ color: '#10b981' }} className="shrink-0 mt-0.5" />
-                        : f.status === 'mismatch' ? <XCircle size={15} style={{ color: '#ef4444' }} className="shrink-0 mt-0.5" />
+                        : dec === 'rejected' ? <XCircle size={15} style={{ color: '#475569' }} className="shrink-0 mt-0.5" />
+                        : dec === 'saving'   ? <Loader2 size={15} style={{ color: '#3b82f6' }} className="shrink-0 mt-0.5 animate-spin" />
+                        : f.status === 'match'     ? <CheckCircle size={15} style={{ color: '#10b981' }} className="shrink-0 mt-0.5" />
+                        : f.status === 'mismatch'  ? <XCircle size={15} style={{ color: '#ef4444' }} className="shrink-0 mt-0.5" />
                         : <AlertCircle size={15} style={{ color: '#f59e0b' }} className="shrink-0 mt-0.5" />}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2 flex-wrap">
                           <span className="text-xs font-bold px-2 py-0.5 rounded" style={{ background: '#111827', color: '#475569' }}>
-                            {TABLE_LABELS[f.table] ?? f.table}
+                            {ALL_VERIFY_TABLES.find(t => t.key === f.table)?.label ?? f.table}
                           </span>
                           <span className="text-white font-semibold text-sm">{f.field}</span>
                           {f.status === 'mismatch' && !dec && (
@@ -587,18 +522,18 @@ export default function VerifyClient(props: Props) {
                       {!dec && (
                         <div className="flex gap-2">
                           <button onClick={() => approve(idx, f)}
-                            className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all"
+                            className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border"
                             style={{ background: 'rgba(16,185,129,0.1)', color: '#10b981', borderColor: 'rgba(16,185,129,0.25)' }}>
                             <ThumbsUp size={11} /> Approve
                           </button>
                           <button onClick={() => reject(idx)}
-                            className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all"
+                            className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border"
                             style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444', borderColor: 'rgba(239,68,68,0.2)' }}>
                             <ThumbsDown size={11} /> Reject
                           </button>
                         </div>
                       )}
-                      {dec === 'saving' && <span className="text-xs font-bold px-3 py-1.5" style={{ color: '#3b82f6' }}>Updating...</span>}
+                      {dec === 'saving' && <span className="text-xs font-bold px-3 py-1.5" style={{ color: '#3b82f6' }}>Updating…</span>}
                       {(dec === 'saved' || dec === 'approved') && (
                         <span className="text-xs font-bold px-3 py-1.5 rounded-lg" style={{ background: 'rgba(16,185,129,0.1)', color: '#10b981' }}>✓ Approved</span>
                       )}
@@ -611,9 +546,6 @@ export default function VerifyClient(props: Props) {
               )
             })}
           </div>
-
-          {/* Mark Verified moved to header */}
-
         </div>
       )}
 
@@ -621,9 +553,9 @@ export default function VerifyClient(props: Props) {
       {!hasResults && !isRunning && (
         <div className="px-6 py-12 text-center">
           <Sparkles size={32} className="mx-auto mb-3" style={{ color: '#1e293b' }} />
-          <p className="text-sm mb-1" style={{ color: '#475569' }}>Select groups above and click Run Verification</p>
+          <p className="text-sm mb-1" style={{ color: '#475569' }}>Select tables above and click Run Verification</p>
           <p className="text-xs" style={{ color: '#334155' }}>
-            Each group runs a separate focused AI call — significantly more thorough than a single pass
+            Each table runs a separate focused AI call with web search — maximum accuracy per table
           </p>
           {sourcesWithUrls > 0 && (
             <p className="text-xs mt-2" style={{ color: '#1e293b' }}>{sourcesWithUrls} official source URLs pre-loaded</p>
