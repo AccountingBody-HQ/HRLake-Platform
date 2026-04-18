@@ -22,16 +22,31 @@ export default function AdminSettingsPage() {
   ]
 
   const CHECKLIST = [
-    { label: 'Clerk production keys added to Vercel',        done: false },
-    { label: 'DNS cutover: hrlake.com → Vercel',             done: false },
-    { label: 'Resend domain verified post-DNS',              done: false },
-    { label: 'Test email capture on live domain',            done: false },
-    { label: 'Verify Clerk sign-in on live domain',          done: false },
-    { label: 'Canonical tags pointing to hrlake.com',        done: false },
-    { label: 'Search Console: submit sitemap',               done: false },
-    { label: 'Mobile tested (375px minimum)',                 done: false },
-    { label: 'Priority 1 — numeric RPC fix deployed',        done: true  },
-    { label: 'termination_rules seeded for 20 countries',    done: true  },
+    // Infrastructure
+    { label: 'Upgrade Vercel to Pro — required for 120s AI routes and rate limiting', done: false },
+    { label: 'Upgrade Supabase to Pro — required for PITR and no auto-pause',         done: false },
+    { label: 'Enable Point-in-Time Recovery in Supabase after Pro upgrade',           done: false },
+    { label: 'Confirm connection pooling — update Vercel env var to port 6543',       done: false },
+    // Security & rate limiting
+    { label: 'Implement rate limiting on /api/chat — uncontrolled cost risk',         done: false },
+    { label: 'Implement rate limiting on /api/calculate',                             done: false },
+    // Auth & keys
+    { label: 'Switch Clerk to production keys (pk_live_*) in Vercel',                done: false },
+    // DNS & email
+    { label: 'DNS cutover: hrlake.com → Vercel',                                     done: false },
+    { label: 'Switch Resend from address to noreply@hrlake.com post-DNS',            done: false },
+    { label: 'Verify Clerk sign-in on live domain post-DNS',                         done: false },
+    { label: 'Test email capture on live domain',                                    done: false },
+    // SEO & QA
+    { label: 'Canonical tags pointing to hrlake.com',                                done: false },
+    { label: 'Search Console: submit sitemap',                                       done: false },
+    { label: 'Mobile tested (375px minimum)',                                        done: false },
+    // Completed
+    { label: 'Dynamic year filters replace all hardcoded 2025 values',               done: true  },
+    { label: 'AI Populate rewritten as sequential per-table with retry',             done: true  },
+    { label: 'AI Verification rewritten as 23 individual table calls',               done: true  },
+    { label: 'Auto-verify on first country insert',                                  done: true  },
+    { label: 'Insert route column mapping fixed from live schema',                   done: true  },
   ]
 
   const card = { background: '#0d1424', borderColor: '#1a2238' }
