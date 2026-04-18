@@ -45,6 +45,7 @@ export const dynamic = 'force-dynamic'
 export default async function LeaveBenefitsPage({ params }: PageProps) {
   const { code } = await params
   const upperCode = code.toUpperCase()
+  const currentYear = new Date().getFullYear()
   const supabase = await createSupabaseServerClient()
 
   const { data: country } = await supabase
@@ -59,9 +60,9 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
     getCountryArticle(upperCode, 'leave-and-benefits'),
     getEmploymentRules(upperCode),
     supabase.schema('hrlake').from('statutory_leave').select('*').eq('country_code', upperCode),
-    supabase.schema('hrlake').from('public_holidays').select('*').eq('country_code', upperCode).eq('year', 2025).order('holiday_date', { ascending: true }),
+    supabase.schema('hrlake').from('public_holidays').select('*').eq('country_code', upperCode).eq('year', currentYear).order('holiday_date', { ascending: true }),
     supabase.schema('hrlake').from('mandatory_benefits').select('*').eq('country_code', upperCode).eq('is_current', true).order('benefit_name', { ascending: true }),
-    supabase.schema('hrlake').from('government_benefit_payments').select('*').eq('country_code', upperCode).eq('is_current', true).eq('tax_year', 2025).order('benefit_type', { ascending: true }),
+    supabase.schema('hrlake').from('government_benefit_payments').select('*').eq('country_code', upperCode).eq('is_current', true).eq('tax_year', currentYear).order('benefit_type', { ascending: true }),
   ])
 
   const statutoryLeave = statutoryLeaveRows.data ?? []
@@ -124,7 +125,7 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
               </p>
             </div>
             <Link href={`/countries/${code.toLowerCase()}/`} className="shrink-0 flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/40 text-slate-300 hover:text-white rounded-xl px-5 py-3 text-sm font-medium transition-all">
-              ← {country.name} Overview
+              \u2190 {country.name} Overview
             </Link>
           </div>
         </div>
@@ -179,7 +180,7 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
 
               {holidays.length > 0 && (
                 <div>
-                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-6">Public Holidays — {country.name}</h2>
+                  <h2 className="font-serif text-2xl font-bold text-slate-900 mb-6">Public Holidays — {country.name} {currentYear}</h2>
                   <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
                     <table className="w-full">
                       <thead>
@@ -329,7 +330,7 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
                           </div>
                           {b.notes && <p className="text-sm text-slate-500 leading-relaxed">{b.notes}</p>}
                           {b.source_url && (
-                            <a href={b.source_url} target="_blank" rel="noopener noreferrer" className="inline-block mt-3 text-xs text-blue-600 hover:underline">Official source ↗</a>
+                            <a href={b.source_url} target="_blank" rel="noopener noreferrer" className="inline-block mt-3 text-xs text-blue-600 hover:underline">Official source \u2197</a>
                           )}
                         </div>
                       )
@@ -369,9 +370,9 @@ export default async function LeaveBenefitsPage({ params }: PageProps) {
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">About This Guide</p>
                 <ul className="space-y-3 text-sm text-slate-600">
-                  <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">✓</span> Sourced from official government publications</li>
-                  <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">✓</span> Updated monthly — always current rules</li>
-                  <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">✓</span> For guidance only — not legal advice</li>
+                  <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2713</span> Sourced from official government publications</li>
+                  <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2713</span> Updated monthly — always current rules</li>
+                  <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2713</span> For guidance only — not legal advice</li>
                 </ul>
               </div>
 
