@@ -55,10 +55,11 @@ function applyDefaults(table: string, row: any, countryCode: string, currencyCod
     delete (r as any).tax_year
     return r
   }
-  // Strip tax_year from all tables that do not have that column
+  // Strip default fields that do not exist on these tables
   if (NO_TAX_YEAR_TABLES.has(table)) {
     const r = { ...base }
     delete (r as any).tax_year
+    delete (r as any).valid_from
     return r
   }
   return base
