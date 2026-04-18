@@ -3,7 +3,7 @@ import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structure
 
 export const metadata: Metadata = {
   title: 'Search — Countries, Calculators and Payroll Guides',
-  description: 'Search HRLake for any country, payroll guide, employment law topic, or compliance requirement. Coverage across 195 countries.',
+  description: 'Search HRLake for any country, payroll guide, employment law topic, or compliance requirement. Updated from official government sources.',
   alternates: {
     canonical: 'https://hrlake.com/search/',
   },

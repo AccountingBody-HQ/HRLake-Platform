@@ -322,7 +322,7 @@ function SearchContent() {
                 </div>
                 <div className="mt-4 text-center">
                   <Link href="/countries/" className="text-sm text-blue-600 hover:text-blue-700 font-semibold transition-colors">
-                    Browse all 195 countries →
+                    Browse all countries →
                   </Link>
                 </div>
               </section>

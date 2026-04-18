@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     template: '%s | HRLake',
   },
   description:
-    'The deep source for global HR intelligence. Employer costs, tax brackets, employment law, and compliance data for 195 countries.',
+    'The deep source for global HR intelligence. Employer costs, tax brackets, employment law, and payroll compliance data — updated from official government sources.',
   keywords: [
     'global payroll',
     'employer of record',

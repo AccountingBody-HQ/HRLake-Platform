@@ -16,7 +16,7 @@ import CountriesClient from '@/components/countries/CountriesClient'
 export const metadata: Metadata = {
   title: 'All Countries — Global HR & Employment Data | HRLake',
   description:
-    'Employment data, payroll rates, social security, and HR compliance for 20 countries — with more being added monthly. Updated from official government sources.',
+    'Employment data, payroll rates, social security, and HR compliance — with new countries added monthly. Updated from official government sources.',
   alternates: {
     canonical: 'https://hrlake.com/countries/',
   },

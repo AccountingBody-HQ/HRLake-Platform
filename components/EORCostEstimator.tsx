@@ -196,7 +196,7 @@ export default function EORCostEstimator({ defaultCountryCode = "GB" }: { defaul
             <div className="divide-y divide-slate-200">
               {[
                 { label: 'Total gross salary',         value: fmt(result.totalSalary, symbol),      sub: `${headcount} × ${fmt(salary, symbol)}` },
-                { label: `Employer SS (~${selected.ss_employer_rate}%)`, value: fmt(result.ssCost, symbol), sub: 'Social security & payroll taxes' },
+                { label: `Employer Contribution (~${selected.ss_employer_rate}%)`, value: fmt(result.ssCost, symbol), sub: 'Social security & payroll taxes' },
                 { label: 'Base employer cost',          value: fmt(result.baseEmployerCost, symbol), sub: 'Before EOR provider fee', bold: true },
                 { label: `EOR provider fee (${selected.provider_fee_low}–${selected.provider_fee_high}%)`, value: `${fmt(result.eorFeeOnlyLow, symbol)} – ${fmt(result.eorFeeOnlyHigh, symbol)}`, sub: 'EOR markup on total employer cost' },
               ].map(row => (

@@ -64,7 +64,7 @@ const CAPABILITIES = [
   {
     icon: Calculator,
     title: 'Payroll Calculator',
-    body: 'Net pay, employer on-costs, income tax, and social security — full line-by-line cost breakdowns for 20 countries and growing.',
+    body: 'Net pay, employer on-costs, income tax, and social security — full line-by-line cost breakdowns across all active countries.',
     href: '/payroll-tools/',
     cta: 'Open calculator',
     accent: 'bg-indigo-50 text-indigo-700',
@@ -517,7 +517,7 @@ export default async function HomePage() {
                 source="homepage"
                 variant="dark"
                 title="Subscribe to updates"
-                subtitle="Join thousands of HR and payroll professionals."
+                subtitle="Trusted by HR and payroll professionals worldwide."
               />
             </div>
           </div>

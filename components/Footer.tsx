@@ -147,7 +147,7 @@ export default function Footer({ countryCount = 23 }: { countryCount?: number })
                   source="footer"
                   variant="dark"
                   title="Subscribe to updates"
-                  subtitle="Join thousands of HR and payroll professionals."
+                  subtitle="Trusted by HR and payroll professionals worldwide."
                 />
               </div>
             </div>

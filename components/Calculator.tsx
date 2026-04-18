@@ -187,7 +187,7 @@ export default function Calculator({
         { name: 'Net Pay', value: Math.round(view === 'monthly' ? result.net_monthly : result.net_annual), color: CHART_COLORS.net },
         { name: 'Income Tax', value: Math.round(view === 'monthly' ? result.income_tax_monthly : result.income_tax_annual), color: CHART_COLORS.tax },
         { name: 'Employee SS', value: Math.round(view === 'monthly' ? result.employee_ss_monthly : result.employee_ss_annual), color: CHART_COLORS.employeeSs },
-        { name: 'Employer SS', value: Math.round(view === 'monthly' ? result.employer_ss_monthly : result.employer_ss_annual), color: CHART_COLORS.employerSs },
+        { name: 'Employer Contribution', value: Math.round(view === 'monthly' ? result.employer_ss_monthly : result.employer_ss_annual), color: CHART_COLORS.employerSs },
       ]
     : []
 
@@ -397,7 +397,7 @@ export default function Calculator({
                 { label: 'Net Pay', color: CHART_COLORS.net },
                 { label: 'Income Tax', color: CHART_COLORS.tax },
                 { label: 'Employee SS', color: CHART_COLORS.employeeSs },
-                { label: 'Employer SS', color: CHART_COLORS.employerSs },
+                { label: 'Employer Contribution', color: CHART_COLORS.employerSs },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-2">
                   <div className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />

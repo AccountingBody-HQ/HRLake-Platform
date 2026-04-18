@@ -48,7 +48,7 @@ function UpgradePrompt() {
     <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm my-2">
       <div className="h-1 bg-gradient-to-r from-blue-600 to-indigo-600"/>
       <div className="p-6">
-        <h3 className="text-slate-900 font-bold text-lg mb-1">Upgrade to Pro</h3>
+        <h3 className="text-slate-900 font-bold text-lg mb-1">HRLake AI</h3>
         <p className="text-slate-500 text-sm mb-4">You have used your 10 free questions this month.</p>
         <div className="grid grid-cols-2 gap-2 mb-4">
           {["Unlimited AI questions","Save calculations","PDF exports","Termination rules","Contractor rules","Tax treaty data","Remote work rules","Rate alerts"].map(f => (
