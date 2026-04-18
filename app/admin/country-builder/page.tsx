@@ -73,7 +73,7 @@ export default function CountryBuilderPage() {
   const [error, setError]           = useState('')
   const [saving, setSaving]         = useState(false)
   const [saved, setSaved]           = useState(false)
-  const [newC, setNewC]             = useState({ iso2: '', iso3: '', name: '', currency_code: '', flag_emoji: '', region: '' })
+  const [newC, setNewC]             = useState({ iso2: '', iso3: '', name: '', currency_code: '', region: '' })
   const [popForm, setPopForm]       = useState({ iso2: searchParams.get('iso2') ?? '', name: '', currency_code: '' })
   const [popStatus, setPopStatus]   = useState<'idle'|'loading'|'done'|'error'>('idle')
   const [popData, setPopData]       = useState<any>(null)
@@ -144,7 +144,7 @@ export default function CountryBuilderPage() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Add failed')
       setSaved(true)
-      setNewC({ iso2: '', iso3: '', name: '', currency_code: '', flag_emoji: '', region: '' })
+      setNewC({ iso2: '', iso3: '', name: '', currency_code: '', region: '' })
       await loadData()
       setTimeout(() => setSaved(false), 4000)
     } catch (e: any) { setError(e.message ?? 'Add failed') }
@@ -686,21 +686,12 @@ export default function CountryBuilderPage() {
                     className={S.input} style={inputStyle} />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>Country Name *</label>
-                  <input value={newC.name}
-                    onChange={e => setNewC(p => ({ ...p, name: e.target.value }))}
-                    placeholder="e.g. Japan"
-                    className={S.input} style={inputStyle} />
-                </div>
-                <div>
-                  <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>Flag Emoji</label>
-                  <input value={newC.flag_emoji}
-                    onChange={e => setNewC(p => ({ ...p, flag_emoji: e.target.value }))}
-                    placeholder="e.g. \ud83c\uddef\ud83c\uddf5"
-                    className={S.input} style={inputStyle} />
-                </div>
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>Country Name *</label>
+                <input value={newC.name}
+                  onChange={e => setNewC(p => ({ ...p, name: e.target.value }))}
+                  placeholder="e.g. Japan"
+                  className={S.input} style={inputStyle} />
               </div>
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider block mb-2" style={{ color: '#475569' }}>Region</label>
@@ -708,7 +699,7 @@ export default function CountryBuilderPage() {
                   onChange={e => setNewC(p => ({ ...p, region: e.target.value }))}
                   className="w-full rounded-xl px-4 py-3 text-white text-sm focus:outline-none"
                   style={inputStyle}>
-                  <option value="">Select region\u2026</option>
+                  <option value="">Select region…</option>
                   {['Europe','Americas','Asia Pacific','Middle East','Africa','Asia'].map(r => (
                     <option key={r} value={r}>{r}</option>
                   ))}
@@ -743,7 +734,7 @@ export default function CountryBuilderPage() {
               <li>Run AI verification in Data Quality</li>
               <li>Generate all 8 Sanity articles in Content Factory</li>
               <li>Verify Payroll Calculator produces correct results</li>
-              <li>Activate country \u2014 it will go live immediately</li>
+              <li>Activate country — it will go live immediately</li>
             </ol>
           </div>
         </div>
