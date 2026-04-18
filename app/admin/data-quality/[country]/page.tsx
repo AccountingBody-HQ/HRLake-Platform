@@ -397,7 +397,7 @@ export default async function VerifyCountryPage({
         <DataCard title="Contractor Rules" count={contractorRules.length}>
           {contractorRules.map((r: any, i: number) => (
             <div key={i} className="px-5 py-3">
-              <p classNama="text-white text-xs font-semibold mb-1">{r.classification_test?.slice(0,80)}{r.classification_test?.length > 80 ? '…' : ''}</p>
+              <p className="text-white text-xs font-semibold mb-1">{r.classification_test?.slice(0,80)}{r.classification_test?.length > 80 ? '…' : ''}</p>
               {r.ir35_equivalent && <p className="text-amber-400 text-xs">IR35: {r.ir35_equivalent?.slice(0,60)}…</p>}
             </div>
           ))}
