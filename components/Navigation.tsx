@@ -22,10 +22,11 @@ const toolsDropdown = [
   { label: 'AI Assistant', href: '/ai-assistant/', sub: 'Ask HR and payroll questions' },
 ]
 
-function MobileSection({ label, links, onClose }: {
+function MobileSection({ label, links, onClose, countryCount }: {
   label: string
   links: { label: string; href: string; sub?: string }[]
   onClose: () => void
+  countryCount?: number
 }) {
   const [open, setOpen] = useState(false)
   return (
@@ -222,7 +223,7 @@ export default function Navigation({ countryCount = 23 }: { countryCount?: numbe
           </div>
           <nav className="px-2 pb-2">
             {/* Countries expandable section */}
-            <MobileSection label="Countries" links={countryDropdown} onClose={() => setMobileOpen(false)} />
+            <MobileSection label="Countries" links={countryDropdown} onClose={() => setMobileOpen(false)} countryCount={countryCount} />
             {/* Tools expandable section */}
             <MobileSection label="Tools" links={toolsDropdown} onClose={() => setMobileOpen(false)} />
             {/* Remaining flat links */}
