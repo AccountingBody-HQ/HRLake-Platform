@@ -152,7 +152,7 @@ const CURRENCIES = [
   { code: 'UAH', name: 'Ukrainian Hryvnia', symbol: '₴' },
   { code: 'UGX', name: 'Ugandan Shilling', symbol: 'Sh' },
   { code: 'UYU', name: 'Uruguayan Peso', symbol: '$' },
-  { code: 'UZS', name: 'Uzbekistani Som', symbol: 'so'm' },
+  { code: 'UZS', name: 'Uzbekistani Som', symbol: "soʻm" },
   { code: 'VES', name: 'Venezuelan Bolívar', symbol: 'Bs.' },
   { code: 'VND', name: 'Vietnamese Dong', symbol: '₫' },
   { code: 'VUV', name: 'Vanuatu Vatu', symbol: 'Vt' },
