@@ -66,6 +66,7 @@ export default function EmailCapture({
 
   if (variant === 'compact') {
     return (
+      <>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           type="email"
@@ -87,6 +88,7 @@ export default function EmailCapture({
       <p className="text-xs mt-2 text-slate-400">
         By subscribing you agree to receive monthly updates from HRLake. No spam. Unsubscribe any time. See our <a href="/privacy-policy/" className="underline hover:text-slate-600">Privacy Policy</a>.
       </p>
+    </>
     )
   }
 
