@@ -118,9 +118,18 @@ const COUNTRY_MAP: Record<string, string> = {
                                                                                                                                                                                                                                                 const supabase = createSupabaseAdminClient();
                                                                                                                                                                                                                                                     const { message, countryCode: passedCode, countryName: passedName, history = [] } = await req.json();
 
-                                                                                                                                                                                                                                                        if (!message) {
-                                                                                                                                                                                                                                                              return NextResponse.json({ error: "Message is required" }, { status: 400 });
-                                                                                                                                                                                                                                                                  }
+    if (!message || typeof message !== "string") {
+      return NextResponse.json({ error: "Message is required" }, { status: 400 });
+    }
+    if (message.length > 500) {
+      return NextResponse.json({ error: "Message too long. Maximum 500 characters." }, { status: 400 });
+    }
+    if (!Array.isArray(history)) {
+      return NextResponse.json({ error: "Invalid history" }, { status: 400 });
+    }
+    if (history.length > 20) {
+      return NextResponse.json({ error: "History too long" }, { status: 400 });
+    }
 
                                                                                                                                                                                                                                                                       const detectedCode = passedCode || detectCountry(message);
                                                                                                                                                                                                                                                                           const countryCode = detectedCode;
