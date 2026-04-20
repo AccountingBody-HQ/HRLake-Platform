@@ -90,7 +90,7 @@ export default function Navigation({ countryCount = 23 }: { countryCount?: numbe
           {/* LOGO */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 mr-10">
             <Globe className="h-5 w-5 text-blue-500" />
-            <span className="text-base font-bold text-white tracking-tight hidden sm:block">
+            <span className="text-base font-bold text-white tracking-tight">
               HRLake<span className="align-super text-xs ml-0.5">®</span>
             </span>
           </Link>
