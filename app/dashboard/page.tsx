@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
 import { User, Calculator, ArrowRight, BookmarkCheck, TrendingUp, Shield, Crown } from 'lucide-react'
+import DeleteAccountButton from '@/components/DeleteAccountButton'
 
 export const dynamic = "force-dynamic"
 
@@ -185,6 +186,12 @@ export default async function DashboardPage() {
           </div>
 
         </div>
+
+        {/* Account Settings */}
+        <div className="mt-8">
+          <DeleteAccountButton />
+        </div>
+
       </div>
     </main>
   )
