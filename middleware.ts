@@ -32,7 +32,7 @@ export default clerkMiddleware(async (auth, request) => {
   if (path.startsWith('/roodber8')) {
     const token = request.cookies.get('admin_token')?.value
     if (!await tokenValid(token)) {
-      return NextResponse.redirect(new URL('/admin-login', request.url))
+      return NextResponse.redirect(new URL('/roodber8-login', request.url))
     }
   }
 
