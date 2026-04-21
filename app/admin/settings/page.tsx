@@ -114,7 +114,7 @@ export default function AdminSettingsPage() {
               { label: 'Host',        value: 'Vercel' },
               { label: 'Framework',   value: 'Next.js 16 (Turbopack)' },
               { label: 'Deploys',     value: 'Auto on git push to main' },
-              { label: 'Live URL',    value: 'global-payroll-expert-platform.vercel.app' },
+              { label: 'Live URL',    value: 'hrlake.com' },
               { label: 'Domain',      value: 'hrlake.com (DNS pending)' },
             ].map(row => (
               <div key={row.label} className="flex items-center justify-between">

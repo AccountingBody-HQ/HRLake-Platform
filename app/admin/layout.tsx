@@ -107,7 +107,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Footer */}
         <div className="px-3 py-4 border-t space-y-0.5" style={{ borderColor: '#1a2238' }}>
-          <a href="https://global-payroll-expert-platform.vercel.app"
+          <a href="https://hrlake.com"
             target="_blank" rel="noopener noreferrer"
             className="flex items-center justify-between px-3 py-2.5 rounded-xl transition-all"
             style={{ background: 'rgba(255,255,255,0.02)' }}>
