@@ -93,6 +93,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://hrlake.com',
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+      { url: '/favicon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/favicon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [{ url: '/favicon-192.png', sizes: '192x192', type: 'image/png' }],
+  },
 }
 
 // --- GTM SNIPPET HELPERS ---
