@@ -156,6 +156,17 @@ function GoogleTagManagerBody() {
   )
 }
 
+
+function CloudflareAnalytics() {
+  return (
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "e3dfc865d5c34058920491e3b996006d"}'
+    />
+  )
+}
+
 // --- ROOT LAYOUT ---
 export default async function RootLayout({
   children,
@@ -183,6 +194,7 @@ export default async function RootLayout({
       <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
         <head>
           <GoogleTagManagerHead />
+          <CloudflareAnalytics />
         </head>
         <body className="bg-white font-sans antialiased">
           <GoogleTagManagerBody />
