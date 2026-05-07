@@ -91,6 +91,7 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "Ke1xcsC2rYKaBT_PbROsCHNgOJ8s3IjRNyzQuI6JBt4",
+    other: { "google-adsense-account": "ca-pub-9708322474624496" },
   },
   alternates: {
     canonical: 'https://hrlake.com',
