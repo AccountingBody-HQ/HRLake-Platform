@@ -9,6 +9,7 @@ import { PortableText } from '@portabletext/react'
 import { getCountryArticle } from '@/lib/sanity'
 import type { Metadata } from 'next'
 import CountrySubNav from '@/components/CountrySubNav'
+import GoogleAdUnit from '@/components/GoogleAdUnit'
 
 
 interface PageProps {
@@ -163,6 +164,8 @@ export default async function PayrollGuidePage({ params }: PageProps) {
                 </div>
               </div>
 
+              <GoogleAdUnit slot="TOP_PAYROLL_SLOT" format="auto" />
+
               {compliance.length > 0 && (
                 <div>
                   <h2 className="font-serif text-2xl font-bold text-slate-900 mb-6">Payroll Filing Obligations</h2>
@@ -277,6 +280,9 @@ export default async function PayrollGuidePage({ params }: PageProps) {
               <p className="text-xs text-slate-400">
                 This guide is for informational purposes only and does not constitute legal or tax advice. Always consult a qualified local payroll specialist.
               </p>
+
+              <GoogleAdUnit slot="BOTTOM_PAYROLL_SLOT" format="auto" />
+
             </div>
 
             <div className="space-y-5">
@@ -324,6 +330,9 @@ export default async function PayrollGuidePage({ params }: PageProps) {
                   </Link>
                 </div>
               </div>
+
+              <GoogleAdUnit slot="SIDEBAR_PAYROLL_SLOT" format="vertical" />
+
             </div>
           </div>
         </div>
