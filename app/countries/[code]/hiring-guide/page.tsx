@@ -9,6 +9,7 @@ import { getCountryArticle } from '@/lib/sanity'
 import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import type { Metadata } from 'next'
 import CountrySubNav from '@/components/CountrySubNav'
+import GoogleAdUnit from '@/components/GoogleAdUnit'
 
 
 interface PageProps {
@@ -210,6 +211,8 @@ export default async function HiringGuidePage({ params }: PageProps) {
                   </div>
                 )}
               </div>
+
+              <GoogleAdUnit slot="TOP_HIRING_SLOT" format="auto" />
 
               {/* Step by step */}
               <div>
@@ -415,6 +418,8 @@ export default async function HiringGuidePage({ params }: PageProps) {
                 This guide is for informational purposes only and does not constitute legal or HR advice. Employment law in {country.name} is subject to change. Always consult a qualified local employment lawyer before hiring.
               </p>
 
+              <GoogleAdUnit slot="BOTTOM_HIRING_SLOT" format="auto" />
+
             </div>
 
             {/* Sidebar — 1/3 */}
@@ -483,6 +488,8 @@ export default async function HiringGuidePage({ params }: PageProps) {
                   </Link>
                 </div>
               </div>
+
+              <GoogleAdUnit slot="SIDEBAR_HIRING_SLOT" format="vertical" />
 
             </div>
           </div>
