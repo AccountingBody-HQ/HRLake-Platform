@@ -9,6 +9,7 @@ import { getCountryArticle } from '@/lib/sanity'
 import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import type { Metadata } from 'next'
 import CountrySubNav from '@/components/CountrySubNav'
+import GoogleAdUnit from '@/components/GoogleAdUnit'
 
 interface PageProps {
   params: Promise<{ code: string }>
@@ -156,6 +157,8 @@ export default async function EmploymentLawPage({ params }: PageProps) {
                         </div>
                       </div>
                     )}
+                    <GoogleAdUnit slot="TOP_EMPLAW_SLOT" format="auto" />
+
                     {workingHours && (
                       <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
                         <div className="flex items-center gap-3 mb-6">
@@ -218,6 +221,8 @@ export default async function EmploymentLawPage({ params }: PageProps) {
                       <Link href={`/countries/${code.toLowerCase()}/payroll-calculator/`} className="shrink-0 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-colors">Open Calculator <ArrowRight size={14} /></Link>
                     </div>
                     <p className="text-xs text-slate-400">Employment law data is sourced from official government publications and updated monthly. This information is for guidance only and does not constitute legal advice. Always consult a qualified employment lawyer for {country.name}-specific obligations.</p>
+
+                    <GoogleAdUnit slot="BOTTOM_EMPLAW_SLOT" format="auto" />
                   </>
                 )}
               </div>
@@ -271,6 +276,9 @@ export default async function EmploymentLawPage({ params }: PageProps) {
                     <Link href="/compare/" className="block rounded-xl bg-blue-600 hover:bg-blue-500 px-4 py-3 text-center text-sm font-bold text-white transition-colors">Compare countries</Link>
                   </div>
                 </div>
+
+                <GoogleAdUnit slot="SIDEBAR_EMPLAW_SLOT" format="vertical" />
+
               </div>
             </div>
           </div>
