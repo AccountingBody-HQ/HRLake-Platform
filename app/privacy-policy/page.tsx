@@ -26,7 +26,7 @@ export default function PrivacyPolicyPage() {
             <h1 className="font-serif text-4xl lg:text-5xl font-bold text-white leading-[1.08] mb-6" style={{letterSpacing: '-0.025em'}}>
               Privacy Policy
             </h1>
-            <p className="text-slate-400 text-sm">Last updated: March 2026</p>
+            <p className="text-slate-400 text-sm">Last updated: May 2026</p>
           </div>
         </div>
       </section>
@@ -76,7 +76,7 @@ export default function PrivacyPolicyPage() {
               <h3>Account data</h3>
               <p>When you create an account, we collect your name, email address, and authentication credentials. Account creation is handled securely via Clerk.</p>
               <h3>Usage data</h3>
-              <p>We collect information about how you use the platform — pages visited, searches performed, calculators used, and features accessed. This data is used to improve the platform and is not used for advertising.</p>
+              <p>We collect information about how you use the platform — pages visited, searches performed, calculators used, and features accessed. This data is used to improve the platform and to show relevant advertising on the platform.</p>
               <h3>Payment data</h3>
               <p>If you subscribe to Pro, payments are processed by Lemon Squeezy. We do not store your payment card details. We receive subscription status, plan type, and billing period information only.</p>
               <h3>Contact form data</h3>
@@ -96,7 +96,6 @@ export default function PrivacyPolicyPage() {
                 <li>To monitor for security threats and abuse</li>
                 <li>To comply with our legal obligations</li>
               </ul>
-              <p>We do not sell your personal data. We do not use your data for advertising or profiling.</p>
 
               <h2 id="data-sharing">4. Data sharing</h2>
               <p>We share your data only with the following third-party services, all of which are necessary to operate the platform:</p>
@@ -107,8 +106,9 @@ export default function PrivacyPolicyPage() {
                 <li><strong>Resend</strong> — transactional email delivery</li>
                 <li><strong>Vercel</strong> — website hosting and infrastructure</li>
                 <li><strong>Sentry</strong> — error monitoring</li>
+                <li><strong>Google AdSense</strong> — advertising network. Google may use cookies and your data to serve relevant ads based on your visits to this and other websites. Advertising cookies are only set if you accept marketing cookies via our consent banner. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google&apos;s Privacy Policy</a>.</li>
               </ul>
-              <p>We do not share your personal data with any other third parties without your explicit consent, except where required by law.</p>
+              <p>We do not share your personal data with any other third parties without your explicit consent, except where required by law or disclosed in this policy.</p>
 
               <h2 id="cookies">5. Cookies</h2>
               <p>We use cookies to operate the platform and improve your experience. For full details of the cookies we use and how to manage them, please read our <Link href="/cookie-policy/">Cookie Policy</Link>.</p>
