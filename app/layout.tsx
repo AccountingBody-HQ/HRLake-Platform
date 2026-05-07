@@ -13,6 +13,7 @@ import Footer from '@/components/Footer'
 import { createClient } from '@supabase/supabase-js'
 import './globals.css'
 import CookieConsent from '@/components/CookieConsent'
+import AnalyticsPageTracker from '@/components/AnalyticsPageTracker'
 
 // --- FONT ---
 const inter = Inter({
@@ -204,6 +205,7 @@ export default async function RootLayout({
           <Analytics />
           <SpeedInsights />
           <CookieConsent />
+          <AnalyticsPageTracker />
         </body>
       </html>
     </ClerkProvider>
