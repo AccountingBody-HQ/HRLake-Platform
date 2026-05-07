@@ -8,6 +8,7 @@ import { getCountryArticle } from '@/lib/sanity'
 import { getBreadcrumbStructuredData, jsonLd as toJsonLd } from '@/lib/structured-data'
 import type { Metadata } from 'next'
 import CountrySubNav from '@/components/CountrySubNav'
+import GoogleAdUnit from '@/components/GoogleAdUnit'
 
 
 interface PageProps {
@@ -227,11 +228,12 @@ export default async function TaxGuidePage({ params }: PageProps) {
                 )}
               </div>
 
+              <GoogleAdUnit slot="TOP_TAX_GUIDE_SLOT" format="auto" />
+
               {/* Social Security */}
               <div>
                 <h2 className="font-serif text-2xl font-bold text-slate-900 mb-6">
-                  Social Security Contributions
-                </h2>
+                  Social Security Contributions                </h2>
                 {ssRates.length === 0 ? (
                   <div className="rounded-2xl border border-amber-200 bg-amber-50 px-6 py-5 text-sm text-amber-800">
                     <strong>Data coming soon.</strong> Social security data for {country.name} is being prepared.
@@ -397,6 +399,8 @@ export default async function TaxGuidePage({ params }: PageProps) {
                 Tax data is sourced from official government publications and updated monthly. Rates are for the {taxYear} tax year. This information is for guidance only and does not constitute tax or legal advice. Always consult a qualified tax adviser for {country.name}-specific obligations.
               </p>
 
+              <GoogleAdUnit slot="BOTTOM_TAX_GUIDE_SLOT" format="auto" />
+
             </div>
 
             {/* Sidebar — 1/3 */}
@@ -478,6 +482,8 @@ export default async function TaxGuidePage({ params }: PageProps) {
                   </Link>
                 </div>
               </div>
+
+              <GoogleAdUnit slot="SIDEBAR_TAX_GUIDE_SLOT" format="vertical" />
 
             </div>
           </div>
